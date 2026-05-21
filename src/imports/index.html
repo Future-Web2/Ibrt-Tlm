@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="IBRAT Talim - Modern Educational Center in Tashkent offering Foreign Languages and Early Childhood Development.">
+    <meta name="keywords" content="Ibrat Talim, Tashkent, language courses, English, Russian, Montessori, mental arithmetic, early development">
+    <meta property="og:title" content="IBRAT Talim | Modern Educational Center">
+    <meta property="og:description" content="Shape your future with modern teaching methods at IBRAT Talim, Tashkent.">
+    <meta property="og:type" content="website">
+    <title>IBRAT Talim | Modern Educational Center</title>
+    
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Custom Cursor -->
+    <div class="cursor-dot"></div>
+    <div class="cursor-outline"></div>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container nav-container">
+            <a href="#" class="logo">
+                IBRAT<span>TALIM</span>
+            </a>
+            
+            <div class="nav-right">
+                <div class="lang-switcher">
+                    <button class="lang-btn active" data-lang="en">EN</button>
+                    <button class="lang-btn" data-lang="ru">RU</button>
+                    <button class="lang-btn" data-lang="uz">UZ</button>
+                </div>
+                <ul class="nav-links">
+                    <li><a href="#home" data-i18n="nav_home">Home</a></li>
+                    <li><a href="#about" data-i18n="nav_about">About</a></li>
+                    <li><a href="#courses" data-i18n="nav_courses">Courses</a></li>
+                    <li><a href="#branches" data-i18n="nav_branches">Branches</a></li>
+                    <li><a href="#testimonials" data-i18n="nav_reviews">Reviews</a></li>
+                    <li><a href="#contact" data-i18n="nav_enroll">Enroll</a></li>
+                </ul>
+                <button class="theme-toggle" aria-label="Toggle Theme">
+                    <i class="fas fa-moon"></i>
+                    <i class="fas fa-sun"></i>
+                </button>
+                <div class="mobile-toggle">
+                    <i class="fas fa-bars"></i>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="hero-bg"></div>
+        
+        <!-- Abstract Shapes -->
+        <div class="vector-shape shape-1"></div>
+        <div class="vector-shape shape-2"></div>
+
+        <div class="container">
+            <div class="hero-content reveal">
+                <h1 data-i18n="hero_title">Shape Your <span class="text-gradient">Future</span> With Us</h1>
+                <p data-i18n="hero_subtitle">Welcome to IBRAT Talim, the premier educational center in Tashkent. Experience a modern approach to learning foreign languages and early childhood development in an inspiring environment.</p>
+                <div class="hero-btns">
+                    <a href="#courses" class="btn btn-primary" data-i18n="btn_explore">Explore Courses</a>
+                    <a href="#contact" class="btn btn-outline"><span data-i18n="btn_join">Join Now</span> <i class="fas fa-arrow-right" style="margin-left: 8px;"></i></a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="section">
+        <div class="container">
+            <div class="reveal" style="text-align: center;">
+                <h2 class="text-gradient" data-i18n="about_title">Our Story & Mission</h2>
+                <p style="color: var(--text-muted); max-width: 800px; font-size: 1.1rem; margin-bottom: 2rem; margin-inline: auto;" data-i18n="about_p">Founded by young entrepreneur <strong>Shahriyor Hamrayev</strong>, IBRAT Talim started its journey from a single school classroom and has rapidly grown into a widespread network of educational branches. Our mission is clear: to provide <strong>modern, high-quality education created by the youth, for the youth.</strong></p>
+            </div>
+
+            <div class="features-grid">
+                <div class="feature-card reveal tilt-card">
+                    <i class="fas fa-brain feature-icon"></i>
+                    <h3>Modern Methods</h3>
+                    <p>We utilize the latest educational techniques including Montessori methods and interactive learning environments to foster rapid growth.</p>
+                </div>
+                <div class="feature-card reveal tilt-card" style="transition-delay: 0.2s;">
+                    <i class="fas fa-chalkboard-teacher feature-icon"></i>
+                    <h3>Expert Teachers</h3>
+                    <p>Our educators are highly qualified professionals dedicated to creating engaging and effective learning experiences for all age groups.</p>
+                </div>
+                <div class="feature-card reveal tilt-card" style="transition-delay: 0.4s;">
+                    <i class="fas fa-child feature-icon"></i>
+                    <h3>All Ages Welcome</h3>
+                    <p>From toddlers starting their developmental journey to adults mastering a new language, we have a tailored program for you.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Statistics Section -->
+    <section class="section stats-section">
+        <div class="container">
+            <div class="stats-grid">
+                <div class="stat-card reveal tilt-card">
+                    <h3 class="stat-number text-gradient" data-target="1500">0</h3>
+                    <p data-i18n="stat_students">Happy Students</p>
+                </div>
+                <div class="stat-card reveal tilt-card" style="transition-delay: 0.2s;">
+                    <h3 class="stat-number text-gradient" data-target="50">0</h3>
+                    <p data-i18n="stat_teachers">Expert Teachers</p>
+                </div>
+                <div class="stat-card reveal tilt-card" style="transition-delay: 0.4s;">
+                    <h3 class="stat-number text-gradient" data-target="15">0</h3>
+                    <p data-i18n="stat_programs">Programs</p>
+                </div>
+                <div class="stat-card reveal tilt-card" style="transition-delay: 0.6s;">
+                    <h3 class="stat-number text-gradient" data-target="5">0</h3>
+                    <p data-i18n="stat_years">Years Excellence</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="process" class="section">
+        <div class="container">
+            <h2 class="text-center reveal" style="text-align: center; margin-bottom: 3rem;" data-i18n="proc_title">How We <span class="text-green">Work</span></h2>
+            
+            <div class="process-steps">
+                <div class="process-step reveal">
+                    <div class="step-number">01</div>
+                    <div class="step-content">
+                        <h3>Consultation</h3>
+                        <p>We assess your goals, current knowledge level, and recommend the best course for you or your child.</p>
+                    </div>
+                </div>
+                <div class="process-step reveal" style="transition-delay: 0.2s;">
+                    <div class="step-number">02</div>
+                    <div class="step-content">
+                        <h3>Placement Test</h3>
+                        <p>Take a quick, free diagnostic test so we can place you in a group that perfectly matches your skill level.</p>
+                    </div>
+                </div>
+                <div class="process-step reveal" style="transition-delay: 0.4s;">
+                    <div class="step-number">03</div>
+                    <div class="step-content">
+                        <h3>Active Learning</h3>
+                        <p>Immerse yourself in our interactive, modern classrooms with expert teachers and proven methodologies.</p>
+                    </div>
+                </div>
+                <div class="process-step reveal" style="transition-delay: 0.6s;">
+                    <div class="step-number">04</div>
+                    <div class="step-content">
+                        <h3>Achieve Results</h3>
+                        <p>Pass exams, get certificates (like IELTS), and confidently apply your new skills in real life!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Courses Section -->
+    <section id="courses" class="section courses-section">
+        <div class="container">
+            <h2 class="text-center reveal" style="text-align: center; margin-bottom: 3rem;" data-i18n="prog_title">Our <span class="text-green">Programs</span></h2>
+
+            <div class="courses-container">
+                <!-- Languages -->
+                <div class="course-category reveal">
+                    <h3 class="course-category-title" data-i18n="prog_lang">Language Courses</h3>
+                    <div class="courses-grid">
+                        <!-- English -->
+                        <a href="course.html?c=english" class="course-card tilt-card" style="text-decoration: none; color: inherit;">
+                            <div class="course-img">
+                                <img src="https://images.unsplash.com/photo-1524178232363-1fb2b075b655?w=800&q=80" alt="Education" style="width: 100%; height: 100%; object-fit: cover; opacity: 0.8;">
+                                <div class="course-badge">EN</div>
+                            </div>
+                            <div class="course-info">
+                                <h4 data-i18n="course_en_name">English Language</h4>
+                                <p data-i18n="course_en_desc">From beginner to advanced levels. Improve speaking, listening, reading, and writing skills.</p>
+                                <span class="learn-more">Learn More <i class="fas fa-arrow-right"></i></span>
+                            </div>
+                        </a>
+
+                        <!-- Russian -->
+                        <a href="course.html?c=russian" class="course-card tilt-card" style="text-decoration: none; color: inherit;">
+                            <div class="course-img">
+                                <img src="https://images.unsplash.com/photo-1524178232363-1fb2b075b655?w=800&q=80" alt="Education" style="width: 100%; height: 100%; object-fit: cover; opacity: 0.8;">
+                                <div class="course-badge">RU</div>
+                            </div>
+                            <div class="course-info">
+                                <h4 data-i18n="course_ru_name">Russian Language</h4>
+                                <p data-i18n="course_ru_desc">Comprehensive courses designed for fast acquisition and fluent conversational abilities.</p>
+                                <span class="learn-more">Learn More <i class="fas fa-arrow-right"></i></span>
+                            </div>
+                        </a>
+
+                        <!-- Arabic -->
+                        <a href="course.html?c=arabic" class="course-card tilt-card" style="text-decoration: none; color: inherit;">
+                            <div class="course-img">
+                                <img src="https://images.unsplash.com/photo-1524178232363-1fb2b075b655?w=800&q=80" alt="Education" style="width: 100%; height: 100%; object-fit: cover; opacity: 0.8;">
+                                <div class="course-badge">AR</div>
+                            </div>
+                            <div class="course-info">
+                                <h4 data-i18n="course_ar_name">Arabic Language</h4>
+                                <p data-i18n="course_ar_desc">Learn the beauty of the Arabic language with focus on grammar, speaking and reading.</p>
+                                <span class="learn-more">Learn More <i class="fas fa-arrow-right"></i></span>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Branches Section -->
+    <section id="branches" class="section">
+        <div class="container">
+            <div class="reveal">
+                <h2 data-i18n="branches_title">Our <span class="text-gradient">Locations</span></h2>
+                <p style="color: var(--text-muted); font-size: 1.1rem;" data-i18n="branches_subtitle">Find a branch near you in Tashkent. We are continuously expanding to bring quality education closer.</p>
+            </div>
+
+            <div class="branches-grid">
+                <!-- Kuksaroy / Oltintepa Branch -->
+                <div class="branch-detailed-card reveal">
+                    <div class="branch-img-container">
+                        <img src="https://images.unsplash.com/photo-1524178232363-1fb2b075b655?w=800&q=80" alt="IBRAT Talim">
+                    </div>
+                    <div class="branch-content">
+                        <h3 class="branch-title"><i class="fas fa-building"></i> <span data-i18n="branch_1_name">Oltintepa Branch</span></h3>
+                        <div class="branch-details">
+                            <div class="detail-item">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <div class="detail-text">
+                                    <span class="detail-label" data-i18n="label_location">Location</span>
+                                    <span class="detail-value" data-i18n="branch_1_addr">Ko'ksaroy, Shifobaxsh suvlar St, 134</span>
+                                </div>
+                            </div>
+                            <div class="detail-item">
+                                <i class="fas fa-compass"></i>
+                                <div class="detail-text">
+                                    <span class="detail-label" data-i18n="label_landmark">Landmark</span>
+                                    <span class="detail-value" data-i18n="branch_1_landmark">Near "Oltintepa" Mosque</span>
+                                </div>
+                            </div>
+                            <div class="detail-item">
+                                <i class="fas fa-clock"></i>
+                                <div class="detail-text">
+                                    <span class="detail-label" data-i18n="label_hours">Working Hours</span>
+                                    <span class="detail-value" data-i18n="label_hours_val">09:00 - 20:00 (Mon-Sat)</span>
+                                </div>
+                            </div>
+                            <div class="detail-item">
+                                <i class="fas fa-phone-alt"></i>
+                                <div class="detail-text">
+                                    <span class="detail-label" data-i18n="label_phone">Phone</span>
+                                    <span class="detail-value">+998 90 006-10-20</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="branch-action">
+                            <a href="https://yandex.com/maps/-/CDT6m-Z6" target="_blank" class="btn btn-outline" style="width: 100%;" data-i18n="btn_map">View on Map</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Yangi Darhon Branch -->
+                <div class="branch-detailed-card reveal" style="transition-delay: 0.2s;">
+                    <div class="branch-img-container">
+                        <img src="https://images.unsplash.com/photo-1524178232363-1fb2b075b655?w=800&q=80" alt="IBRAT Talim">
+                    </div>
+                    <div class="branch-content">
+                        <h3 class="branch-title"><i class="fas fa-building"></i> <span data-i18n="branch_2_name">Yangi Darhon Branch</span></h3>
+                        <div class="branch-details">
+                            <div class="detail-item">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <div class="detail-text">
+                                    <span class="detail-label" data-i18n="label_location">Location</span>
+                                    <span class="detail-value" data-i18n="branch_2_addr">Navro'z Street, 20</span>
+                                </div>
+                            </div>
+                            <div class="detail-item">
+                                <i class="fas fa-compass"></i>
+                                <div class="detail-text">
+                                    <span class="detail-label" data-i18n="label_landmark">Landmark</span>
+                                    <span class="detail-value" data-i18n="branch_2_landmark">Yangi Darhon mahalla</span>
+                                </div>
+                            </div>
+                            <div class="detail-item">
+                                <i class="fas fa-clock"></i>
+                                <div class="detail-text">
+                                    <span class="detail-label" data-i18n="label_hours">Working Hours</span>
+                                    <span class="detail-value" data-i18n="label_hours_val">09:00 - 20:00 (Mon-Sat)</span>
+                                </div>
+                            </div>
+                            <div class="detail-item">
+                                <i class="fas fa-phone-alt"></i>
+                                <div class="detail-text">
+                                    <span class="detail-label" data-i18n="label_phone">Phone</span>
+                                    <span class="detail-value">+998 90 007-80-21</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="branch-action">
+                            <a href="#" class="btn btn-outline" style="width: 100%;" data-i18n="btn_map">View on Map</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Yangihayot Branch -->
+                <div class="branch-detailed-card reveal" style="transition-delay: 0.4s;">
+                    <div class="branch-img-container">
+                        <img src="https://images.unsplash.com/photo-1524178232363-1fb2b075b655?w=800&q=80" alt="IBRAT Talim">
+                    </div>
+                    <div class="branch-content">
+                        <h3 class="branch-title"><i class="fas fa-building"></i> <span data-i18n="branch_3_name">Yangihayot Branch</span></h3>
+                        <div class="branch-details">
+                            <div class="detail-item">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <div class="detail-text">
+                                    <span class="detail-label" data-i18n="label_location">Location</span>
+                                    <span class="detail-value" data-i18n="branch_3_addr">Yoʻldosh-16, 12, Yangihayot Dist.</span>
+                                </div>
+                            </div>
+                            <div class="detail-item">
+                                <i class="fas fa-compass"></i>
+                                <div class="detail-text">
+                                    <span class="detail-label" data-i18n="label_landmark">Landmark</span>
+                                    <span class="detail-value" data-i18n="branch_3_landmark">Near 37th Polyclinic</span>
+                                </div>
+                            </div>
+                            <div class="detail-item">
+                                <i class="fas fa-clock"></i>
+                                <div class="detail-text">
+                                    <span class="detail-label" data-i18n="label_hours">Working Hours</span>
+                                    <span class="detail-value" data-i18n="label_hours_val">09:00 - 20:00 (Mon-Sat)</span>
+                                </div>
+                            </div>
+                            <div class="detail-item">
+                                <i class="fas fa-phone-alt"></i>
+                                <div class="detail-text">
+                                    <span class="detail-label" data-i18n="label_phone">Phone</span>
+                                    <span class="detail-value">+998 90 131-66-01</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="branch-action">
+                            <a href="#" class="btn btn-outline" style="width: 100%;" data-i18n="btn_map">View on Map</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Gallery Section -->
+    <section id="gallery" class="section gallery-section">
+        <div class="container">
+            <div class="reveal">
+                <h2 class="text-center" style="text-align: center; margin-bottom: 3rem;">Inside <span class="text-gradient">IBRAT Talim</span></h2>
+            </div>
+            
+            <div class="gallery-grid">
+                <div class="gallery-item reveal tilt-card">
+                    <img src="https://images.unsplash.com/photo-1577896851231-70ef18881754?auto=format&fit=crop&q=80" alt="Modern Classroom">
+                    <div class="gallery-overlay">
+                        <span>Modern Classrooms</span>
+                    </div>
+                </div>
+                <div class="gallery-item reveal tilt-card" style="transition-delay: 0.1s;">
+                    <img src="https://images.unsplash.com/photo-1503676260728-1c00da094a0b?auto=format&fit=crop&q=80" alt="Interactive Learning">
+                    <div class="gallery-overlay">
+                        <span>Interactive Learning</span>
+                    </div>
+                </div>
+                <div class="gallery-item reveal tilt-card" style="transition-delay: 0.2s;">
+                    <img src="https://images.unsplash.com/photo-1543269865-cbf427effbad?auto=format&fit=crop&q=80" alt="Group Study">
+                    <div class="gallery-overlay">
+                        <span>Group Discussions</span>
+                    </div>
+                </div>
+                <div class="gallery-item reveal tilt-card" style="transition-delay: 0.3s;">
+                    <img src="https://images.unsplash.com/photo-1588075592446-265fd1e6e76f?auto=format&fit=crop&q=80" alt="Kids Education">
+                    <div class="gallery-overlay">
+                        <span>Early Development</span>
+                    </div>
+                </div>
+                <div class="gallery-item reveal tilt-card" style="transition-delay: 0.4s;">
+                    <img src="https://images.unsplash.com/photo-1513258496099-48168024aec0?auto=format&fit=crop&q=80" alt="Library">
+                    <div class="gallery-overlay">
+                        <span>Study Resources</span>
+                    </div>
+                </div>
+                <div class="gallery-item reveal tilt-card" style="transition-delay: 0.5s;">
+                    <img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&q=80" alt="Graduation">
+                    <div class="gallery-overlay">
+                        <span>Student Success</span>
+                    </div>
+                </div>
+                <div class="gallery-item reveal tilt-card" style="transition-delay: 0.6s;">
+                    <img src="https://images.unsplash.com/photo-1523240715639-99a8080f9708?auto=format&fit=crop&q=80" alt="Arabic Class">
+                    <div class="gallery-overlay">
+                        <span>Language Immersion</span>
+                    </div>
+                </div>
+                <div class="gallery-item reveal tilt-card" style="transition-delay: 0.7s;">
+                    <img src="https://images.unsplash.com/photo-1517048676732-d65bc937f952?auto=format&fit=crop&q=80" alt="Discussion">
+                    <div class="gallery-overlay">
+                        <span>Expert Guidance</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="testimonials" class="section">
+        <div class="container">
+            <div class="reveal">
+                <h2 class="text-center" style="text-align: center; margin-bottom: 3rem;" data-i18n="rev_title">Student <span class="text-green">Success</span></h2>
+            </div>
+            
+            <div class="testimonials-grid">
+                <div class="testimonial-card reveal tilt-card">
+                    <i class="fas fa-quote-left quote-icon"></i>
+                    <p class="testimonial-text">"My daughter absolutely loves the Montessori classes! Her confidence has skyrocketed, and the teachers are so supportive."</p>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">N</div>
+                        <div>
+                            <h4>Nargiza T.</h4>
+                            <span>Parent of 5yo</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card reveal tilt-card" style="transition-delay: 0.2s;">
+                    <i class="fas fa-quote-left quote-icon"></i>
+                    <p class="testimonial-text">"The intensive Russian language course helped me secure my dream job. The methodology here is highly practical and results-oriented."</p>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">A</div>
+                        <div>
+                            <h4>Alisher M.</h4>
+                            <span>Adult Student</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card reveal tilt-card" style="transition-delay: 0.4s;">
+                    <i class="fas fa-quote-left quote-icon"></i>
+                    <p class="testimonial-text">"Mental arithmetic has transformed the way my son thinks. He solves complex problems faster than I do now!"</p>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">D</div>
+                        <div>
+                            <h4>Dilnoza R.</h4>
+                            <span>Parent of 9yo</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Form Section -->
+    <section id="contact" class="section contact-section">
+        <div class="container">
+            <div class="contact-container reveal">
+                <div class="contact-info">
+                    <h2 class="text-gradient" data-i18n="cont_title">Start Your Journey</h2>
+                    <p data-i18n="cont_subtitle">Ready to enroll or have a question? Fill out the form below and our team will get back to you shortly.</p>
+                    
+                    <div style="margin-top: 2rem;">
+                        <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 1rem; color: var(--text-primary);">
+                            <div style="width: 40px; height: 40px; border-radius: 50%; background: rgba(12,230,89,0.1); display: flex; align-items: center; justify-content: center; color: var(--brand-green);">
+                                <i class="fas fa-phone"></i>
+                            </div>
+                            <div style="display: flex; flex-direction: column;">
+                                <span>+998 90 131-66-01</span>
+                                <span>+998 90 006-10-20</span>
+                            </div>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 15px; color: var(--text-primary);">
+                            <div style="width: 40px; height: 40px; border-radius: 50%; background: rgba(12,230,89,0.1); display: flex; align-items: center; justify-content: center; color: var(--brand-green);">
+                                <i class="fas fa-envelope"></i>
+                            </div>
+                            <span>info@ibrattalim.uz</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="contact-form-wrapper" style="background: var(--card-bg); padding: 3rem; border-radius: 20px; border: 1px solid var(--border-color);">
+                    <form id="contactForm">
+                        <div class="form-group">
+                            <input type="text" id="name" class="form-control" required>
+                            <label for="name" class="form-label" data-i18n="form_name">Full Name</label>
+                        </div>
+                        <div class="form-group">
+                            <input type="tel" id="phone" class="form-control" required>
+                            <label for="phone" class="form-label" data-i18n="form_phone">Phone Number</label>
+                        </div>
+                        <div class="form-group">
+                            <select id="course" class="form-control" style="color: var(--text-muted);" required>
+                                <option value="" disabled selected data-i18n="form_course">Select a Course</option>
+                                <option value="english">English Language</option>
+                                <option value="russian">Russian Language</option>
+                                <option value="uzbek">Uzbek Language</option>
+                                <option value="korean">Korean Language</option>
+                                <option value="math_physics">Math & Physics</option>
+                                <option value="dtm_ielts">DTM/BIM & IELTS Prep</option>
+                                <option value="mental">Mental Arithmetic</option>
+                                <option value="montessori">Montessori</option>
+                                <option value="speedreading">Speed Reading</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <textarea id="message" class="form-control"></textarea>
+                            <label for="message" class="form-label" data-i18n="form_msg">Message (Optional)</label>
+                        </div>
+                        <button type="submit" class="btn btn-primary" style="width: 100%; border-radius: 10px;" data-i18n="btn_send">Send Request</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid reveal">
+                <div class="footer-col">
+                    <a href="#" class="logo">
+                        IBRAT<span>TALIM</span>
+                    </a>
+                    <p data-i18n="footer_desc">Empowering minds through innovative education. Join our community and shape your future today.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-telegram"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                    </div>
+                </div>
+                
+                <div class="footer-col">
+                    <h4 data-i18n="footer_links">Quick Links</h4>
+                    <ul>
+                        <li><a href="#home" data-i18n="nav_home">Home</a></li>
+                        <li><a href="#about" data-i18n="nav_about">About</a></li>
+                        <li><a href="#courses" data-i18n="nav_courses">Courses</a></li>
+                        <li><a href="#branches" data-i18n="nav_branches">Branches</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-col">
+                    <h4 data-i18n="footer_branches">Our Branches</h4>
+                    <ul class="branch-list">
+                        <li><strong>Sergeli 5A:</strong> 📞 (90) 026 80 21, (77) 131 66 01</li>
+                        <li><strong>Yangi Darhon:</strong> 📞 (90) 007 80 21</li>
+                        <li><strong>Sputnik 16:</strong> 📞 (90) 131 66 01</li>
+                        <li><strong>Beruniy:</strong> 📞 (92) 001 05 04</li>
+                    </ul>
+                </div>
+
+                <div class="footer-col">
+                    <h4 data-i18n="footer_contact">Contact Us</h4>
+                    <p data-i18n="footer_info_label">For more information:</p>
+                    <a href="tel:+998771316601" class="footer-phone">📲 (77) 131 66 01</a>
+                </div>
+            </div>
+            <p class="copyright">&copy; 2026 IBRAT Talim. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Script -->
+    <script src="script.js"></script>
+</body>
+</html>

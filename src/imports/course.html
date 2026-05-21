@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-i18n="course_page_title">Course Details | IBRAT Talim</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="subpage">
+    <div class="cursor-dot"></div>
+    <div class="cursor-outline"></div>
+
+    <nav class="navbar scrolled">
+        <div class="container nav-container">
+            <a href="index.html" class="logo">
+                IBRAT<span>TALIM</span>
+            </a>
+            <div class="nav-right">
+                <div class="lang-switcher">
+                    <button class="lang-btn" data-lang="en">EN</button>
+                    <button class="lang-btn" data-lang="ru">RU</button>
+                    <button class="lang-btn" data-lang="uz">UZ</button>
+                </div>
+                <a href="index.html#courses" class="btn btn-outline" style="padding: 0.5rem 1.2rem; font-size: 0.8rem;">
+                    <i class="fas fa-arrow-left" style="margin-right: 8px;"></i> <span data-i18n="btn_back">Back</span>
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <header class="course-hero">
+        <div class="container">
+            <h1 id="course-title" class="text-gradient">Course Name</h1>
+            <div class="course-hero-img reveal">
+                <img id="course-banner" src="" alt="Course Banner">
+            </div>
+        </div>
+    </header>
+
+    <section class="section">
+        <div class="container">
+            <div class="course-details-grid">
+                <div class="course-main-info reveal">
+                    <h2 data-i18n="about_course">About the Course</h2>
+                    <p id="course-description">Detailed description will appear here.</p>
+                    
+                    <h3 style="margin-top: 2rem; margin-bottom: 1rem;" data-i18n="what_you_learn">What You Will Learn</h3>
+                    <ul id="course-features" style="list-style: none; display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; color: var(--text-muted);">
+                        <!-- Features added via JS -->
+                    </ul>
+                </div>
+
+                <aside class="course-sidebar reveal" style="transition-delay: 0.2s;">
+                    <h3 class="sidebar-title" data-i18n="course_info">Course Information</h3>
+                    <div class="sidebar-item">
+                        <span class="sidebar-label" data-i18n="label_duration">Duration</span>
+                        <span class="sidebar-value" id="course-duration">3 Months</span>
+                    </div>
+                    <div class="sidebar-item">
+                        <span class="sidebar-label" data-i18n="label_level">Level</span>
+                        <span class="sidebar-value" id="course-level">All Levels</span>
+                    </div>
+                    <div class="sidebar-item">
+                        <span class="sidebar-label" data-i18n="label_cert">Certificate</span>
+                        <span class="sidebar-value" data-i18n="val_yes">Yes</span>
+                    </div>
+                    
+                    <a href="index.html#contact" class="btn btn-primary" style="width: 100%; margin-top: 2rem; border-radius: 10px;" data-i18n="btn_enroll_now">Enroll Now</a>
+                </aside>
+            </div>
+        </div>
+    </section>
+
+    <!-- More Courses Section -->
+    <section class="section" style="background: var(--bg-secondary);">
+        <div class="container">
+            <h2 class="text-center reveal" style="text-align: center; margin-bottom: 3rem;" data-i18n="more_courses">More <span class="text-green">Courses</span></h2>
+            <div class="courses-grid" id="more-courses-grid">
+                <!-- Other courses will be injected here -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid reveal">
+                <div class="footer-col">
+                    <a href="index.html" class="logo">
+                        IBRAT<span>TALIM</span>
+                    </a>
+                    <p data-i18n="footer_desc">Empowering minds through innovative education. Join our community and shape your future today.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-telegram"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                    </div>
+                </div>
+                
+                <div class="footer-col">
+                    <h4 data-i18n="footer_links">Quick Links</h4>
+                    <ul>
+                        <li><a href="index.html#home" data-i18n="nav_home">Home</a></li>
+                        <li><a href="index.html#about" data-i18n="nav_about">About</a></li>
+                        <li><a href="index.html#courses" data-i18n="nav_courses">Courses</a></li>
+                        <li><a href="index.html#branches" data-i18n="nav_branches">Branches</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-col">
+                    <h4 data-i18n="footer_branches">Our Branches</h4>
+                    <ul class="branch-list">
+                        <li><strong>Sergeli 5A:</strong> 📞 (90) 026 80 21, (77) 131 66 01</li>
+                        <li><strong>Yangi Darhon:</strong> 📞 (90) 007 80 21</li>
+                        <li><strong>Sputnik 16:</strong> 📞 (90) 131 66 01</li>
+                        <li><strong>Beruniy:</strong> 📞 (92) 001 05 04</li>
+                    </ul>
+                </div>
+
+                <div class="footer-col">
+                    <h4 data-i18n="footer_contact">Contact Us</h4>
+                    <p data-i18n="footer_info_label">For more information:</p>
+                    <a href="tel:+998771316601" class="footer-phone">📲 (77) 131 66 01</a>
+                </div>
+            </div>
+            <p class="copyright">&copy; 2026 IBRAT Talim. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+    <script>
+        // Specific logic for course page
+        document.addEventListener('DOMContentLoaded', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const courseKey = urlParams.get('c') || 'english';
+            
+            const courseData = {
+                english: {
+                    title: 'English Language',
+                    banner: 'https://images.unsplash.com/photo-1524178232363-1fb2b075b655?w=800&q=80',
+                    desc: 'Master the global language with our comprehensive English courses. Whether you are a beginner looking to start your journey or an advanced student aiming for IELTS success, our expert-led programs are tailored to your needs. Focus on speaking, grammar, and professional communication.',
+                    features: ['IELTS Preparation', 'Grammar Mastery', 'Speaking Clubs', 'Business English'],
+                    duration: '3-6 Months',
+                    level: 'A1 - C1'
+                },
+                russian: {
+                    title: 'Russian Language',
+                    banner: 'https://images.unsplash.com/photo-1524178232363-1fb2b075b655?w=800&q=80',
+                    desc: 'Russian is one of the most widely spoken languages in the region. Our course focuses on practical communication, literature, and grammar. We use modern immersive techniques to help you speak fluently from day one.',
+                    features: ['Native Speakers', 'Practical Focus', 'Grammar Intensive', 'Literature & Culture'],
+                    duration: '4 Months',
+                    level: 'Beginner to Advanced'
+                },
+                arabic: {
+                    title: 'Arabic Language',
+                    banner: 'https://images.unsplash.com/photo-1524178232363-1fb2b075b655?w=800&q=80',
+                    desc: 'Discover the rich heritage and linguistic beauty of the Arabic language. Our courses cover everything from the alphabet to complex literature and modern conversational Arabic. Ideal for those interested in theology, business, or culture.',
+                    features: ['Classic Arabic', 'Modern Dialects', 'Writing & Calligraphy', 'Quranic Arabic'],
+                    duration: '6 Months',
+                    level: 'Beginner to Intermediate'
+                }
+            };
+
+            const data = courseData[courseKey] || courseData.english;
+            
+            // Populate page
+            document.getElementById('course-title').innerText = data.title;
+            document.getElementById('course-banner').src = data.banner;
+            document.getElementById('course-description').innerText = data.desc;
+            document.getElementById('course-duration').innerText = data.duration;
+            document.getElementById('course-level').innerText = data.level;
+            
+            const featuresList = document.getElementById('course-features');
+            data.features.forEach(f => {
+                const li = document.createElement('li');
+                li.innerHTML = `<i class="fas fa-check-circle" style="color: var(--brand-green); margin-right: 10px;"></i> ${f}`;
+                featuresList.appendChild(li);
+            });
+
+            // Populate More Courses
+            const moreGrid = document.getElementById('more-courses-grid');
+            Object.keys(courseData).forEach(key => {
+                if (key !== courseKey) {
+                    const c = courseData[key];
+                    const card = document.createElement('a');
+                    card.href = `course.html?c=${key}`;
+                    card.className = 'course-card tilt-card reveal';
+                    card.style.textDecoration = 'none';
+                    card.style.color = 'inherit';
+                    card.innerHTML = `
+                        <div class="course-img">
+                            <img src="${c.banner}" alt="${c.title}" style="width: 100%; height: 100%; object-fit: cover;">
+                        </div>
+                        <div class="course-info">
+                            <h4>${c.title}</h4>
+                            <p>${c.desc.substring(0, 80)}...</p>
+                        </div>
+                    `;
+                    moreGrid.appendChild(card);
+                }
+            });
+        });
+    </script>
+</body>
+</html>

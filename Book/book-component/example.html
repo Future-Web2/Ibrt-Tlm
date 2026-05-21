@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Integration Example - 3D Book Component</title>
+    <link rel="stylesheet" href="book-3d.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', sans-serif;
+            background: #f5f5f5;
+        }
+        
+        .header {
+            padding: 40px 20px;
+            background: white;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .header h1 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+        
+        .content-section {
+            max-width: 1200px;
+            margin: 60px auto;
+            padding: 40px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.1);
+        }
+        
+        .content-section h2 {
+            color: #966b38;
+            margin-bottom: 20px;
+        }
+        
+        .content-section p {
+            color: #666;
+            line-height: 1.8;
+            margin-bottom: 15px;
+        }
+        
+        .footer {
+            padding: 40px 20px;
+            background: #333;
+            color: white;
+            text-align: center;
+            margin-top: 100px;
+        }
+    </style>
+</head>
+<body>
+    <!-- HEADER -->
+    <div class="header">
+        <h1>3D Book Animation Component</h1>
+        <p>Интерактивный компонент с 3D анимацией прокрутки</p>
+    </div>
+
+    <!-- CONTENT BEFORE BOOK -->
+    <div class="content-section">
+        <h2>О компоненте</h2>
+        <p>
+            Это полностью готовый компонент 3D книги с анимацией при прокрутке. 
+            Книга начинает закрытой и постепенно открывается при прокрутке страницы вниз.
+        </p>
+        <p>
+            Компонент полностью адаптивен и работает на всех устройствах.
+            Используйте CSS переменную --scroll-progress для управления анимацией.
+        </p>
+    </div>
+
+    <!-- 3D BOOK COMPONENT -->
+    <section class="book-scroll-track theme-light" id="book-section">
+        <div class="sticky-viewport">
+            <div class="writing-table">
+                <div class="spotlight"></div>
+            </div>
+            
+            <!-- Ambient Particles -->
+            <div class="dust-container">
+                <div class="dust dust-1"></div>
+                <div class="dust dust-2"></div>
+                <div class="dust dust-3"></div>
+                <div class="dust dust-4"></div>
+                <div class="dust dust-5"></div>
+                <div class="dust dust-6"></div>
+                <div class="dust dust-7"></div>
+                <div class="dust dust-8"></div>
+            </div>
+
+            <!-- 3D Scene -->
+            <div class="scene-3d">
+                <div class="ancient-book">
+                    <!-- COVERS -->
+                    <div class="book-cover left-back-cover" style="background-image: url('data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 200 200%22><circle cx=%22100%22 cy=%22100%22 r=%2280%22 fill=%22none%22 stroke=%22%23c59b27%22 stroke-width=%222%22/><text x=%22100%22 y=%2280%22 font-family=%22Arial,%20sans-serif%22 font-size=%2220%22 font-weight=%22bold%22 text-anchor=%22middle%22 fill=%22%23c59b27%22>IBRAT</text><text x=%22100%22 y=%22110%22 font-family=%22Arial,%20sans-serif%22 font-size=%2212%22 text-anchor=%22middle%22 fill=%22%23c59b27%22>TA%27LIM</text></svg>')"></div>
+                    <div class="book-cover right-back-cover"></div>
+
+                    <!-- LEFT PAGE -->
+                    <div class="static-page left-base">
+                        <div class="ink-content">
+                            <span class="drop-cap">I</span>
+                            <h2>Biz Haqimizda</h2>
+                            <p>
+                                IBRAT Talim zamonaviy bilimlarni chuqur o'rganish va kelajak 
+                                ko'nikmalarini shakllantirish maskanidir. Bizning maqsadimiz — 
+                                har bir talabaga mukammal rivojlanish yo'lini taqdim etishdir.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- FLIPPING PAGES -->
+                    <div class="flipping-page page-1">
+                        <div class="page-face front">✦ Kelajak Texnologiyalari</div>
+                        <div class="page-face back"></div>
+                    </div>
+                    
+                    <div class="flipping-page page-2">
+                        <div class="page-face front">⚛ Zamonaviy Metodika</div>
+                        <div class="page-face back"></div>
+                    </div>
+
+                    <div class="flipping-page page-3">
+                        <div class="page-face front">✵ Individual Yondashuv</div>
+                        <div class="page-face back"></div>
+                    </div>
+
+                    <!-- RIGHT PAGE -->
+                    <div class="static-page right-base">
+                        <div class="ink-content advantages-grid">
+                            <div class="seal-item">
+                                <div class="seal-icon">✦</div>
+                                <div>
+                                    <h4>Yuqori Sifat</h4>
+                                    <p>Xalqaro standartlarga mos darsliklar va tizim.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CONTENT AFTER BOOK -->
+    <div class="content-section">
+        <h2>Как использовать</h2>
+        <p>
+            Просто скопируйте файлы book-3d.html, book-3d.css и book-3d.js в вашу папку 
+            и включите их в ваш основной проект.
+        </p>
+        <p>
+            Все CSS стили полностью кастомизируемы. Отредактируйте цвета, размеры и текст 
+            под ваши нужды.
+        </p>
+    </div>
+
+    <!-- FOOTER -->
+    <div class="footer">
+        <p>&copy; 2024 3D Book Component. Все права защищены.</p>
+    </div>
+
+    <script src="book-3d.js"></script>
+</body>
+</html>

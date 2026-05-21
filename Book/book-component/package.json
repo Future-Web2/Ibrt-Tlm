@@ -1,0 +1,21 @@
+{
+  "name": "3d-book-component",
+  "version": "1.0.0",
+  "description": "Interactive 3D book scroll animation component",
+  "main": "book-3d.js",
+  "files": [
+    "book-3d.html",
+    "book-3d.css",
+    "book-3d.js",
+    "README.md"
+  ],
+  "keywords": [
+    "3d",
+    "animation",
+    "book",
+    "scroll",
+    "interactive"
+  ],
+  "author": "",
+  "license": "MIT"
+}

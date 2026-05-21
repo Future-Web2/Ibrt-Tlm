@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D Book Scroll Animation</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="root"></div>
+    
+    <section class="book-scroll-track theme-light" id="about">
+        <div class="sticky-viewport">
+            <div class="writing-table"><div class="spotlight"></div></div>
+            
+            <!-- Ambient Particles -->
+            <div class="dust-container">
+                <div class="dust dust-1"></div>
+                <div class="dust dust-2"></div>
+                <div class="dust dust-3"></div>
+                <div class="dust dust-4"></div>
+                <div class="dust dust-5"></div>
+                <div class="dust dust-6"></div>
+                <div class="dust dust-7"></div>
+                <div class="dust dust-8"></div>
+            </div>
+
+            <!-- 3D Scene -->
+            <div class="scene-3d">
+                <div class="ancient-book">
+            <!-- BASE COVERS -->
+                    <div class="book-cover left-back-cover" style="background-image: url('data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 200 200%22><circle cx=%22100%22 cy=%22100%22 r=%2280%22 fill=%22none%22 stroke=%22%23c59b27%22 stroke-width=%222%22/><text x=%22100%22 y=%2280%22 font-family=%22Arial,%20sans-serif%22 font-size=%2220%22 font-weight=%22bold%22 text-anchor=%22middle%22 fill=%22%23c59b27%22>IBRAT</text><text x=%22100%22 y=%22110%22 font-family=%22Arial,%20sans-serif%22 font-size=%2212%22 text-anchor=%22middle%22 fill=%22%23c59b27%22>TA%27LIM</text></svg>')"></div>
+                    <div class="book-cover right-back-cover"></div>
+
+                    <!-- STATIC LEFT BASE PAGE -->
+                    <div class="static-page left-base">
+                        <div class="ink-content">
+                            <span class="drop-cap">I</span>
+                            <h2>Biz Haqimizda</h2>
+                            <p>
+                                IBRAT Talim zamonaviy bilimlarni chuqur o'rganish va kelajak 
+                                ko'nikmalarini shakllantirish maskanidir. Bizning maqsadimiz — 
+                                har bir talabaga mukammal rivojlanish yo'lini taqdim etishdir.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- FLIPPING PAGES -->
+                    <div class="flipping-page page-1">
+                        <div class="page-face front">✦ Kelajak Texnologiyalari</div>
+                        <div class="page-face back"></div>
+                    </div>
+                    
+                    <div class="flipping-page page-2">
+                        <div class="page-face front">⚛ Zamonaviy Metodika</div>
+                        <div class="page-face back"></div>
+                    </div>
+
+                    <div class="flipping-page page-3">
+                        <div class="page-face front">✵ Individual Yondashuv</div>
+                        <div class="page-face back"></div>
+                    </div>
+
+                    <!-- STATIC RIGHT BASE PAGE -->
+                    <div class="static-page right-base">
+                        <div class="ink-content advantages-grid">
+                            <div class="seal-item">
+                                <div class="seal-icon">✦</div>
+                                <div>
+                                    <h4>Yuqori Sifat</h4>
+                                    <p>Xalqaro standartlarga mos darsliklar va tizim.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script src="app.js"></script>
+</body>
+</html>
