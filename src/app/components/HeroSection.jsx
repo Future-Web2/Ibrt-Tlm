@@ -1,658 +1,633 @@
-import { useRef, useState, useEffect, useCallback } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useLang } from '../context/LanguageContext.jsx';
-import logoImage from '../../publish/image.png';
 
-const G = 'var(--brand-green)';
-const glass = {
-  background: 'var(--glass-bg)',
-  backdropFilter: 'blur(22px) saturate(1.8)',
-  WebkitBackdropFilter: 'blur(22px) saturate(1.8)',
-  border: '1px solid var(--glass-border)',
-  boxShadow: 'var(--glass-shadow)',
-  borderRadius: 20,
-};
-
-/* ─── Particle Canvas (cinematic floating sparkles) ─── */
-function ParticleField() {
-  const canvasRef = useRef(null);
-  const animRef = useRef(null);
-
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext('2d');
-    let W = canvas.width = window.innerWidth;
-    let H = canvas.height = window.innerHeight;
-
-    const N = 72;
-    const particles = Array.from({ length: N }, () => ({
-      x: Math.random() * W,
-      y: Math.random() * H,
-      r: Math.random() * 2.2 + 0.4,
-      vx: (Math.random() - 0.5) * 0.35,
-      vy: (Math.random() - 0.5) * 0.35,
-      alpha: Math.random() * 0.5 + 0.15,
-      pulse: Math.random() * Math.PI * 2,
-      pulseSpeed: Math.random() * 0.02 + 0.008,
-    }));
-
-    const resize = () => {
-      W = canvas.width = window.innerWidth;
-      H = canvas.height = window.innerHeight;
-    };
-    window.addEventListener('resize', resize);
-
-    const tick = () => {
-      ctx.clearRect(0, 0, W, H);
-      for (const p of particles) {
-        p.x += p.vx;
-        p.y += p.vy;
-        p.pulse += p.pulseSpeed;
-        if (p.x < 0) p.x = W;
-        if (p.x > W) p.x = 0;
-        if (p.y < 0) p.y = H;
-        if (p.y > H) p.y = 0;
-        const a = p.alpha * (0.6 + 0.4 * Math.sin(p.pulse));
-        const grd = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r * 3);
-        grd.addColorStop(0, `rgba(16,185,129,${a})`);
-        grd.addColorStop(1, `rgba(16,185,129,0)`);
-        ctx.fillStyle = grd;
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, p.r * 3, 0, Math.PI * 2);
-        ctx.fill();
-      }
-      animRef.current = requestAnimationFrame(tick);
-    };
-
-    animRef.current = requestAnimationFrame(tick);
-    return () => {
-      cancelAnimationFrame(animRef.current);
-      window.removeEventListener('resize', resize);
-    };
-  }, []);
-
-  return (
-    <canvas
-      ref={canvasRef}
-      style={{
-        position: 'absolute', inset: 0, zIndex: 1,
-        width: '100%', height: '100%', pointerEvents: 'none',
-      }}
-    />
-  );
-}
-
-/* ─── Typewriter effect ─── */
-function Typewriter({ words, speed = 90, pause = 2000 }) {
-  const [display, setDisplay] = useState('');
-  const [wordIdx, setWordIdx] = useState(0);
-  const [charIdx, setCharIdx] = useState(0);
-  const [deleting, setDeleting] = useState(false);
-
-  useEffect(() => {
-    const current = words[wordIdx];
-    let delay = deleting ? speed / 2 : speed;
-
-    if (!deleting && charIdx === current.length) {
-      delay = pause;
-      const t = setTimeout(() => setDeleting(true), delay);
-      return () => clearTimeout(t);
-    }
-    if (deleting && charIdx === 0) {
-      setDeleting(false);
-      setWordIdx((i) => (i + 1) % words.length);
-      return;
-    }
-
-    const t = setTimeout(() => {
-      setDisplay(current.slice(0, charIdx + (deleting ? -1 : 1)));
-      setCharIdx((i) => i + (deleting ? -1 : 1));
-    }, delay);
-    return () => clearTimeout(t);
-  }, [charIdx, deleting, wordIdx, words, speed, pause]);
-
-  return (
-    <span>
-      {display}
-      <span style={{
-        display: 'inline-block', width: '3px', height: '1em',
-        background: 'var(--brand-green)', marginLeft: 2, verticalAlign: 'middle',
-        animation: 'cursorBlink 1.1s step-start infinite',
-        borderRadius: 2,
-      }} />
-    </span>
-  );
-}
-
-/* ─── Stat Card ─── */
-function StatCard({ emoji, value, label, delay }) {
-  const [visible, setVisible] = useState(false);
-  useEffect(() => {
-    const t = setTimeout(() => setVisible(true), delay);
-    return () => clearTimeout(t);
-  }, [delay]);
-
-  return (
-    <div className="liquid-glass-droplet" style={{
-      ...glass, padding: '1.1rem 1.4rem',
-      textAlign: 'center', minWidth: 120,
-      opacity: visible ? 1 : 0,
-      transform: visible ? 'translateY(0) scale(1)' : 'translateY(20px) scale(0.9)',
-      transition: 'opacity 0.6s cubic-bezier(0.16,1,0.3,1), transform 0.6s cubic-bezier(0.16,1,0.3,1)',
-      cursor: 'default',
-    }}>
-      <div style={{ fontSize: '1.6rem', marginBottom: 4 }}>{emoji}</div>
-      <div style={{
-        fontSize: '1.65rem', fontWeight: 900, color: G, lineHeight: 1,
-        fontFamily: "'Outfit', sans-serif",
-      }}>{value}</div>
-      <div style={{ fontSize: '.7rem', color: 'var(--text-secondary)', marginTop: 3, fontWeight: 600, letterSpacing: '0.5px' }}>{label}</div>
-    </div>
-  );
-}
-
-/* ─── Mini enroll widget ─── */
-function EnrollWidget({ T, courses }) {
-  const [formName, setFormName] = useState('');
-  const [formPhone, setFormPhone] = useState('');
-  const [formCourse, setFormCourse] = useState('');
-  const [sent, setSent] = useState(false);
-  const [focused, setFocused] = useState(null);
-
-  const handleSubmit = () => {
-    if (formName && formPhone) {
-      setSent(true);
-      setTimeout(() => { setSent(false); setFormName(''); setFormPhone(''); setFormCourse(''); }, 3500);
-    }
-  };
-
-  const inputStyle = (id) => ({
-    width: '100%', padding: '.55rem .9rem',
-    background: focused === id ? 'rgba(16,185,129,0.06)' : 'var(--input-bg, rgba(255,255,255,0.07))',
-    border: `1.5px solid ${focused === id ? 'var(--brand-green)' : 'var(--glass-border, rgba(255,255,255,0.2))'}`,
-    borderRadius: 10, color: 'var(--text-primary)',
-    fontFamily: "'Outfit', sans-serif", fontSize: '.82rem', marginBottom: '.45rem',
-    outline: 'none', transition: 'border-color 0.25s, background 0.25s', boxSizing: 'border-box',
-  });
-
-  return (
-    <div style={{
-      ...glass, padding: '1.4rem 1.5rem', borderRadius: 24,
-      minWidth: 240, maxWidth: 280, position: 'relative', overflow: 'hidden',
-    }}>
-      {/* Top glow accent */}
-      <div style={{
-        position: 'absolute', top: 0, left: '50%', transform: 'translateX(-50%)',
-        width: '80%', height: 2, background: 'linear-gradient(90deg, transparent, var(--brand-green), transparent)',
-        borderRadius: '0 0 4px 4px',
-      }} />
-
-      <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: '1rem' }}>
-        <span style={{
-          width: 28, height: 28, borderRadius: '50%',
-          background: 'linear-gradient(135deg, #10b981, #059669)',
-          display: 'flex', alignItems: 'center', justifyContent: 'center',
-          fontSize: '.8rem', flexShrink: 0,
-        }}>⚡</span>
-        <h4 style={{ fontSize: '.85rem', fontWeight: 800, color: 'var(--text-primary)', margin: 0 }}>
-          {T('widget_enroll')}
-        </h4>
-      </div>
-
-      {sent ? (
-        <div style={{ textAlign: 'center', padding: '1.2rem 0' }}>
-          <div style={{ fontSize: '2.2rem', marginBottom: '.4rem' }}>🎉</div>
-          <div style={{ color: G, fontWeight: 800, fontSize: '.9rem' }}>Yuborildi!</div>
-          <div style={{ color: 'var(--text-secondary)', fontSize: '.75rem', marginTop: 4 }}>Tez orada bog'lanamiz</div>
-        </div>
-      ) : (
-        <>
-          <input value={formName} onChange={e => setFormName(e.target.value)}
-            placeholder={T('form_name_w')}
-            onFocus={() => setFocused('name')} onBlur={() => setFocused(null)}
-            style={inputStyle('name')} />
-          <input value={formPhone} onChange={e => setFormPhone(e.target.value)}
-            placeholder="+998 __ ___ __ __"
-            onFocus={() => setFocused('phone')} onBlur={() => setFocused(null)}
-            style={inputStyle('phone')} />
-          <select value={formCourse} onChange={e => setFormCourse(e.target.value)}
-            onFocus={() => setFocused('course')} onBlur={() => setFocused(null)}
-            style={{ ...inputStyle('course'), color: formCourse ? 'var(--text-primary)' : 'var(--text-secondary)', cursor: 'pointer', background: 'var(--bg-primary, #fff)' }}>
-            <option value="" disabled>{T('form_course_w')}</option>
-            {courses.map(c => <option key={c.v} value={c.v}>{c.l}</option>)}
-          </select>
-          <button onClick={handleSubmit} style={{
-            width: '100%', padding: '.55rem', border: 'none', borderRadius: 10,
-            background: 'linear-gradient(135deg, #10b981, #059669)',
-            color: '#fff', fontWeight: 800, fontSize: '.82rem', cursor: 'pointer',
-            fontFamily: "'Outfit', sans-serif",
-            boxShadow: '0 4px 14px rgba(16,185,129,0.4)',
-            transition: 'transform 0.2s, box-shadow 0.2s',
-          }}
-            onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '0 8px 20px rgba(16,185,129,0.55)'; }}
-            onMouseLeave={e => { e.currentTarget.style.transform = ''; e.currentTarget.style.boxShadow = '0 4px 14px rgba(16,185,129,0.4)'; }}
-          >
-            {T('btn_send')} →
-          </button>
-        </>
-      )}
-    </div>
-  );
-}
-
-/* ─── Main Section ─── */
 export default function HeroSection() {
-  const { T, lang } = useLang();
-  const [scrollY, setScrollY] = useState(0);
-  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+  const { lang } = useLang();
   const [mounted, setMounted] = useState(false);
-  const sectionRef = useRef(null);
-
-  const typewriterWords = {
-    uz: ['Ingliz tilini', 'Rus tilini', 'Arab tilini', 'Koreys tilini', 'Mental Arifmetika'],
-    ru: ['Английский язык', 'Русский язык', 'Арабский язык', 'Корейский язык', 'Ментальную арифметику'],
-    en: ['English', 'Russian', 'Arabic', 'Korean', 'Mental Arithmetic'],
-  };
-
-  const courses = [
-    { v: 'english', l: 'Ingliz tili' }, { v: 'russian', l: 'Rus tili' },
-    { v: 'arabic', l: 'Arab tili' }, { v: 'korean', l: 'Koreys tili' },
-    { v: 'mental', l: 'Mental Arifmetika' }, { v: 'montessori', l: 'Montessori' },
-  ];
+  const [cardOffset, setCardOffset] = useState({ x: 0, y: 0 });
+  const [leaving, setLeaving] = useState(false);
+  const rightRef = useRef(null);
 
   useEffect(() => {
-    const t = setTimeout(() => setMounted(true), 80);
+    const t = setTimeout(() => setMounted(true), 120);
     return () => clearTimeout(t);
   }, []);
 
-  useEffect(() => {
-    const handleScroll = () => setScrollY(window.scrollY);
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
-  const handleMouseMove = useCallback((e) => {
-    const rect = sectionRef.current?.getBoundingClientRect();
+  const onMouseMove = (e) => {
+    const rect = rightRef.current?.getBoundingClientRect();
     if (!rect) return;
-    setMousePos({
-      x: (e.clientX - rect.left - rect.width / 2) / rect.width,
-      y: (e.clientY - rect.top - rect.height / 2) / rect.height,
-    });
-  }, []);
+    const cx = (e.clientX - rect.left - rect.width / 2) / (rect.width / 2);
+    const cy = (e.clientY - rect.top - rect.height / 2) / (rect.height / 2);
+    setLeaving(false);
+    setCardOffset({ x: cx * 18, y: cy * 12 });
+  };
 
-  const tiltX = mousePos.y * -8;
-  const tiltY = mousePos.x * 10;
+  const onMouseLeave = () => {
+    setLeaving(true);
+    setCardOffset({ x: 0, y: 0 });
+  };
 
-  const stats = [
-    { emoji: '🎓', value: '1500+', label: T('stat_students'), delay: 600 },
-    { emoji: '👩‍🏫', value: '50+', label: T('stat_teachers'), delay: 750 },
-    { emoji: '⭐', value: '5', label: T('stat_years'), delay: 900 },
-    { emoji: '📚', value: '8+', label: lang === 'uz' ? 'Kurs turlari' : lang === 'ru' ? 'Видов курсов' : 'Course types', delay: 1050 },
-  ];
+  const copy = {
+    uz: {
+      eyebrow: "Ta'lim markazi · Toshkent · 2016 yildan beri",
+      l1: 'Bilim —',
+      l2: "o'zgarish",
+      l3: 'investitsiya.',
+      body: "Xorijiy tillar va bolalar erta rivojlanishiga ixtisoslashgan ta'lim markazi. 9 yillik tajriba, individual yondashuv, tasdiqlangan natijalar.",
+      cta1: "Kurslarni ko'rish",
+      cta2: "Biz haqimizda",
+      c1t: 'BITIRUVCHILAR', c1n: '5,000+', c1l: "dasturni tugatdi",
+      c2t: 'MAMNUNLIK',     c2n: '98%',    c2l: "ijobiy baho berdi",
+      c3t: 'TAJRIBA',       c3n: '9',      c3l: "yillik faoliyat",
+      st1: 'bitiruvchi', st2: 'yil tajriba', st3: 'mamnunlik darajasi',
+    },
+    ru: {
+      eyebrow: "Образовательный центр · Ташкент · с 2016 года",
+      l1: 'Знание —',
+      l2: 'трансформация',
+      l3: 'инвестиция.',
+      body: "Образовательный центр с девятилетним опытом в иностранных языках и раннем развитии детей. Индивидуальный подход, измеримые результаты.",
+      cta1: "Смотреть курсы",
+      cta2: "О нас",
+      c1t: 'ВЫПУСКНИКИ',      c1n: '5,000+', c1l: "завершили программу",
+      c2t: 'УДОВЛЕТВОРЁННОСТЬ', c2n: '98%',   c2l: "положительных оценок",
+      c3t: 'ОПЫТ',             c3n: '9',      c3l: "лет деятельности",
+      st1: 'выпускников', st2: 'лет опыта', st3: 'удовлетворённость',
+    },
+    en: {
+      eyebrow: "Educational Centre · Tashkent · est. 2016",
+      l1: 'Knowledge —',
+      l2: 'transformative',
+      l3: 'investment.',
+      body: "A Tashkent-based educational centre with nine years of expertise in foreign language instruction and early childhood development.",
+      cta1: "Explore courses",
+      cta2: "About us",
+      c1t: 'GRADUATES',   c1n: '5,000+', c1l: "programme completions",
+      c2t: 'SATISFACTION', c2n: '98%',   c2l: "positive ratings",
+      c3t: 'EXPERIENCE',  c3n: '9',      c3l: "years of operation",
+      st1: 'graduates', st2: 'years', st3: 'satisfaction rate',
+    },
+  };
+  const lc = copy[lang] || copy.uz;
+
+  /* helper: append ibh-vis when mounted */
+  const v = (base) => `${base}${mounted ? ' ibh-vis' : ''}`;
 
   return (
-    <section
-      id="home"
-      ref={sectionRef}
-      onMouseMove={handleMouseMove}
-      style={{
-        minHeight: '100vh', display: 'flex', alignItems: 'center',
-        justifyContent: 'center', position: 'relative',
-        overflow: 'hidden', paddingTop: 90,
-        fontFamily: "'Outfit', sans-serif",
-      }}
-    >
+    <section id="home" className="ibh">
+      <style>{`
+        /* ═══════════════════════════════════════════════════
+           IBRAT HERO — Editorial / Institutional
+           Monocle × Swiss Design × Copenhagen architecture
+        ═══════════════════════════════════════════════════ */
 
-      {/* ── Parallax background image ── */}
-      <div style={{
-        position: 'absolute', inset: 0, zIndex: 0,
-        backgroundImage: `url('https://images.unsplash.com/photo-1523050854058-8df90110c9f1?auto=format&fit=crop&w=1800&q=80')`,
-        backgroundSize: 'cover', backgroundPosition: 'center',
-        transform: `translate3d(0, ${scrollY * 0.3}px, 0) scale(${1 + scrollY * 0.0002})`,
-        willChange: 'transform',
-        filter: 'brightness(0.35) saturate(1.2)',
-      }} />
+        /* ── CSS Variables: Dark (default) ── */
+        .ibh {
+          --hbg:   #0D0C0A;
+          --htx:   #F0EAE0;
+          --hac:   #2DC56A;
+          --hmut:  rgba(240,234,224,0.45);
+          --hbdr:  rgba(240,234,224,0.08);
+          --hrb:   #111009;
+          --hca:   #1C1A16;
+          --hcb:   #181510;
+          --hcc:   #1A1814;
+          --hpbg:  #2DC56A;
+          --hptx:  #070E09;
+          --hgbd:  rgba(240,234,224,0.25);
+          --hprog: rgba(240,234,224,0.1);
+        }
 
-      {/* ── Dark cinematic gradient overlay ── */}
-      <div style={{
-        position: 'absolute', inset: 0, zIndex: 1,
-        background: `
-          radial-gradient(ellipse 70% 60% at 50% 40%, rgba(2,44,34,0.55) 0%, transparent 70%),
-          linear-gradient(180deg, rgba(0,0,0,0.55) 0%, rgba(2,20,14,0.75) 60%, rgba(1,8,5,0.92) 100%)
-        `,
-      }} />
+        /* ── CSS Variables: Light ── */
+        html[data-theme="light"] .ibh {
+          --hbg:   #F2EDE6;
+          --htx:   #0F0E0C;
+          --hac:   #1A7A3C;
+          --hmut:  rgba(15,14,12,0.45);
+          --hbdr:  rgba(15,14,12,0.08);
+          --hrb:   #EAE3DA;
+          --hca:   #E0D9CF;
+          --hcb:   #D4CCBF;
+          --hcc:   #DEDAD3;
+          --hpbg:  #0F0E0C;
+          --hptx:  #F2EDE6;
+          --hgbd:  rgba(15,14,12,0.25);
+          --hprog: rgba(15,14,12,0.08);
+        }
 
-      {/* ── Green aurora glow top-right ── */}
-      <div style={{
-        position: 'absolute', width: 700, height: 700, borderRadius: '50%',
-        background: 'radial-gradient(circle, rgba(16,185,129,0.18) 0%, transparent 70%)',
-        top: -250, right: -150, zIndex: 1,
-        transform: `translate3d(${mousePos.x * -18}px, ${scrollY * -0.1 + mousePos.y * -12}px, 0)`,
-        transition: 'transform 0.08s linear',
-        willChange: 'transform',
-      }} />
-      {/* ── Green aurora glow bottom-left ── */}
-      <div style={{
-        position: 'absolute', width: 500, height: 500, borderRadius: '50%',
-        background: 'radial-gradient(circle, rgba(16,185,129,0.1) 0%, transparent 70%)',
-        bottom: -200, left: -80, zIndex: 1,
-        transform: `translate3d(${mousePos.x * 12}px, ${scrollY * -0.06 + mousePos.y * 10}px, 0)`,
-        transition: 'transform 0.08s linear',
-        willChange: 'transform',
-      }} />
+        /* ── Section wrapper ── */
+        .ibh {
+          background: var(--hbg);
+          color: var(--htx);
+          font-family: 'Cabinet Grotesk', 'Helvetica Neue', Arial, sans-serif;
+          border-radius: 14px;
+          overflow: hidden;
+          min-height: 100vh;
+          display: flex;
+          flex-direction: column;
+          padding-top: 84px;
+          transition: background-color 0.35s ease, color 0.35s ease;
+        }
 
-      {/* ── Particle canvas ── */}
-      <ParticleField />
+        /* ── Two-column grid + 1px divider ── */
+        .ibh-grid {
+          display: grid;
+          grid-template-columns: 1fr 1px 1fr;
+          flex: 1;
+          min-height: 0;
+        }
 
-      {/* ── Grid overlay texture ── */}
-      <div style={{
-        position: 'absolute', inset: 0, zIndex: 2,
-        backgroundImage: `
-          linear-gradient(rgba(16,185,129,0.04) 1px, transparent 1px),
-          linear-gradient(90deg, rgba(16,185,129,0.04) 1px, transparent 1px)
-        `,
-        backgroundSize: '50px 50px',
-        maskImage: 'radial-gradient(ellipse 80% 60% at 50% 50%, black 30%, transparent 100%)',
-        WebkitMaskImage: 'radial-gradient(ellipse 80% 60% at 50% 50%, black 30%, transparent 100%)',
-      }} />
+        /* ═══ LEFT COLUMN ═══ */
+        .ibh-left {
+          display: flex;
+          flex-direction: column;
+          padding: 60px 56px 56px;
+        }
 
-      {/* ── MAIN LAYOUT ── */}
-      <div style={{
-        position: 'relative', zIndex: 5, width: '100%', maxWidth: 1280,
-        padding: '0 2rem', display: 'flex', flexDirection: 'column',
-        alignItems: 'center',
-        transform: `translate3d(0, ${scrollY * 0.12}px, 0)`,
-        opacity: Math.max(1 - scrollY / 680, 0),
-        willChange: 'transform, opacity',
-      }}>
+        /* ── Eyebrow ── */
+        .ibh-eye {
+          display: flex;
+          align-items: center;
+          gap: 12px;
+          margin-bottom: 48px;
+        }
+        .ibh-eye-rule {
+          display: block;
+          width: 24px;
+          height: 1.5px;
+          background: var(--hac);
+          flex-shrink: 0;
+          transition: background 0.35s ease;
+        }
+        .ibh-eye-tx {
+          font-family: 'Cabinet Grotesk', sans-serif;
+          font-size: 11px;
+          font-weight: 700;
+          letter-spacing: 2.5px;
+          text-transform: uppercase;
+          color: var(--htx);
+          opacity: 0.4;
+          transition: color 0.35s ease;
+        }
 
-        {/* ── Top layout: Stats left | Logo center | Enroll right ── */}
-        <div style={{
-          display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-          width: '100%', gap: '2rem', marginBottom: '3rem',
-        }} className="hero-top-layout">
+        /* ── 3-line Fraunces headline ── */
+        .ibh-h1 {
+          font-family: 'Fraunces', 'Times New Roman', Georgia, serif;
+          font-size: clamp(44px, 4.8vw, 70px);
+          font-weight: 900;
+          letter-spacing: -2.5px;
+          line-height: 0.97;
+          color: var(--htx);
+          margin: 0;
+          font-style: normal;
+          font-variation-settings: 'opsz' 72, 'wght' 900;
+          transition: color 0.35s ease;
+        }
 
-          {/* Stat Cards - Left */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.9rem', flexShrink: 0 }} className="hero-stats">
-            {stats.slice(0, 2).map(s => (
-              <StatCard key={s.label} {...s} />
-            ))}
+        /* overflow wrapper clips the slide-up reveal */
+        .ibh-hw {
+          display: block;
+          overflow: hidden;
+          padding-bottom: 0.06em;
+        }
+
+        /* animated line — hidden until .ibh-vis added */
+        .ibh-hl {
+          display: block;
+          transform: translateY(108%);
+          transition: transform 0.95s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .ibh-hl.ibh-vis {
+          transform: translateY(0);
+        }
+
+        /* Line 2: italic, weight 300, accent color */
+        .ibh-hl-ac {
+          font-style: italic;
+          color: var(--hac);
+          font-variation-settings: 'opsz' 72, 'wght' 300;
+          transition: color 0.35s ease;
+        }
+
+        /* ── Body copy + CTA block ── */
+        .ibh-btm {
+          margin-top: 56px;
+          display: flex;
+          flex-direction: column;
+          gap: 28px;
+        }
+
+        /* reveal wrapper for body */
+        .ibh-bw {
+          opacity: 0;
+          transform: translateY(18px);
+          transition:
+            opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+            transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .ibh-bw.ibh-vis {
+          opacity: 1;
+          transform: translateY(0);
+        }
+
+        .ibh-body {
+          font-family: 'Cabinet Grotesk', sans-serif;
+          font-size: 14px;
+          font-weight: 400;
+          line-height: 1.8;
+          color: var(--htx);
+          opacity: 0.45;
+          max-width: 300px;
+          margin: 0;
+          transition: color 0.35s ease;
+        }
+
+        /* ── CTA row ── */
+        .ibh-cta {
+          display: flex;
+          gap: 10px;
+          align-items: center;
+          flex-wrap: wrap;
+          opacity: 0;
+          transform: translateY(18px);
+          transition:
+            opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+            transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .ibh-cta.ibh-vis {
+          opacity: 1;
+          transform: translateY(0);
+        }
+
+        /* Primary CTA — filled */
+        .ibh-cta-pri {
+          display: inline-flex;
+          align-items: center;
+          padding: 11px 24px;
+          background: var(--hpbg);
+          color: var(--hptx) !important;
+          border: 1px solid transparent;
+          border-radius: 4px;
+          font-family: 'Cabinet Grotesk', sans-serif;
+          font-size: 11px;
+          font-weight: 700;
+          letter-spacing: 1.8px;
+          text-transform: uppercase;
+          text-decoration: none !important;
+          cursor: pointer;
+          transition:
+            background 0.35s ease,
+            color 0.35s ease,
+            opacity 0.2s ease;
+        }
+        .ibh-cta-pri:hover { opacity: 0.78; }
+
+        /* Ghost CTA — transparent + 1px border */
+        .ibh-cta-gh {
+          display: inline-flex;
+          align-items: center;
+          padding: 11px 24px;
+          background: transparent;
+          color: var(--htx) !important;
+          border: 1px solid var(--hgbd);
+          border-radius: 4px;
+          font-family: 'Cabinet Grotesk', sans-serif;
+          font-size: 11px;
+          font-weight: 700;
+          letter-spacing: 1.8px;
+          text-transform: uppercase;
+          text-decoration: none !important;
+          cursor: pointer;
+          transition:
+            border-color 0.25s ease,
+            color 0.25s ease;
+        }
+        .ibh-cta-gh:hover {
+          border-color: var(--hac);
+          color: var(--hac) !important;
+        }
+
+        /* ═══ COLUMN DIVIDER ═══ */
+        .ibh-vd {
+          background: var(--hbdr);
+          transition: background 0.35s ease;
+        }
+
+        /* ═══ RIGHT COLUMN ═══ */
+        .ibh-right {
+          background: var(--hrb);
+          display: flex;
+          flex-direction: column;
+          justify-content: flex-end;
+          padding: 60px 56px 0;
+          position: relative;
+          overflow: hidden;
+          transition: background 0.35s ease;
+        }
+
+        /* ── Card stack (parallax controlled via inline transform) ── */
+        .ibh-cards {
+          display: flex;
+          align-items: flex-end;
+          gap: 14px;
+          /* position/transform applied inline for parallax */
+        }
+
+        /* ── Individual info cards ── */
+        .ibh-card {
+          display: flex;
+          flex-direction: column;
+          padding: 20px;
+          border: 1px solid var(--hbdr);
+          box-sizing: border-box;
+          opacity: 0;
+          transform: translateY(50px);
+          transition:
+            background 0.35s ease,
+            border-color 0.35s ease,
+            opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
+            transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .ibh-card.ibh-vis {
+          opacity: 1;
+          transform: translateY(0);
+        }
+
+        /* Card A: 130×220, bottom-flush */
+        .ibh-ca { width: 130px; min-height: 220px; background: var(--hca); }
+
+        /* Card B: 160×280, focal — floats 28px above baseline */
+        .ibh-cb { width: 160px; min-height: 280px; background: var(--hcb); margin-bottom: 28px; }
+
+        /* Card C: 115×195, bottom-flush */
+        .ibh-cc { width: 115px; min-height: 195px; background: var(--hcc); }
+
+        /* Card internals */
+        .ibh-card-tag {
+          font-family: 'Cabinet Grotesk', sans-serif;
+          font-size: 9px;
+          font-weight: 700;
+          letter-spacing: 1.5px;
+          text-transform: uppercase;
+          color: var(--htx);
+          opacity: 0.4;
+          display: block;
+          transition: color 0.35s ease;
+        }
+        .ibh-card-sp { flex: 1; display: block; } /* pushes data to bottom */
+        .ibh-card-n {
+          font-family: 'Fraunces', Georgia, serif;
+          font-size: 26px;
+          font-weight: 900;
+          letter-spacing: -0.5px;
+          color: var(--htx);
+          line-height: 1;
+          display: block;
+          margin-bottom: 5px;
+          font-variation-settings: 'opsz' 36, 'wght' 900;
+          transition: color 0.35s ease;
+        }
+        .ibh-card-l {
+          font-family: 'Cabinet Grotesk', sans-serif;
+          font-size: 10px;
+          font-weight: 500;
+          letter-spacing: 0.5px;
+          color: var(--htx);
+          opacity: 0.45;
+          line-height: 1.4;
+          display: block;
+          margin-bottom: 14px;
+          transition: color 0.35s ease;
+        }
+        /* 2px progress bar — green fill, no gradient */
+        .ibh-prog {
+          width: 100%;
+          height: 2px;
+          background: var(--hprog);
+          overflow: hidden;
+          transition: background 0.35s ease;
+        }
+        .ibh-prog-f {
+          height: 100%;
+          background: var(--hac);
+          transition: background 0.35s ease;
+        }
+
+        /* Watermark */
+        .ibh-wm {
+          position: absolute;
+          bottom: 16px;
+          right: 22px;
+          font-family: 'Cabinet Grotesk', sans-serif;
+          font-size: 9px;
+          font-weight: 500;
+          letter-spacing: 0.5px;
+          color: var(--htx);
+          opacity: 0.2;
+          transition: color 0.35s ease;
+        }
+
+        /* ═══ STAT STRIP ═══ */
+        .ibh-stats {
+          display: grid;
+          grid-template-columns: repeat(3, 1fr);
+          border-top: 1px solid var(--hbdr);
+          transition: border-color 0.35s ease;
+          flex-shrink: 0;
+        }
+        .ibh-stat {
+          display: flex;
+          flex-direction: column;
+          gap: 7px;
+          padding: 30px 44px;
+        }
+        .ibh-stat + .ibh-stat {
+          border-left: 1px solid var(--hbdr);
+          transition: border-color 0.35s ease;
+        }
+        .ibh-stat-n {
+          font-family: 'Fraunces', Georgia, serif;
+          font-size: clamp(30px, 3vw, 44px);
+          font-weight: 900;
+          letter-spacing: -1.5px;
+          color: var(--htx);
+          line-height: 1;
+          font-variation-settings: 'opsz' 48, 'wght' 900;
+          transition: color 0.35s ease;
+        }
+        .ibh-stat-l {
+          font-family: 'Cabinet Grotesk', sans-serif;
+          font-size: 10px;
+          font-weight: 500;
+          letter-spacing: 1.5px;
+          text-transform: uppercase;
+          color: var(--htx);
+          opacity: 0.4;
+          transition: color 0.35s ease;
+        }
+
+        /* ═══ RESPONSIVE ═══ */
+        @media (max-width: 960px) {
+          .ibh-grid {
+            grid-template-columns: 1fr;
+            grid-template-rows: auto 1px auto;
+          }
+          .ibh-vd { width: 100%; height: 1px; }
+          .ibh-left { padding: 48px 32px 44px; }
+          .ibh-right { min-height: 420px; padding: 44px 32px 0; }
+          .ibh-cards { justify-content: center; }
+          .ibh-stats { grid-template-columns: repeat(3, 1fr); }
+          .ibh-stat { padding: 24px 28px; }
+        }
+
+        @media (max-width: 640px) {
+          .ibh { border-radius: 0; padding-top: 80px; }
+          .ibh-h1 { letter-spacing: -1.5px; }
+          .ibh-left { padding: 36px 24px 36px; }
+          .ibh-btm { margin-top: 40px; }
+          .ibh-stats { grid-template-columns: 1fr; }
+          .ibh-stat + .ibh-stat { border-left: none; border-top: 1px solid var(--hbdr); }
+          .ibh-stat { padding: 20px 24px; }
+          .ibh-ca { width: 100px; min-height: 180px; }
+          .ibh-cb { width: 130px; min-height: 228px; }
+          .ibh-cc { width: 90px;  min-height: 162px; }
+          .ibh-cards { gap: 10px; }
+          .ibh-right { padding: 36px 24px 0; }
+        }
+      `}</style>
+
+      {/* ═══ TWO-COLUMN GRID ═══ */}
+      <div className="ibh-grid">
+
+        {/* ── LEFT: Eyebrow + Headline + Body + CTAs ── */}
+        <div className="ibh-left">
+
+          {/* Eyebrow: 24px green rule + 11px uppercase label */}
+          <div className="ibh-eye">
+            <span className="ibh-eye-rule" />
+            <span className="ibh-eye-tx">{lc.eyebrow}</span>
           </div>
 
-          {/* Central Logo + Headline Block */}
-          <div style={{ flex: 1, textAlign: 'center', minWidth: 0 }}>
+          {/* 3-line Fraunces headline */}
+          <h1 className="ibh-h1">
+            {/* Line 1 — normal weight */}
+            <span className="ibh-hw">
+              <span className={v('ibh-hl')} style={{ transitionDelay: '0ms' }}>
+                {lc.l1}
+              </span>
+            </span>
+            {/* Line 2 — italic weight 300, accent color */}
+            <span className="ibh-hw">
+              <span className={v('ibh-hl')} style={{ transitionDelay: '100ms' }}>
+                <span className="ibh-hl-ac">{lc.l2}</span>
+              </span>
+            </span>
+            {/* Line 3 — normal weight */}
+            <span className="ibh-hw">
+              <span className={v('ibh-hl')} style={{ transitionDelay: '200ms' }}>
+                {lc.l3}
+              </span>
+            </span>
+          </h1>
 
-            {/* ── Badge ── */}
-            <div style={{
-              display: 'inline-flex', alignItems: 'center', gap: 8,
-              fontSize: '.72rem', fontWeight: 700, letterSpacing: '2.5px', textTransform: 'uppercase',
-              color: '#10b981', marginBottom: '1.4rem', padding: '.35rem 1.1rem',
-              background: 'rgba(16,185,129,0.1)', borderRadius: 50,
-              border: '1px solid rgba(16,185,129,0.35)',
-              opacity: mounted ? 1 : 0, transform: mounted ? 'translateY(0)' : 'translateY(-10px)',
-              transition: 'opacity 0.7s 0.1s, transform 0.7s 0.1s',
-            }}>
-              <span style={{ width: 7, height: 7, borderRadius: '50%', background: '#10b981', display: 'inline-block', animation: 'pulseDot 2s infinite' }} />
-              {T('hero_label')}
+          {/* Body copy + CTA pinned below headline */}
+          <div className="ibh-btm">
+            <div className={v('ibh-bw')} style={{ transitionDelay: '250ms' }}>
+              <p className="ibh-body">{lc.body}</p>
             </div>
+            <div className={v('ibh-cta')} style={{ transitionDelay: '450ms' }}>
+              <a
+                className="ibh-cta-pri"
+                href="#courses"
+                onClick={e => { e.preventDefault(); document.getElementById('courses')?.scrollIntoView({ behavior: 'smooth' }); }}
+              >
+                {lc.cta1}
+              </a>
+              <a
+                className="ibh-cta-gh"
+                href="#about"
+                onClick={e => { e.preventDefault(); document.getElementById('about')?.scrollIntoView({ behavior: 'smooth' }); }}
+              >
+                {lc.cta2}
+              </a>
+            </div>
+          </div>
+        </div>
 
-            {/* ── Logo with 3D mouse tilt ── */}
-            <div style={{
-              display: 'flex', justifyContent: 'center', marginBottom: '1.8rem',
-              opacity: mounted ? 1 : 0, transform: mounted ? 'scale(1)' : 'scale(0.7)',
-              transition: 'opacity 0.8s 0.2s, transform 0.8s 0.2s cubic-bezier(0.16,1,0.3,1)',
-            }}>
-              <div style={{
-                transform: `perspective(600px) rotateX(${tiltX * 0.5}deg) rotateY(${tiltY * 0.5}deg)`,
-                transition: 'transform 0.08s linear',
-                willChange: 'transform',
-              }}>
-                {/* Outer glow ring */}
-                <div style={{
-                  width: 160, height: 160, borderRadius: '50%', position: 'relative',
-                  display: 'flex', alignItems: 'center', justifyContent: 'center',
-                }}>
-                  {/* Spinning border */}
-                  <div style={{
-                    position: 'absolute', inset: -4, borderRadius: '50%',
-                    background: 'conic-gradient(from 0deg, transparent 0%, #10b981 25%, transparent 50%, #10b981 75%, transparent 100%)',
-                    animation: 'spinRing 4s linear infinite',
-                  }} />
-                  {/* Inner white ring */}
-                  <div style={{
-                    position: 'absolute', inset: -2, borderRadius: '50%',
-                    background: 'rgba(2,20,14,0.95)',
-                  }} />
-                  {/* Logo container */}
-                  <div style={{
-                    width: 150, height: 150, borderRadius: '50%', position: 'relative', zIndex: 2,
-                    background: '#fff',
-                    boxShadow: '0 0 0 3px rgba(16,185,129,0.5), 0 20px 60px rgba(16,185,129,0.35), 0 0 80px rgba(16,185,129,0.15)',
-                    animation: 'logoBreathe 4s ease-in-out infinite',
-                    overflow: 'hidden',
-                  }}>
-                    <img src={logoImage} alt="IBRAT TA'LIM Logo"
-                      style={{ width: '100%', height: '100%', objectFit: 'contain', borderRadius: '50%' }} />
-                  </div>
-                  {/* Orbiting dot */}
-                  <div style={{
-                    position: 'absolute', inset: -8, borderRadius: '50%',
-                    animation: 'orbitDot 3s linear infinite',
-                    pointerEvents: 'none',
-                  }}>
-                    <div style={{
-                      width: 10, height: 10, borderRadius: '50%',
-                      background: 'var(--brand-green)',
-                      boxShadow: '0 0 12px 4px rgba(16,185,129,0.7)',
-                      position: 'absolute', top: 0, left: '50%', transform: 'translateX(-50%)',
-                    }} />
-                  </div>
-                </div>
+        {/* ── 1px VERTICAL DIVIDER ── */}
+        <div className="ibh-vd" />
+
+        {/* ── RIGHT: Staggered info cards + watermark ── */}
+        <div
+          className="ibh-right"
+          ref={rightRef}
+          onMouseMove={onMouseMove}
+          onMouseLeave={onMouseLeave}
+        >
+          {/* Card stack — mouse parallax applied inline */}
+          <div
+            className="ibh-cards"
+            style={{
+              transform: `translate(${cardOffset.x}px, ${cardOffset.y}px)`,
+              transition: leaving
+                ? '0.6s cubic-bezier(0.16, 1, 0.3, 1)'
+                : '0.1s linear',
+            }}
+          >
+            {/* Card A — 130×220, bottom-flush */}
+            <div className={v('ibh-card ibh-ca')} style={{ transitionDelay: '80ms' }}>
+              <span className="ibh-card-tag">{lc.c1t}</span>
+              <span className="ibh-card-sp" />
+              <span className="ibh-card-n">{lc.c1n}</span>
+              <span className="ibh-card-l">{lc.c1l}</span>
+              <div className="ibh-prog">
+                <div className="ibh-prog-f" style={{ width: '92%' }} />
               </div>
             </div>
 
-            {/* ── H1 Title ── */}
-            <h1 style={{
-              fontSize: 'clamp(2.4rem,6.5vw,5.2rem)',
-              letterSpacing: -2, lineHeight: 1.0,
-              marginBottom: '0.8rem', fontWeight: 900,
-              color: '#ffffff',
-              opacity: mounted ? 1 : 0, transform: mounted ? 'translateY(0)' : 'translateY(20px)',
-              transition: 'opacity 0.7s 0.35s, transform 0.7s 0.35s',
-            }}>
-              {T('hero_title_1')}{' '}
-              <span style={{
-                backgroundImage: `linear-gradient(135deg, #10b981 0%, #34d399 40%, #6ee7b7 70%, #10b981 100%)`,
-                backgroundSize: '200% auto',
-                WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent',
-                backgroundClip: 'text',
-                animation: 'shine 4s linear infinite',
-                display: 'inline-block',
-              }}>
-                {T('hero_title_2')}
-              </span>
-              <br />
-              {T('hero_title_3')}
-            </h1>
-
-            {/* ── Typewriter subtitle ── */}
-            <div style={{
-              fontSize: 'clamp(1rem,2.2vw,1.25rem)',
-              color: 'rgba(255,255,255,0.6)',
-              marginBottom: '1rem', lineHeight: 1.5, fontWeight: 400,
-              opacity: mounted ? 1 : 0, transform: mounted ? 'translateY(0)' : 'translateY(15px)',
-              transition: 'opacity 0.7s 0.5s, transform 0.7s 0.5s',
-            }}>
-              {lang === 'uz' ? "O'rganing: " : lang === 'ru' ? 'Изучайте: ' : 'Learn: '}
-              <span style={{ color: '#10b981', fontWeight: 700 }}>
-                <Typewriter words={typewriterWords[lang] || typewriterWords.uz} />
-              </span>
+            {/* Card B — 160×280, focal, 28px margin-bottom */}
+            <div className={v('ibh-card ibh-cb')} style={{ transitionDelay: '200ms' }}>
+              <span className="ibh-card-tag">{lc.c2t}</span>
+              <span className="ibh-card-sp" />
+              <span className="ibh-card-n">{lc.c2n}</span>
+              <span className="ibh-card-l">{lc.c2l}</span>
+              <div className="ibh-prog">
+                <div className="ibh-prog-f" style={{ width: '98%' }} />
+              </div>
             </div>
 
-            {/* ── Sub text ── */}
-            <p style={{
-              fontSize: 'clamp(0.88rem,1.5vw,1.05rem)',
-              color: 'rgba(255,255,255,0.5)',
-              marginBottom: '2.2rem', maxWidth: 560, marginInline: 'auto', lineHeight: 1.75,
-              opacity: mounted ? 1 : 0, transform: mounted ? 'translateY(0)' : 'translateY(15px)',
-              transition: 'opacity 0.7s 0.65s, transform 0.7s 0.65s',
-            }}>
-              {T('hero_sub')}
-            </p>
-
-            {/* ── CTA Buttons ── */}
-            <div style={{
-              display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap',
-              opacity: mounted ? 1 : 0, transform: mounted ? 'translateY(0)' : 'translateY(15px)',
-              transition: 'opacity 0.7s 0.8s, transform 0.7s 0.8s',
-            }}>
-              <a href="#courses"
-                onClick={e => { e.preventDefault(); document.getElementById('courses')?.scrollIntoView({ behavior: 'smooth' }); }}
-                className="liquid-glass-droplet"
-                style={{
-                  display: 'inline-flex', alignItems: 'center', gap: 10,
-                  padding: '1rem 2.4rem', borderRadius: 50,
-                  background: 'linear-gradient(135deg, #10b981, #059669)',
-                  color: '#fff', fontWeight: 800, fontSize: '.9rem',
-                  textTransform: 'uppercase', letterSpacing: '1.5px', textDecoration: 'none',
-                  boxShadow: '0 8px 30px rgba(16,185,129,0.45)',
-                  border: '1px solid rgba(255,255,255,0.15)',
-                }}>
-                <i className="fas fa-rocket" style={{ fontSize: '.85rem' }} />
-                {T('btn_explore')}
-              </a>
-              <a href="#contact"
-                onClick={e => { e.preventDefault(); document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' }); }}
-                className="liquid-glass-droplet"
-                style={{
-                  ...glass,
-                  display: 'inline-flex', alignItems: 'center', gap: 10,
-                  padding: '1rem 2.4rem', borderRadius: 50,
-                  color: '#fff', fontWeight: 800, fontSize: '.9rem',
-                  textTransform: 'uppercase', letterSpacing: '1.5px', textDecoration: 'none',
-                  borderColor: 'rgba(16,185,129,0.4)',
-                }}>
-                {T('btn_join')}
-                <i className="fas fa-arrow-right" style={{ fontSize: '.8rem' }} />
-              </a>
+            {/* Card C — 115×195, bottom-flush */}
+            <div className={v('ibh-card ibh-cc')} style={{ transitionDelay: '320ms' }}>
+              <span className="ibh-card-tag">{lc.c3t}</span>
+              <span className="ibh-card-sp" />
+              <span className="ibh-card-n">{lc.c3n}</span>
+              <span className="ibh-card-l">{lc.c3l}</span>
+              <div className="ibh-prog">
+                <div className="ibh-prog-f" style={{ width: '75%' }} />
+              </div>
             </div>
-
           </div>
 
-          {/* Enroll widget — right */}
-          <div style={{
-            flexShrink: 0,
-            opacity: mounted ? 1 : 0, transform: mounted ? 'translateX(0)' : 'translateX(30px)',
-            transition: 'opacity 0.7s 0.9s, transform 0.7s 0.9s',
-          }} className="hero-enroll">
-            <EnrollWidget T={T} courses={courses} />
-          </div>
-
-        </div>
-
-        {/* ── Bottom stats row (remaining 2 stats) ── */}
-        <div style={{
-          display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap',
-          opacity: mounted ? 1 : 0, transform: mounted ? 'translateY(0)' : 'translateY(15px)',
-          transition: 'opacity 0.7s 1.1s, transform 0.7s 1.1s',
-        }} className="hero-stats-bottom">
-          {stats.slice(2).map(s => (
-            <StatCard key={s.label} {...s} />
-          ))}
-          {/* Course tag chips */}
-          {['🇬🇧 English', '🇷🇺 Русский', '🇸🇦 Arab', '🇰🇷 Korean', '🧮 Mental', '🌱 Montessori'].map((tag, i) => (
-            <div key={tag} className="liquid-glass-droplet" style={{
-              ...glass, padding: '.45rem 1rem', borderRadius: 50,
-              fontSize: '.75rem', fontWeight: 700, color: 'rgba(255,255,255,0.75)',
-              letterSpacing: '.5px', cursor: 'default',
-              opacity: mounted ? 1 : 0,
-              transition: `opacity 0.5s ${1.2 + i * 0.07}s`,
-            }}>
-              {tag}
-            </div>
-          ))}
+          {/* Corner watermark */}
+          <span className="ibh-wm">© 2025 Ibrat</span>
         </div>
 
       </div>
 
-      {/* ── Scroll indicator ── */}
-      <div style={{
-        position: 'absolute', bottom: '2rem', left: '50%', transform: 'translateX(-50%)',
-        zIndex: 6, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6,
-        opacity: mounted ? 0.55 : 0, transition: 'opacity 0.8s 1.5s',
-      }}>
-        <div style={{ fontSize: '.65rem', color: 'rgba(255,255,255,0.5)', fontWeight: 700, letterSpacing: '2.5px', textTransform: 'uppercase', marginBottom: 4 }}>
-          {lang === 'uz' ? "O'ganing" : lang === 'ru' ? 'Прокрутите' : 'Scroll'}
-        </div>
-        <div style={{
-          width: 26, height: 44, borderRadius: 20,
-          border: '2px solid rgba(16,185,129,0.4)',
-          display: 'flex', alignItems: 'flex-start', justifyContent: 'center',
-          padding: 5,
-        }}>
-          <div style={{
-            width: 5, height: 10, borderRadius: 3,
-            background: 'linear-gradient(to bottom, #10b981, transparent)',
-            animation: 'mouseScroll 2s ease-in-out infinite',
-          }} />
-        </div>
+      {/* ═══ STAT STRIP ═══ */}
+      <div className="ibh-stats">
+        {[
+          { n: '5,000+', l: lc.st1 },
+          { n: '9',      l: lc.st2 },
+          { n: '98%',    l: lc.st3 },
+        ].map((s, i) => (
+          <div className="ibh-stat" key={i}>
+            <span className="ibh-stat-n">{s.n}</span>
+            <span className="ibh-stat-l">{s.l}</span>
+          </div>
+        ))}
       </div>
 
-      {/* ── Keyframes ── */}
-      <style>{`
-        @keyframes floatWidget { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
-        @keyframes blobFloat { 0%,100%{transform:translate(0,0) scale(1)} 33%{transform:translate(30px,-50px) scale(1.05)} 66%{transform:translate(-20px,25px) scale(.97)} }
-        @keyframes shine { to { background-position: 200% center; } }
-        @keyframes spinRing { to { transform: rotate(360deg); } }
-        @keyframes orbitDot { to { transform: rotate(360deg); } }
-        @keyframes logoBreathe {
-          0%,100% { box-shadow: 0 0 0 3px rgba(16,185,129,0.5), 0 20px 60px rgba(16,185,129,0.35), 0 0 80px rgba(16,185,129,0.15); }
-          50% { box-shadow: 0 0 0 6px rgba(16,185,129,0.7), 0 25px 70px rgba(16,185,129,0.5), 0 0 120px rgba(16,185,129,0.25); }
-        }
-        @keyframes pulseDot {
-          0%,100% { opacity: 1; transform: scale(1); }
-          50% { opacity: 0.5; transform: scale(1.5); }
-        }
-        @keyframes cursorBlink {
-          0%,100% { opacity: 1; }
-          50% { opacity: 0; }
-        }
-        @keyframes mouseScroll {
-          0% { transform: translateY(0); opacity: 1; }
-          80% { transform: translateY(16px); opacity: 0; }
-          100% { transform: translateY(0); opacity: 0; }
-        }
-
-        /* Responsive Hero */
-        @media (max-width: 1100px) {
-          .hero-top-layout {
-            flex-direction: column !important;
-            align-items: center !important;
-          }
-          .hero-stats {
-            flex-direction: row !important;
-            flex-wrap: wrap !important;
-            justify-content: center !important;
-            order: 2 !important;
-          }
-          .hero-enroll {
-            order: 3 !important;
-          }
-        }
-
-        @media (max-width: 600px) {
-          .hero-top-layout {
-            gap: 1.2rem !important;
-          }
-          .hero-enroll {
-            width: 100% !important;
-          }
-          .hero-enroll > div {
-            min-width: unset !important;
-            max-width: 100% !important;
-          }
-        }
-      `}</style>
     </section>
   );
 }
