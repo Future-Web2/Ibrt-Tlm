@@ -1,5 +1,6 @@
 import { useRef, useState, useEffect } from 'react';
 import { useLang } from '../context/LanguageContext.jsx';
+import logoImage from '../../publish/image.png';
 
 const G = 'var(--brand-green)';
 const glass = {
@@ -174,6 +175,27 @@ export default function HeroSection() {
         transform: `translate3d(0, ${scrollY * 0.15}px, 0)`,
         opacity: Math.max(1 - scrollY / 650, 0),
         willChange: 'transform, opacity' }}>
+        
+        {/* Animated Volumetric Brand Logo */}
+        <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '1.6rem' }}>
+          <div className="liquid-glass-droplet" style={{
+            width: 130,
+            height: 130,
+            borderRadius: '50%',
+            background: '#ffffff',
+            padding: '5px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            border: '3px solid var(--brand-green)',
+            boxShadow: '0 10px 30px rgba(16, 185, 129, 0.25), inset 0 1px 0 rgba(255,255,255,0.6)',
+            animation: 'floatWidget 6s ease-in-out infinite',
+            transition: 'transform 0.3s ease'
+          }}>
+            <img src={logoImage} alt="IBRAT TA'LIM Logo" style={{ width: '100%', height: '100%', borderRadius: '50%', objectFit: 'contain' }} />
+          </div>
+        </div>
+
         <div style={{ display: 'inline-block', fontSize: '.75rem', fontWeight: 700, letterSpacing: '3px', textTransform: 'uppercase', color: G, marginBottom: '1.2rem', padding: '.3rem 1rem', background: 'var(--card-glow)', borderRadius: 50, border: '1px solid var(--brand-green)' }}>
           {T('hero_label')}
         </div>

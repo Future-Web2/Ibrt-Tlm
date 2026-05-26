@@ -843,9 +843,9 @@ export default function HomePage() {
 
             {/* Column 1: Brand & About */}
             <div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '1.5rem' }}>
-                <div style={{ width: 40, height: 40, borderRadius: '12px', background: 'rgba(255,255,255,0.1)', backdropFilter: 'blur(10px)', border: '1px solid rgba(255,255,255,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                  <i className="fas fa-graduation-cap" style={{ color: '#10b981', fontSize: '1.2rem' }}></i>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '1.5rem' }}>
+                <div style={{ width: 45, height: 45, borderRadius: '50%', background: '#ffffff', padding: '3px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, boxShadow: '0 0 15px rgba(16, 185, 129, 0.3)' }}>
+                  <img src={filialImage} alt="IBRAT TA'LIM Logo" style={{ width: '100%', height: '100%', borderRadius: '50%', objectFit: 'contain' }} />
                 </div>
                 <div style={{ fontSize: '1.5rem', fontWeight: 900, letterSpacing: '3px', color: '#ffffff' }}>IBRAT<span style={{ color: '#10b981' }}>TALIM</span></div>
               </div>
