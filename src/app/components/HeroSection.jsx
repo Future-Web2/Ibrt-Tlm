@@ -1,633 +1,620 @@
 import { useEffect, useState, useRef } from 'react';
 import { useLang } from '../context/LanguageContext.jsx';
+import logoImage from '../../publish/image.png';
 
 export default function HeroSection() {
   const { lang } = useLang();
-  const [mounted, setMounted] = useState(false);
-  const [cardOffset, setCardOffset] = useState({ x: 0, y: 0 });
-  const [leaving, setLeaving] = useState(false);
+  const [vis, setVis] = useState(false);
+  const [mouse, setMouse] = useState({ x: 0, y: 0 });
   const rightRef = useRef(null);
 
   useEffect(() => {
-    const t = setTimeout(() => setMounted(true), 120);
+    const t = setTimeout(() => setVis(true), 80);
     return () => clearTimeout(t);
   }, []);
 
-  const onMouseMove = (e) => {
-    const rect = rightRef.current?.getBoundingClientRect();
-    if (!rect) return;
-    const cx = (e.clientX - rect.left - rect.width / 2) / (rect.width / 2);
-    const cy = (e.clientY - rect.top - rect.height / 2) / (rect.height / 2);
-    setLeaving(false);
-    setCardOffset({ x: cx * 18, y: cy * 12 });
-  };
-
-  const onMouseLeave = () => {
-    setLeaving(true);
-    setCardOffset({ x: 0, y: 0 });
+  const onMove = (e) => {
+    const r = rightRef.current?.getBoundingClientRect();
+    if (!r) return;
+    setMouse({
+      x: (e.clientX - r.left - r.width / 2) / r.width,
+      y: (e.clientY - r.top - r.height / 2) / r.height,
+    });
   };
 
   const copy = {
     uz: {
-      eyebrow: "Ta'lim markazi · Toshkent · 2016 yildan beri",
-      l1: 'Bilim —',
-      l2: "o'zgarish",
-      l3: 'investitsiya.',
-      body: "Xorijiy tillar va bolalar erta rivojlanishiga ixtisoslashgan ta'lim markazi. 9 yillik tajriba, individual yondashuv, tasdiqlangan natijalar.",
-      cta1: "Kurslarni ko'rish",
-      cta2: "Biz haqimizda",
-      c1t: 'BITIRUVCHILAR', c1n: '5,000+', c1l: "dasturni tugatdi",
-      c2t: 'MAMNUNLIK',     c2n: '98%',    c2l: "ijobiy baho berdi",
-      c3t: 'TAJRIBA',       c3n: '9',      c3l: "yillik faoliyat",
-      st1: 'bitiruvchi', st2: 'yil tajriba', st3: 'mamnunlik darajasi',
+      badge: "Toshkentning №1 Ta'lim Markazi",
+      hl1: 'Kelajagingizni', hl2: "Biz Bilan", hl3: 'Shakllantiring.',
+      sub: "Ingliz tili, rus tili, mental arifmetika va Montessori — 9 yillik tajriba, tasdiqlangan natijalar.",
+      cta1: "Kurslarni Ko'rish", cta2: "Biz Haqimizda",
+      s1n: '1,500+', s1l: "Faol o'quvchi",
+      s2n: '98%',   s2l: 'Mamnunlik',
+      s3n: '9+',    s3l: 'Yil tajriba',
+      c1l: "O'QUVCHILAR", c1n: '1,500+', c1s: "Faol o'quvchi",
+      c2l: 'MAMNUNLIK',   c2n: '98%',    c2s: 'Ijobiy baho',
+      c3l: 'KURSLAR',     c3n: '8+',     c3s: "Ta'lim yo'nalishlari",
+      t1: '🇬🇧 Ingliz tili', t2: '🌱 Montessori', t3: '🧮 Mental',
     },
     ru: {
-      eyebrow: "Образовательный центр · Ташкент · с 2016 года",
-      l1: 'Знание —',
-      l2: 'трансформация',
-      l3: 'инвестиция.',
-      body: "Образовательный центр с девятилетним опытом в иностранных языках и раннем развитии детей. Индивидуальный подход, измеримые результаты.",
-      cta1: "Смотреть курсы",
-      cta2: "О нас",
-      c1t: 'ВЫПУСКНИКИ',      c1n: '5,000+', c1l: "завершили программу",
-      c2t: 'УДОВЛЕТВОРЁННОСТЬ', c2n: '98%',   c2l: "положительных оценок",
-      c3t: 'ОПЫТ',             c3n: '9',      c3l: "лет деятельности",
-      st1: 'выпускников', st2: 'лет опыта', st3: 'удовлетворённость',
+      badge: 'Образовательный центр №1 в Ташкенте',
+      hl1: 'Формируйте', hl2: 'Своё Будущее', hl3: 'Вместе с Нами.',
+      sub: 'Английский, русский, ментальная арифметика и Монтессори — 9 лет опыта, измеримые результаты.',
+      cta1: 'Смотреть Курсы', cta2: 'О Нас',
+      s1n: '1,500+', s1l: 'Студентов',
+      s2n: '98%',   s2l: 'Удовлетворённость',
+      s3n: '9+',    s3l: 'Лет опыта',
+      c1l: 'СТУДЕНТЫ',       c1n: '1,500+', c1s: 'Активных',
+      c2l: 'УДОВЛЕТВОРЁННОСТЬ', c2n: '98%', c2s: 'Положит. оценок',
+      c3l: 'КУРСЫ',          c3n: '8+',    c3s: 'Направлений',
+      t1: '🇬🇧 Английский', t2: '🌱 Монтессори', t3: '🧮 Арифметика',
     },
     en: {
-      eyebrow: "Educational Centre · Tashkent · est. 2016",
-      l1: 'Knowledge —',
-      l2: 'transformative',
-      l3: 'investment.',
-      body: "A Tashkent-based educational centre with nine years of expertise in foreign language instruction and early childhood development.",
-      cta1: "Explore courses",
-      cta2: "About us",
-      c1t: 'GRADUATES',   c1n: '5,000+', c1l: "programme completions",
-      c2t: 'SATISFACTION', c2n: '98%',   c2l: "positive ratings",
-      c3t: 'EXPERIENCE',  c3n: '9',      c3l: "years of operation",
-      st1: 'graduates', st2: 'years', st3: 'satisfaction rate',
+      badge: "Tashkent's #1 Educational Centre",
+      hl1: 'Shape Your', hl2: 'Future', hl3: 'With Us.',
+      sub: 'English, Russian, mental arithmetic and Montessori — 9 years of expertise, proven results.',
+      cta1: 'Explore Courses', cta2: 'About Us',
+      s1n: '1,500+', s1l: 'Active Students',
+      s2n: '98%',   s2l: 'Satisfaction',
+      s3n: '9+',    s3l: 'Years',
+      c1l: 'STUDENTS',    c1n: '1,500+', c1s: 'Active learners',
+      c2l: 'SATISFACTION', c2n: '98%',  c2s: 'Positive ratings',
+      c3l: 'COURSES',     c3n: '8+',    c3s: 'Programmes',
+      t1: '🇬🇧 English', t2: '🌱 Montessori', t3: '🧮 Mental Math',
     },
   };
   const lc = copy[lang] || copy.uz;
 
-  /* helper: append ibh-vis when mounted */
-  const v = (base) => `${base}${mounted ? ' ibh-vis' : ''}`;
+  const v = vis ? ' hv' : '';
 
   return (
-    <section id="home" className="ibh">
+    <section id="home">
       <style>{`
-        /* ═══════════════════════════════════════════════════
-           IBRAT HERO — Editorial / Institutional
-           Monocle × Swiss Design × Copenhagen architecture
-        ═══════════════════════════════════════════════════ */
+        /* ════════════════════════════════════════════
+           HERO SECTION — Ocean-World-inspired layout
+           Vibrant right panel · Clean left panel
+        ════════════════════════════════════════════ */
 
-        /* ── CSS Variables: Dark (default) ── */
-        .ibh {
-          --hbg:   #0D0C0A;
-          --htx:   #F0EAE0;
-          --hac:   #2DC56A;
-          --hmut:  rgba(240,234,224,0.45);
-          --hbdr:  rgba(240,234,224,0.08);
-          --hrb:   #111009;
-          --hca:   #1C1A16;
-          --hcb:   #181510;
-          --hcc:   #1A1814;
-          --hpbg:  #2DC56A;
-          --hptx:  #070E09;
-          --hgbd:  rgba(240,234,224,0.25);
-          --hprog: rgba(240,234,224,0.1);
-        }
-
-        /* ── CSS Variables: Light ── */
-        html[data-theme="light"] .ibh {
-          --hbg:   #F2EDE6;
-          --htx:   #0F0E0C;
-          --hac:   #1A7A3C;
-          --hmut:  rgba(15,14,12,0.45);
-          --hbdr:  rgba(15,14,12,0.08);
-          --hrb:   #EAE3DA;
-          --hca:   #E0D9CF;
-          --hcb:   #D4CCBF;
-          --hcc:   #DEDAD3;
-          --hpbg:  #0F0E0C;
-          --hptx:  #F2EDE6;
-          --hgbd:  rgba(15,14,12,0.25);
-          --hprog: rgba(15,14,12,0.08);
-        }
-
-        /* ── Section wrapper ── */
-        .ibh {
-          background: var(--hbg);
-          color: var(--htx);
-          font-family: 'Cabinet Grotesk', 'Helvetica Neue', Arial, sans-serif;
-          border-radius: 14px;
-          overflow: hidden;
+        /* Page background (outside the rounded container) */
+        #home {
           min-height: 100vh;
+          padding: 92px 18px 18px;
+          box-sizing: border-box;
           display: flex;
           flex-direction: column;
-          padding-top: 84px;
-          transition: background-color 0.35s ease, color 0.35s ease;
+          background: #e8e8e8;
+          font-family: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+        html.dark #home {
+          background: #0a0a0a;
+        }
+        html[data-theme="light"] #home {
+          background: #e5e0d8;
         }
 
-        /* ── Two-column grid + 1px divider ── */
-        .ibh-grid {
-          display: grid;
-          grid-template-columns: 1fr 1px 1fr;
+        /* ── Rounded main container ── */
+        .hw-outer {
           flex: 1;
-          min-height: 0;
-        }
-
-        /* ═══ LEFT COLUMN ═══ */
-        .ibh-left {
-          display: flex;
-          flex-direction: column;
-          padding: 60px 56px 56px;
-        }
-
-        /* ── Eyebrow ── */
-        .ibh-eye {
-          display: flex;
-          align-items: center;
-          gap: 12px;
-          margin-bottom: 48px;
-        }
-        .ibh-eye-rule {
-          display: block;
-          width: 24px;
-          height: 1.5px;
-          background: var(--hac);
-          flex-shrink: 0;
-          transition: background 0.35s ease;
-        }
-        .ibh-eye-tx {
-          font-family: 'Cabinet Grotesk', sans-serif;
-          font-size: 11px;
-          font-weight: 700;
-          letter-spacing: 2.5px;
-          text-transform: uppercase;
-          color: var(--htx);
-          opacity: 0.4;
-          transition: color 0.35s ease;
-        }
-
-        /* ── 3-line Fraunces headline ── */
-        .ibh-h1 {
-          font-family: 'Fraunces', 'Times New Roman', Georgia, serif;
-          font-size: clamp(44px, 4.8vw, 70px);
-          font-weight: 900;
-          letter-spacing: -2.5px;
-          line-height: 0.97;
-          color: var(--htx);
-          margin: 0;
-          font-style: normal;
-          font-variation-settings: 'opsz' 72, 'wght' 900;
-          transition: color 0.35s ease;
-        }
-
-        /* overflow wrapper clips the slide-up reveal */
-        .ibh-hw {
-          display: block;
+          display: grid;
+          grid-template-columns: 52fr 48fr;
+          border-radius: 20px;
           overflow: hidden;
-          padding-bottom: 0.06em;
+          min-height: calc(100vh - 112px);
+          box-shadow: 0 30px 80px rgba(0,0,0,0.2);
         }
 
-        /* animated line — hidden until .ibh-vis added */
-        .ibh-hl {
-          display: block;
-          transform: translateY(108%);
-          transition: transform 0.95s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-        .ibh-hl.ibh-vis {
-          transform: translateY(0);
-        }
-
-        /* Line 2: italic, weight 300, accent color */
-        .ibh-hl-ac {
-          font-style: italic;
-          color: var(--hac);
-          font-variation-settings: 'opsz' 72, 'wght' 300;
-          transition: color 0.35s ease;
-        }
-
-        /* ── Body copy + CTA block ── */
-        .ibh-btm {
-          margin-top: 56px;
+        /* ════ LEFT COLUMN ════ */
+        .hw-left {
+          background: #ffffff;
           display: flex;
           flex-direction: column;
-          gap: 28px;
-        }
-
-        /* reveal wrapper for body */
-        .ibh-bw {
-          opacity: 0;
-          transform: translateY(18px);
-          transition:
-            opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
-            transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-        .ibh-bw.ibh-vis {
-          opacity: 1;
-          transform: translateY(0);
-        }
-
-        .ibh-body {
-          font-family: 'Cabinet Grotesk', sans-serif;
-          font-size: 14px;
-          font-weight: 400;
-          line-height: 1.8;
-          color: var(--htx);
-          opacity: 0.45;
-          max-width: 300px;
-          margin: 0;
-          transition: color 0.35s ease;
-        }
-
-        /* ── CTA row ── */
-        .ibh-cta {
-          display: flex;
-          gap: 10px;
-          align-items: center;
-          flex-wrap: wrap;
-          opacity: 0;
-          transform: translateY(18px);
-          transition:
-            opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
-            transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-        .ibh-cta.ibh-vis {
-          opacity: 1;
-          transform: translateY(0);
-        }
-
-        /* Primary CTA — filled */
-        .ibh-cta-pri {
-          display: inline-flex;
-          align-items: center;
-          padding: 11px 24px;
-          background: var(--hpbg);
-          color: var(--hptx) !important;
-          border: 1px solid transparent;
-          border-radius: 4px;
-          font-family: 'Cabinet Grotesk', sans-serif;
-          font-size: 11px;
-          font-weight: 700;
-          letter-spacing: 1.8px;
-          text-transform: uppercase;
-          text-decoration: none !important;
-          cursor: pointer;
-          transition:
-            background 0.35s ease,
-            color 0.35s ease,
-            opacity 0.2s ease;
-        }
-        .ibh-cta-pri:hover { opacity: 0.78; }
-
-        /* Ghost CTA — transparent + 1px border */
-        .ibh-cta-gh {
-          display: inline-flex;
-          align-items: center;
-          padding: 11px 24px;
-          background: transparent;
-          color: var(--htx) !important;
-          border: 1px solid var(--hgbd);
-          border-radius: 4px;
-          font-family: 'Cabinet Grotesk', sans-serif;
-          font-size: 11px;
-          font-weight: 700;
-          letter-spacing: 1.8px;
-          text-transform: uppercase;
-          text-decoration: none !important;
-          cursor: pointer;
-          transition:
-            border-color 0.25s ease,
-            color 0.25s ease;
-        }
-        .ibh-cta-gh:hover {
-          border-color: var(--hac);
-          color: var(--hac) !important;
-        }
-
-        /* ═══ COLUMN DIVIDER ═══ */
-        .ibh-vd {
-          background: var(--hbdr);
+          justify-content: center;
+          padding: 64px 60px;
+          gap: 0;
           transition: background 0.35s ease;
+          position: relative;
+          z-index: 1;
+        }
+        html.dark .hw-left {
+          background: #111111;
+        }
+        html[data-theme="light"] .hw-left {
+          background: #ffffff;
         }
 
-        /* ═══ RIGHT COLUMN ═══ */
-        .ibh-right {
-          background: var(--hrb);
+        /* Badge pill */
+        .hw-badge {
+          display: inline-flex;
+          align-items: center;
+          gap: 8px;
+          padding: 7px 14px 7px 10px;
+          border-radius: 50px;
+          border: 1px solid rgba(26,122,60,0.22);
+          background: rgba(26,122,60,0.06);
+          font-size: 11.5px;
+          font-weight: 700;
+          color: #1a7a3c;
+          width: fit-content;
+          letter-spacing: 0.2px;
+          margin-bottom: 28px;
+          opacity: 0;
+          transform: translateY(-12px);
+          transition: opacity 0.5s 0.05s ease, transform 0.5s 0.05s ease;
+        }
+        html.dark .hw-badge {
+          color: #2dc56a;
+          border-color: rgba(45,197,106,0.28);
+          background: rgba(45,197,106,0.08);
+        }
+        .hw-badge.hv { opacity: 1; transform: translateY(0); }
+
+        .hw-badge-dot {
+          width: 7px; height: 7px;
+          border-radius: 50%;
+          background: #1a7a3c;
+          flex-shrink: 0;
+          animation: hwPulse 2.2s ease-in-out infinite;
+        }
+        html.dark .hw-badge-dot { background: #2dc56a; }
+        @keyframes hwPulse {
+          0%,100% { opacity: 1; transform: scale(1); }
+          50%      { opacity: 0.4; transform: scale(1.5); }
+        }
+
+        /* Headline */
+        .hw-h1 {
+          font-size: clamp(38px, 4.8vw, 70px);
+          font-weight: 900;
+          line-height: 1.04;
+          letter-spacing: -2.5px;
+          color: #0a0a0a;
+          margin: 0 0 24px;
+          opacity: 0;
+          transform: translateY(24px);
+          transition: opacity 0.65s 0.18s ease, transform 0.65s 0.18s cubic-bezier(0.16,1,0.3,1);
+        }
+        html.dark .hw-h1   { color: #f2f2f2; }
+        html[data-theme="light"] .hw-h1 { color: #0a0a0a; }
+        .hw-h1.hv { opacity: 1; transform: translateY(0); }
+
+        .hw-h1-accent {
+          color: #1a7a3c;
+          display: block;
+        }
+        html.dark .hw-h1-accent { color: #2dc56a; }
+
+        /* Subtitle */
+        .hw-sub {
+          font-size: 15px;
+          line-height: 1.75;
+          color: #666;
+          max-width: 400px;
+          margin: 0 0 36px;
+          font-weight: 400;
+          opacity: 0;
+          transform: translateY(18px);
+          transition: opacity 0.65s 0.32s ease, transform 0.65s 0.32s ease;
+        }
+        html.dark .hw-sub { color: rgba(242,242,242,0.5); }
+        .hw-sub.hv { opacity: 1; transform: translateY(0); }
+
+        /* CTA buttons */
+        .hw-ctas {
+          display: flex;
+          gap: 12px;
+          flex-wrap: wrap;
+          margin-bottom: 40px;
+          opacity: 0;
+          transform: translateY(16px);
+          transition: opacity 0.65s 0.46s ease, transform 0.65s 0.46s ease;
+        }
+        .hw-ctas.hv { opacity: 1; transform: translateY(0); }
+
+        .hw-cta-solid {
+          display: inline-flex;
+          align-items: center;
+          gap: 8px;
+          padding: 14px 30px;
+          border-radius: 50px;
+          background: #1a7a3c;
+          color: #fff !important;
+          font-weight: 700;
+          font-size: 14px;
+          text-decoration: none !important;
+          border: none;
+          cursor: pointer;
+          box-shadow: 0 8px 28px rgba(26,122,60,0.38);
+          font-family: 'Outfit', sans-serif;
+          transition: transform 0.2s ease, box-shadow 0.2s ease;
+          white-space: nowrap;
+        }
+        html.dark .hw-cta-solid {
+          background: #2dc56a;
+          color: #060f08 !important;
+          box-shadow: 0 8px 28px rgba(45,197,106,0.42);
+        }
+        .hw-cta-solid:hover {
+          transform: translateY(-3px);
+          box-shadow: 0 14px 36px rgba(26,122,60,0.48);
+        }
+        html.dark .hw-cta-solid:hover {
+          box-shadow: 0 14px 36px rgba(45,197,106,0.55);
+        }
+
+        .hw-cta-ghost {
+          display: inline-flex;
+          align-items: center;
+          gap: 8px;
+          padding: 14px 30px;
+          border-radius: 50px;
+          background: transparent;
+          color: #0a0a0a !important;
+          font-weight: 700;
+          font-size: 14px;
+          text-decoration: none !important;
+          border: 1.5px solid rgba(0,0,0,0.18);
+          cursor: pointer;
+          font-family: 'Outfit', sans-serif;
+          transition: border-color 0.22s ease, color 0.22s ease;
+          white-space: nowrap;
+        }
+        html.dark .hw-cta-ghost {
+          color: #f2f2f2 !important;
+          border-color: rgba(255,255,255,0.18);
+        }
+        .hw-cta-ghost:hover {
+          border-color: #1a7a3c;
+          color: #1a7a3c !important;
+        }
+        html.dark .hw-cta-ghost:hover {
+          border-color: #2dc56a;
+          color: #2dc56a !important;
+        }
+
+        /* Stat strip inside left col */
+        .hw-stats {
+          display: flex;
+          gap: 0;
+          padding-top: 32px;
+          border-top: 1px solid rgba(0,0,0,0.07);
+          opacity: 0;
+          transition: opacity 0.65s 0.6s ease;
+        }
+        html.dark .hw-stats { border-color: rgba(255,255,255,0.07); }
+        .hw-stats.hv { opacity: 1; }
+
+        .hw-stat {
+          flex: 1;
           display: flex;
           flex-direction: column;
-          justify-content: flex-end;
-          padding: 60px 56px 0;
+          gap: 3px;
+          padding-right: 20px;
+        }
+        .hw-stat + .hw-stat {
+          padding-left: 20px;
+          padding-right: 0;
+          border-left: 1px solid rgba(0,0,0,0.07);
+        }
+        html.dark .hw-stat + .hw-stat { border-color: rgba(255,255,255,0.07); }
+
+        .hw-stat-n {
+          font-size: 24px;
+          font-weight: 900;
+          letter-spacing: -0.8px;
+          color: #0a0a0a;
+          line-height: 1;
+        }
+        html.dark .hw-stat-n { color: #f2f2f2; }
+
+        .hw-stat-l {
+          font-size: 10.5px;
+          font-weight: 600;
+          color: #999;
+          text-transform: uppercase;
+          letter-spacing: 0.8px;
+        }
+
+        /* ════ RIGHT COLUMN ════ */
+        .hw-right {
           position: relative;
           overflow: hidden;
-          transition: background 0.35s ease;
+          background: linear-gradient(145deg, #1e8c46 0%, #0f5c2a 45%, #073d1a 100%);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          min-height: 520px;
+        }
+        html.dark .hw-right {
+          background: linear-gradient(145deg, #104d26 0%, #072e15 50%, #030f07 100%);
         }
 
-        /* ── Card stack (parallax controlled via inline transform) ── */
-        .ibh-cards {
-          display: flex;
-          align-items: flex-end;
-          gap: 14px;
-          /* position/transform applied inline for parallax */
+        /* Decorative blobs */
+        .hw-blob {
+          position: absolute;
+          border-radius: 50%;
+          filter: blur(80px);
+          pointer-events: none;
+          z-index: 0;
+        }
+        .hw-blob-1 {
+          width: 420px; height: 420px;
+          background: rgba(45,197,106,0.3);
+          top: -120px; right: -100px;
+        }
+        .hw-blob-2 {
+          width: 300px; height: 300px;
+          background: rgba(16,185,129,0.2);
+          bottom: -100px; left: -60px;
+        }
+        .hw-blob-3 {
+          width: 180px; height: 180px;
+          background: rgba(255,255,255,0.06);
+          top: 45%; left: 45%;
         }
 
-        /* ── Individual info cards ── */
-        .ibh-card {
+        /* Grid lines overlay (subtle) */
+        .hw-grid {
+          position: absolute;
+          inset: 0;
+          background-image:
+            linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px);
+          background-size: 48px 48px;
+          pointer-events: none;
+          z-index: 0;
+        }
+
+        /* Central logo */
+        .hw-logo-outer {
+          position: relative;
+          z-index: 2;
+          transition: transform 0.08s linear;
+        }
+        .hw-logo-ring {
+          width: 190px; height: 190px;
+          border-radius: 50%;
+          border: 2px solid rgba(255,255,255,0.22);
           display: flex;
-          flex-direction: column;
-          padding: 20px;
-          border: 1px solid var(--hbdr);
+          align-items: center;
+          justify-content: center;
+          position: relative;
+          background: rgba(255,255,255,0.06);
+          backdrop-filter: blur(8px);
+          animation: hwLogoGlow 4s ease-in-out infinite;
+        }
+        @keyframes hwLogoGlow {
+          0%,100% { box-shadow: 0 0 0 8px rgba(45,197,106,0.08), 0 0 60px rgba(45,197,106,0.25); }
+          50%      { box-shadow: 0 0 0 14px rgba(45,197,106,0.12), 0 0 100px rgba(45,197,106,0.4); }
+        }
+        /* Spinning dashed border */
+        .hw-logo-ring::before {
+          content: '';
+          position: absolute;
+          inset: -6px;
+          border-radius: 50%;
+          border: 1.5px dashed rgba(255,255,255,0.2);
+          animation: hwSpin 18s linear infinite;
+        }
+        @keyframes hwSpin { to { transform: rotate(360deg); } }
+
+        .hw-logo-img {
+          width: 162px; height: 162px;
+          border-radius: 50%;
+          object-fit: contain;
+          background: #fff;
+          padding: 6px;
           box-sizing: border-box;
-          opacity: 0;
-          transform: translateY(50px);
-          transition:
-            background 0.35s ease,
-            border-color 0.35s ease,
-            opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
-            transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-        .ibh-card.ibh-vis {
-          opacity: 1;
-          transform: translateY(0);
         }
 
-        /* Card A: 130×220, bottom-flush */
-        .ibh-ca { width: 130px; min-height: 220px; background: var(--hca); }
+        /* Floating glass cards */
+        .hw-fc {
+          position: absolute;
+          background: rgba(255,255,255,0.13);
+          backdrop-filter: blur(14px);
+          -webkit-backdrop-filter: blur(14px);
+          border: 1px solid rgba(255,255,255,0.22);
+          border-radius: 16px;
+          padding: 14px 18px;
+          z-index: 3;
+          color: #fff;
+          min-width: 130px;
+          box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+          transition: transform 0.08s linear;
+        }
+        .hw-fc-top-left  { top: 14%; left: 6%; animation: hwFloatA 6s ease-in-out infinite; }
+        .hw-fc-bot-right { bottom: 20%; right: 6%; animation: hwFloatB 7s ease-in-out -2.5s infinite; }
+        .hw-fc-top-right { top: 16%; right: 8%; animation: hwFloatC 5.5s ease-in-out -1.5s infinite; }
 
-        /* Card B: 160×280, focal — floats 28px above baseline */
-        .ibh-cb { width: 160px; min-height: 280px; background: var(--hcb); margin-bottom: 28px; }
+        @keyframes hwFloatA { 0%,100%{transform:translateY(0px)} 50%{transform:translateY(-11px)} }
+        @keyframes hwFloatB { 0%,100%{transform:translateY(0px)} 50%{transform:translateY(-8px)} }
+        @keyframes hwFloatC { 0%,100%{transform:translateY(0px)} 50%{transform:translateY(-14px)} }
 
-        /* Card C: 115×195, bottom-flush */
-        .ibh-cc { width: 115px; min-height: 195px; background: var(--hcc); }
-
-        /* Card internals */
-        .ibh-card-tag {
-          font-family: 'Cabinet Grotesk', sans-serif;
-          font-size: 9px;
+        .hw-fc-lbl {
+          font-size: 8.5px;
           font-weight: 700;
-          letter-spacing: 1.5px;
           text-transform: uppercase;
-          color: var(--htx);
-          opacity: 0.4;
-          display: block;
-          transition: color 0.35s ease;
+          letter-spacing: 1.5px;
+          opacity: 0.6;
+          margin-bottom: 5px;
+          font-family: 'Outfit', sans-serif;
         }
-        .ibh-card-sp { flex: 1; display: block; } /* pushes data to bottom */
-        .ibh-card-n {
-          font-family: 'Fraunces', Georgia, serif;
+        .hw-fc-num {
           font-size: 26px;
           font-weight: 900;
           letter-spacing: -0.5px;
-          color: var(--htx);
           line-height: 1;
-          display: block;
-          margin-bottom: 5px;
-          font-variation-settings: 'opsz' 36, 'wght' 900;
-          transition: color 0.35s ease;
+          font-family: 'Outfit', sans-serif;
         }
-        .ibh-card-l {
-          font-family: 'Cabinet Grotesk', sans-serif;
+        .hw-fc-sub {
           font-size: 10px;
-          font-weight: 500;
-          letter-spacing: 0.5px;
-          color: var(--htx);
-          opacity: 0.45;
-          line-height: 1.4;
-          display: block;
-          margin-bottom: 14px;
-          transition: color 0.35s ease;
-        }
-        /* 2px progress bar — green fill, no gradient */
-        .ibh-prog {
-          width: 100%;
-          height: 2px;
-          background: var(--hprog);
-          overflow: hidden;
-          transition: background 0.35s ease;
-        }
-        .ibh-prog-f {
-          height: 100%;
-          background: var(--hac);
-          transition: background 0.35s ease;
+          opacity: 0.6;
+          margin-top: 3px;
+          font-family: 'Outfit', sans-serif;
         }
 
-        /* Watermark */
-        .ibh-wm {
+        /* Floating tag pills */
+        .hw-tag {
           position: absolute;
-          bottom: 16px;
-          right: 22px;
-          font-family: 'Cabinet Grotesk', sans-serif;
-          font-size: 9px;
-          font-weight: 500;
-          letter-spacing: 0.5px;
-          color: var(--htx);
-          opacity: 0.2;
-          transition: color 0.35s ease;
+          background: rgba(255,255,255,0.16);
+          backdrop-filter: blur(10px);
+          -webkit-backdrop-filter: blur(10px);
+          border: 1px solid rgba(255,255,255,0.28);
+          border-radius: 50px;
+          padding: 7px 16px;
+          font-size: 12px;
+          font-weight: 700;
+          color: #fff;
+          z-index: 3;
+          white-space: nowrap;
+          box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+        }
+        .hw-tag-1 { bottom: 28%; left: 8%;  animation: hwFloatC 8s ease-in-out -1s infinite; }
+        .hw-tag-2 { bottom: 18%; left: 28%; animation: hwFloatA 7s ease-in-out -3s infinite; }
+        .hw-tag-3 { bottom: 12%; right: 12%; animation: hwFloatB 9s ease-in-out -5s infinite; }
+
+        /* ════ RESPONSIVE ════ */
+        @media (max-width: 920px) {
+          #home { padding: 90px 12px 12px; }
+          .hw-outer { grid-template-columns: 1fr; }
+          .hw-right { min-height: 460px; order: -1; }
+          .hw-left  { padding: 52px 40px; }
+          .hw-fc-top-right { display: none; }
         }
 
-        /* ═══ STAT STRIP ═══ */
-        .ibh-stats {
-          display: grid;
-          grid-template-columns: repeat(3, 1fr);
-          border-top: 1px solid var(--hbdr);
-          transition: border-color 0.35s ease;
-          flex-shrink: 0;
-        }
-        .ibh-stat {
-          display: flex;
-          flex-direction: column;
-          gap: 7px;
-          padding: 30px 44px;
-        }
-        .ibh-stat + .ibh-stat {
-          border-left: 1px solid var(--hbdr);
-          transition: border-color 0.35s ease;
-        }
-        .ibh-stat-n {
-          font-family: 'Fraunces', Georgia, serif;
-          font-size: clamp(30px, 3vw, 44px);
-          font-weight: 900;
-          letter-spacing: -1.5px;
-          color: var(--htx);
-          line-height: 1;
-          font-variation-settings: 'opsz' 48, 'wght' 900;
-          transition: color 0.35s ease;
-        }
-        .ibh-stat-l {
-          font-family: 'Cabinet Grotesk', sans-serif;
-          font-size: 10px;
-          font-weight: 500;
-          letter-spacing: 1.5px;
-          text-transform: uppercase;
-          color: var(--htx);
-          opacity: 0.4;
-          transition: color 0.35s ease;
-        }
-
-        /* ═══ RESPONSIVE ═══ */
-        @media (max-width: 960px) {
-          .ibh-grid {
-            grid-template-columns: 1fr;
-            grid-template-rows: auto 1px auto;
-          }
-          .ibh-vd { width: 100%; height: 1px; }
-          .ibh-left { padding: 48px 32px 44px; }
-          .ibh-right { min-height: 420px; padding: 44px 32px 0; }
-          .ibh-cards { justify-content: center; }
-          .ibh-stats { grid-template-columns: repeat(3, 1fr); }
-          .ibh-stat { padding: 24px 28px; }
-        }
-
-        @media (max-width: 640px) {
-          .ibh { border-radius: 0; padding-top: 80px; }
-          .ibh-h1 { letter-spacing: -1.5px; }
-          .ibh-left { padding: 36px 24px 36px; }
-          .ibh-btm { margin-top: 40px; }
-          .ibh-stats { grid-template-columns: 1fr; }
-          .ibh-stat + .ibh-stat { border-left: none; border-top: 1px solid var(--hbdr); }
-          .ibh-stat { padding: 20px 24px; }
-          .ibh-ca { width: 100px; min-height: 180px; }
-          .ibh-cb { width: 130px; min-height: 228px; }
-          .ibh-cc { width: 90px;  min-height: 162px; }
-          .ibh-cards { gap: 10px; }
-          .ibh-right { padding: 36px 24px 0; }
+        @media (max-width: 620px) {
+          #home { padding: 80px 8px 8px; }
+          .hw-outer { border-radius: 14px; min-height: auto; }
+          .hw-left  { padding: 40px 28px; }
+          .hw-h1    { font-size: 36px; letter-spacing: -1.5px; }
+          .hw-right { min-height: 380px; }
+          .hw-logo-ring { width: 145px; height: 145px; }
+          .hw-logo-img  { width: 125px; height: 125px; }
+          .hw-fc-bot-right { bottom: 14%; right: 4%; }
+          .hw-stats { gap: 0; }
+          .hw-stat-n { font-size: 20px; }
+          .hw-tag-3 { display: none; }
         }
       `}</style>
 
-      {/* ═══ TWO-COLUMN GRID ═══ */}
-      <div className="ibh-grid">
+      <div className="hw-outer">
 
-        {/* ── LEFT: Eyebrow + Headline + Body + CTAs ── */}
-        <div className="ibh-left">
+        {/* ═══ LEFT ═══ */}
+        <div className="hw-left">
 
-          {/* Eyebrow: 24px green rule + 11px uppercase label */}
-          <div className="ibh-eye">
-            <span className="ibh-eye-rule" />
-            <span className="ibh-eye-tx">{lc.eyebrow}</span>
+          {/* Badge */}
+          <div className={`hw-badge${v}`}>
+            <span className="hw-badge-dot" />
+            {lc.badge}
           </div>
 
-          {/* 3-line Fraunces headline */}
-          <h1 className="ibh-h1">
-            {/* Line 1 — normal weight */}
-            <span className="ibh-hw">
-              <span className={v('ibh-hl')} style={{ transitionDelay: '0ms' }}>
-                {lc.l1}
-              </span>
-            </span>
-            {/* Line 2 — italic weight 300, accent color */}
-            <span className="ibh-hw">
-              <span className={v('ibh-hl')} style={{ transitionDelay: '100ms' }}>
-                <span className="ibh-hl-ac">{lc.l2}</span>
-              </span>
-            </span>
-            {/* Line 3 — normal weight */}
-            <span className="ibh-hw">
-              <span className={v('ibh-hl')} style={{ transitionDelay: '200ms' }}>
-                {lc.l3}
-              </span>
-            </span>
+          {/* 3-line headline */}
+          <h1 className={`hw-h1${v}`}>
+            {lc.hl1}
+            <span className="hw-h1-accent">{lc.hl2}</span>
+            {lc.hl3}
           </h1>
 
-          {/* Body copy + CTA pinned below headline */}
-          <div className="ibh-btm">
-            <div className={v('ibh-bw')} style={{ transitionDelay: '250ms' }}>
-              <p className="ibh-body">{lc.body}</p>
+          {/* Subtitle */}
+          <p className={`hw-sub${v}`}>{lc.sub}</p>
+
+          {/* CTA buttons */}
+          <div className={`hw-ctas${v}`}>
+            <a
+              className="hw-cta-solid"
+              href="#courses"
+              onClick={e => { e.preventDefault(); document.getElementById('courses')?.scrollIntoView({ behavior: 'smooth' }); }}
+            >
+              {lc.cta1} →
+            </a>
+            <a
+              className="hw-cta-ghost"
+              href="#about"
+              onClick={e => { e.preventDefault(); document.getElementById('about')?.scrollIntoView({ behavior: 'smooth' }); }}
+            >
+              {lc.cta2}
+            </a>
+          </div>
+
+          {/* Inline stat strip */}
+          <div className={`hw-stats${v}`}>
+            <div className="hw-stat">
+              <span className="hw-stat-n">{lc.s1n}</span>
+              <span className="hw-stat-l">{lc.s1l}</span>
             </div>
-            <div className={v('ibh-cta')} style={{ transitionDelay: '450ms' }}>
-              <a
-                className="ibh-cta-pri"
-                href="#courses"
-                onClick={e => { e.preventDefault(); document.getElementById('courses')?.scrollIntoView({ behavior: 'smooth' }); }}
-              >
-                {lc.cta1}
-              </a>
-              <a
-                className="ibh-cta-gh"
-                href="#about"
-                onClick={e => { e.preventDefault(); document.getElementById('about')?.scrollIntoView({ behavior: 'smooth' }); }}
-              >
-                {lc.cta2}
-              </a>
+            <div className="hw-stat">
+              <span className="hw-stat-n">{lc.s2n}</span>
+              <span className="hw-stat-l">{lc.s2l}</span>
+            </div>
+            <div className="hw-stat">
+              <span className="hw-stat-n">{lc.s3n}</span>
+              <span className="hw-stat-l">{lc.s3l}</span>
             </div>
           </div>
+
         </div>
 
-        {/* ── 1px VERTICAL DIVIDER ── */}
-        <div className="ibh-vd" />
-
-        {/* ── RIGHT: Staggered info cards + watermark ── */}
+        {/* ═══ RIGHT — Vibrant visual panel ═══ */}
         <div
-          className="ibh-right"
+          className="hw-right"
           ref={rightRef}
-          onMouseMove={onMouseMove}
-          onMouseLeave={onMouseLeave}
+          onMouseMove={onMove}
+          onMouseLeave={() => setMouse({ x: 0, y: 0 })}
         >
-          {/* Card stack — mouse parallax applied inline */}
+          {/* Blobs */}
+          <div className="hw-blob hw-blob-1" />
+          <div className="hw-blob hw-blob-2" />
+          <div className="hw-blob hw-blob-3" />
+
+          {/* Grid texture */}
+          <div className="hw-grid" />
+
+          {/* Central logo — mild parallax on mouse */}
           <div
-            className="ibh-cards"
-            style={{
-              transform: `translate(${cardOffset.x}px, ${cardOffset.y}px)`,
-              transition: leaving
-                ? '0.6s cubic-bezier(0.16, 1, 0.3, 1)'
-                : '0.1s linear',
-            }}
+            className="hw-logo-outer"
+            style={{ transform: `translate(${mouse.x * 10}px, ${mouse.y * 7}px)` }}
           >
-            {/* Card A — 130×220, bottom-flush */}
-            <div className={v('ibh-card ibh-ca')} style={{ transitionDelay: '80ms' }}>
-              <span className="ibh-card-tag">{lc.c1t}</span>
-              <span className="ibh-card-sp" />
-              <span className="ibh-card-n">{lc.c1n}</span>
-              <span className="ibh-card-l">{lc.c1l}</span>
-              <div className="ibh-prog">
-                <div className="ibh-prog-f" style={{ width: '92%' }} />
-              </div>
-            </div>
-
-            {/* Card B — 160×280, focal, 28px margin-bottom */}
-            <div className={v('ibh-card ibh-cb')} style={{ transitionDelay: '200ms' }}>
-              <span className="ibh-card-tag">{lc.c2t}</span>
-              <span className="ibh-card-sp" />
-              <span className="ibh-card-n">{lc.c2n}</span>
-              <span className="ibh-card-l">{lc.c2l}</span>
-              <div className="ibh-prog">
-                <div className="ibh-prog-f" style={{ width: '98%' }} />
-              </div>
-            </div>
-
-            {/* Card C — 115×195, bottom-flush */}
-            <div className={v('ibh-card ibh-cc')} style={{ transitionDelay: '320ms' }}>
-              <span className="ibh-card-tag">{lc.c3t}</span>
-              <span className="ibh-card-sp" />
-              <span className="ibh-card-n">{lc.c3n}</span>
-              <span className="ibh-card-l">{lc.c3l}</span>
-              <div className="ibh-prog">
-                <div className="ibh-prog-f" style={{ width: '75%' }} />
-              </div>
+            <div className="hw-logo-ring">
+              <img src={logoImage} alt="IBRAT TA'LIM" className="hw-logo-img" />
             </div>
           </div>
 
-          {/* Corner watermark */}
-          <span className="ibh-wm">© 2025 Ibrat</span>
+          {/* Floating card — top left — Students */}
+          <div
+            className="hw-fc hw-fc-top-left"
+            style={{ transform: `translate(${mouse.x * 20}px, ${mouse.y * 14}px)` }}
+          >
+            <div className="hw-fc-lbl">{lc.c1l}</div>
+            <div className="hw-fc-num">{lc.c1n}</div>
+            <div className="hw-fc-sub">{lc.c1s}</div>
+          </div>
+
+          {/* Floating card — bottom right — Satisfaction */}
+          <div
+            className="hw-fc hw-fc-bot-right"
+            style={{ transform: `translate(${mouse.x * -16}px, ${mouse.y * -11}px)` }}
+          >
+            <div className="hw-fc-lbl">{lc.c2l}</div>
+            <div className="hw-fc-num">{lc.c2n}</div>
+            <div className="hw-fc-sub">{lc.c2s}</div>
+          </div>
+
+          {/* Floating card — top right — Courses */}
+          <div
+            className="hw-fc hw-fc-top-right"
+            style={{ transform: `translate(${mouse.x * -12}px, ${mouse.y * 18}px)` }}
+          >
+            <div className="hw-fc-lbl">{lc.c3l}</div>
+            <div className="hw-fc-num">{lc.c3n}</div>
+            <div className="hw-fc-sub">{lc.c3s}</div>
+          </div>
+
+          {/* Course tag pills — bottom area */}
+          <div className="hw-tag hw-tag-1">{lc.t1}</div>
+          <div className="hw-tag hw-tag-2">{lc.t2}</div>
+          <div className="hw-tag hw-tag-3">{lc.t3}</div>
+
         </div>
-
       </div>
-
-      {/* ═══ STAT STRIP ═══ */}
-      <div className="ibh-stats">
-        {[
-          { n: '5,000+', l: lc.st1 },
-          { n: '9',      l: lc.st2 },
-          { n: '98%',    l: lc.st3 },
-        ].map((s, i) => (
-          <div className="ibh-stat" key={i}>
-            <span className="ibh-stat-n">{s.n}</span>
-            <span className="ibh-stat-l">{s.l}</span>
-          </div>
-        ))}
-      </div>
-
     </section>
   );
 }
