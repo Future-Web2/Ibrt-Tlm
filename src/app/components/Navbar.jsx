@@ -19,6 +19,100 @@ export default function Navbar() {
   const isHome = location.pathname === '/';
   
   const settingsRef = useRef(null);
+  const navLinksRef = useRef(null);
+
+  const [activeSection, setActiveSection] = useState(() => {
+    if (typeof window !== 'undefined' && window.location.hash) {
+      return window.location.hash.slice(1);
+    }
+    return 'home';
+  });
+  const [indicatorStyle, setIndicatorStyle] = useState({ left: 0, width: 0, height: 0, top: 0, opacity: 0 });
+
+  // Intersection Observer to track active section based on scroll position
+  useEffect(() => {
+    if (!isHome) {
+      setActiveSection('');
+      return;
+    }
+
+    const sections = ['home', 'about', 'courses', 'branches', 'testimonials', 'contact'];
+    const observedElements = sections.map(id => document.getElementById(id)).filter(Boolean);
+
+    if (observedElements.length === 0) return;
+
+    const observerOptions = {
+      root: null,
+      rootMargin: '-30% 0px -45% 0px', // Sweet spot in middle of screen
+      threshold: 0.1
+    };
+
+    const handleIntersection = (entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          setActiveSection(entry.target.id);
+        }
+      });
+    };
+
+    const observer = new IntersectionObserver(handleIntersection, observerOptions);
+    observedElements.forEach(el => observer.observe(el));
+
+    // Handle scroll to top/bottom edge cases
+    const handleScroll = () => {
+      if (window.scrollY < 80) {
+        setActiveSection('home');
+      } else if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 60) {
+        setActiveSection('contact');
+      }
+    };
+    window.addEventListener('scroll', handleScroll);
+
+    return () => {
+      observedElements.forEach(el => observer.unobserve(el));
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, [isHome]);
+
+  // Update dynamic indicator pill position
+  useEffect(() => {
+    const updateIndicator = () => {
+      if (!navLinksRef.current) return;
+      
+      // Find active anchor or special contact link inside active list
+      const activeLink = navLinksRef.current.querySelector('a.active, .nav-link-enroll.active');
+      
+      if (activeLink) {
+        const parentRect = navLinksRef.current.getBoundingClientRect();
+        const activeRect = activeLink.getBoundingClientRect();
+        
+        // Calculate position relative to parent ul element
+        const left = activeRect.left - parentRect.left;
+        const width = activeRect.width;
+        const height = activeRect.height;
+        const top = activeRect.top - parentRect.top;
+        
+        setIndicatorStyle({
+          left: `${left}px`,
+          width: `${width}px`,
+          height: `${height}px`,
+          top: `${top}px`,
+          opacity: 1
+        });
+      } else {
+        setIndicatorStyle(prev => ({ ...prev, opacity: 0 }));
+      }
+    };
+
+    // Update with a small delay for DOM loading, and instantly on resize/state changes
+    const timer = setTimeout(updateIndicator, 50);
+    window.addEventListener('resize', updateIndicator);
+    
+    return () => {
+      clearTimeout(timer);
+      window.removeEventListener('resize', updateIndicator);
+    };
+  }, [activeSection, location.pathname, location.hash, mobileOpen]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -75,6 +169,7 @@ export default function Navbar() {
     setMobileOpen(false);
     if (isHome) {
       e.preventDefault();
+      setActiveSection(id); // Instantly highlight active link on click
       const el = document.getElementById(id);
       if (el) {
         el.scrollIntoView({ behavior: 'smooth' });
@@ -160,14 +255,47 @@ export default function Navbar() {
           flex-shrink: 0 !important;
         }
 
+        /* Dynamic Glass sliding indicator variables */
+        :root {
+          --nav-indicator-bg: rgba(0, 0, 0, 0.04);
+          --nav-indicator-border: rgba(0, 0, 0, 0.08);
+          --nav-indicator-shadow: 0 4px 15px rgba(0, 0, 0, 0.05), inset 0 1px 1px rgba(255, 255, 255, 0.6);
+        }
+
+        .dark, [data-theme="dark"] {
+          --nav-indicator-bg: rgba(255, 255, 255, 0.07);
+          --nav-indicator-border: rgba(255, 255, 255, 0.16);
+          --nav-indicator-shadow: 0 6px 20px rgba(0, 0, 0, 0.35), inset 0 1px 0px rgba(255, 255, 255, 0.15);
+        }
+
+        /* Sliding capsule styles */
+        .nav-indicator {
+          position: absolute;
+          border-radius: 50px;
+          background: var(--nav-indicator-bg);
+          border: 1.5px solid var(--nav-indicator-border);
+          backdrop-filter: blur(12px) saturate(1.8);
+          -webkit-backdrop-filter: blur(12px) saturate(1.8);
+          box-shadow: var(--nav-indicator-shadow);
+          transition: all 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+          pointer-events: none;
+          z-index: 1; /* Under the text, above the nav background */
+        }
+
         .nav-links {
           display: flex;
           list-style: none;
-          gap: clamp(0.6rem, 1.2vw, 1.4rem);
+          gap: clamp(0.4rem, 0.8vw, 1.2rem);
           align-items: center;
           margin: 0;
           padding: 0;
           flex-wrap: nowrap !important;
+          position: relative; /* relative for absolute .nav-indicator placement */
+        }
+
+        .nav-links li {
+          position: relative;
+          z-index: 2; /* Keep above indicator */
         }
 
         .nav-links a:not(.nav-btn-login) {
@@ -178,33 +306,22 @@ export default function Navbar() {
           text-transform: uppercase;
           letter-spacing: 1px;
           position: relative;
-          padding: 6px 0;
-          transition: color var(--transition-fast, 0.2s ease);
+          padding: 8px 16px; /* Elegant pill wrapping padding */
+          border-radius: 50px;
+          transition: color var(--transition-fast, 0.2s ease), background-color 0.2s ease;
           white-space: nowrap !important;
+          display: inline-flex;
+          align-items: center;
         }
 
-        .nav-links a:not(.nav-btn-login):hover {
+        .nav-links a:not(.nav-btn-login):hover,
+        .nav-links a:not(.nav-btn-login).active {
           color: var(--brand-green);
           text-shadow: 0 0 10px var(--card-glow);
         }
 
         .nav-links a:not(.nav-btn-login)::after {
-          content: '';
-          position: absolute;
-          bottom: -2px;
-          left: 50%;
-          transform: translateX(-50%);
-          width: 0%;
-          height: 3px;
-          border-radius: 50px;
-          background-color: var(--brand-green);
-          transition: var(--transition-normal, 0.4s cubic-bezier(0.16, 1, 0.3, 1));
-          box-shadow: 0 0 10px var(--brand-green);
-        }
-
-        .nav-links a:not(.nav-btn-login):hover::after,
-        .nav-links a:not(.nav-btn-login).active::after {
-          width: 60%;
+          display: none !important; /* Hide old underline as we have the glass capsule outline */
         }
 
         /* Premium Login Button with live shimmer sweep */
@@ -486,11 +603,12 @@ export default function Navbar() {
             width: 95% !important;
           }
           .nav-links {
-            gap: 0.5rem !important;
+            gap: 0.3rem !important;
           }
           .nav-links a:not(.nav-btn-login) {
             font-size: 0.8rem !important;
             letter-spacing: 0.5px !important;
+            padding: 6px 12px !important; /* Elegant slightly smaller padding to prevent crowding */
           }
           .nav-btn-login {
             padding: 7px 16px !important;
@@ -567,11 +685,14 @@ export default function Navbar() {
           </Link>
 
           {/* Navigation Links - Center Glass Cloud Navigation */}
-          <ul className={`nav-links ${mobileOpen ? 'active' : ''}`}>
+          <ul ref={navLinksRef} className={`nav-links ${mobileOpen ? 'active' : ''}`}>
+            {/* Smooth Sliding Glass Indicator */}
+            <span className="nav-indicator" style={indicatorStyle}></span>
+
             {links.map((link) => (
               <li key={link.key}>
                 <a href={link.href} onClick={(e) => scrollTo(e, link.href.slice(2))}
-                   className={location.hash === link.href.slice(1) ? 'active' : ''}>
+                   className={activeSection === link.href.slice(2) ? 'active' : ''}>
                   {T(link.key)}
                 </a>
               </li>
@@ -579,7 +700,8 @@ export default function Navbar() {
             
             {/* Special Enroll link with pulsing dot */}
             <li>
-              <a href="/#contact" onClick={(e) => scrollTo(e, 'contact')} className="nav-link-enroll">
+              <a href="/#contact" onClick={(e) => scrollTo(e, 'contact')}
+                 className={`nav-link-enroll ${activeSection === 'contact' ? 'active' : ''}`}>
                 <span>{T('nav_enroll')}</span>
                 <span className="pulse-dot"></span>
               </a>
