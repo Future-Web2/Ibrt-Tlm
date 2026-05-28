@@ -81,6 +81,7 @@ export default function HomePage() {
   const [formName, setFormName] = useState('');
   const [formPhone, setFormPhone] = useState('');
   const [formCourse, setFormCourse] = useState('');
+  const [formMsg, setFormMsg] = useState('');
   const [formSent, setFormSent] = useState(false);
 
   const carouselRef = useRef(null);
