@@ -81,8 +81,14 @@ export default function HomePage() {
   const [formName, setFormName] = useState('');
   const [formPhone, setFormPhone] = useState('');
   const [formCourse, setFormCourse] = useState('');
-  const [formMsg, setFormMsg] = useState('');
   const [formSent, setFormSent] = useState(false);
+
+  const carouselRef = useRef(null);
+  const scrollCarousel = (dir) => {
+    if (carouselRef.current) {
+      carouselRef.current.scrollBy({ left: dir * 350, behavior: 'smooth' });
+    }
+  };
 
 
 
@@ -128,9 +134,12 @@ export default function HomePage() {
   ];
 
   const testimonials = [
-    { initial: 'N', nameKey: 'Nargiza T.', roleKey: 't1_role', textKey: 't1_text' },
-    { initial: 'A', nameKey: 'Alisher M.', roleKey: 't2_role', textKey: 't2_text' },
-    { initial: 'D', nameKey: 'Dilnoza R.', roleKey: 't3_role', textKey: 't3_text' },
+    { initial: 'N', nameKey: 'Nargiza T.', roleKey: 't1_role', textKey: 't1_text', icon: 'fa-child' },
+    { initial: 'A', nameKey: 'Alisher M.', roleKey: 't2_role', textKey: 't2_text', icon: 'fa-user-graduate' },
+    { initial: 'D', nameKey: 'Dilnoza R.', roleKey: 't3_role', textKey: 't3_text', icon: 'fa-brain' },
+    { initial: 'S', nameKey: 'Sanjar B.', roleKey: 't4_role', textKey: 't4_text', icon: 'fa-award' },
+    { initial: 'M', nameKey: 'Malika K.', roleKey: 't5_role', textKey: 't5_text', icon: 'fa-comments' },
+    { initial: 'B', nameKey: 'Bobur Y.', roleKey: 't6_role', textKey: 't6_text', icon: 'fa-shapes' },
   ];
 
   const courseSelectOptions = [
@@ -433,6 +442,9 @@ export default function HomePage() {
           @media(max-width: 768px) {
             .ibrat-gallery-item { width: 280px !important; height: 200px !important; }
           }
+          
+          .no-scrollbar::-webkit-scrollbar { display: none; }
+          .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
         `}</style>
       </section>
 
@@ -445,34 +457,70 @@ export default function HomePage() {
               {T('reviews_title')} <span style={{ color: G, textShadow: `0 0 20px var(--card-glow)` }}>{T('reviews_title_green')}</span>
             </h2>
           </div>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(300px,1fr))', gap: '2rem' }}>
-            {testimonials.map((t, i) => (
-              <div key={t.initial} className="ibrat-reveal liquid-glass-card" style={{ background: 'var(--glass-bg)', backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)', border: '1px solid var(--glass-border)', padding: '2.5rem', borderRadius: '24px', boxShadow: 'var(--glass-shadow)', opacity: 0, transform: 'translateY(30px)', cursor: 'pointer', position: 'relative', overflow: 'hidden' }}>
+          <div style={{ position: 'relative' }}>
+            <div 
+              ref={carouselRef}
+              className="no-scrollbar"
+              style={{ 
+                display: 'flex', 
+                overflowX: 'auto', 
+                scrollSnapType: 'x mandatory', 
+                gap: '2rem', 
+                paddingBottom: '2rem',
+                WebkitOverflowScrolling: 'touch',
+                scrollBehavior: 'smooth'
+              }}
+            >
+              {testimonials.map((t, i) => (
+                <div key={t.initial} className="ibrat-reveal liquid-glass-card" style={{ minWidth: '320px', maxWidth: '380px', flex: '0 0 auto', scrollSnapAlign: 'start', background: 'var(--glass-bg)', backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)', border: '1px solid var(--glass-border)', padding: '2.5rem', borderRadius: '24px', boxShadow: 'var(--glass-shadow)', opacity: 0, transform: 'translateY(30px)', cursor: 'pointer', position: 'relative', overflow: 'hidden' }}>
 
-                {/* Micro Glow on hover */}
-                <div className="ibrat-testimonial-glow" style={{ position: 'absolute', top: '-50px', right: '-50px', width: '150px', height: '150px', background: 'var(--brand-green)', filter: 'blur(80px)', opacity: 0, transition: 'opacity 0.4s', borderRadius: '50%', pointerEvents: 'none' }} />
+                  {/* Micro Glow on hover */}
+                  <div className="ibrat-testimonial-glow" style={{ position: 'absolute', top: '-50px', right: '-50px', width: '150px', height: '150px', background: 'var(--brand-green)', filter: 'blur(80px)', opacity: 0, transition: 'opacity 0.4s', borderRadius: '50%', pointerEvents: 'none' }} />
 
-                {/* Top User Info with Verified Badge */}
-                <div style={{ display: 'flex', alignItems: 'center', gap: '1.2rem', marginBottom: '1.5rem', position: 'relative', zIndex: 1 }}>
-                  <div style={{ width: 55, height: 55, borderRadius: '50%', background: 'linear-gradient(135deg, #10b981, #059669)', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 900, fontSize: '1.3rem', flexShrink: 0, boxShadow: `0 5px 15px rgba(16,185,129,0.3)` }}>{t.initial}</div>
-                  <div>
-                    <div style={{ fontWeight: 800, fontSize: '1.15rem', color: 'var(--text-primary)', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                      {t.nameKey}
-                      <i className="fas fa-check-circle" style={{ color: '#3b82f6', fontSize: '1rem', textShadow: '0 0 10px rgba(59,130,246,0.5)' }} title="Tasdiqlangan foydalanuvchi"></i>
+                  {/* Top User Info with Verified Badge */}
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '1.2rem', marginBottom: '1.5rem', position: 'relative', zIndex: 1 }}>
+                    <div style={{ width: 55, height: 55, borderRadius: '50%', background: 'linear-gradient(135deg, #10b981, #059669)', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 900, fontSize: '1.5rem', flexShrink: 0, boxShadow: `0 5px 15px rgba(16,185,129,0.3)` }}>
+                      <i className={`fas ${t.icon}`} />
                     </div>
-                    <div style={{ fontSize: '.85rem', color: 'var(--brand-green)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1px' }}>✔️ Tasdiqlangan ota-ona</div>
+                    <div>
+                      <div style={{ fontWeight: 800, fontSize: '1.15rem', color: 'var(--text-primary)', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                        {t.nameKey}
+                        <i className="fas fa-check-circle" style={{ color: '#3b82f6', fontSize: '1rem', textShadow: '0 0 10px rgba(59,130,246,0.5)' }} title="Tasdiqlangan foydalanuvchi"></i>
+                      </div>
+                      <div style={{ fontSize: '.85rem', color: 'var(--brand-green)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1px' }}>✔️ {T(t.roleKey)}</div>
+                    </div>
                   </div>
+
+                  <div style={{ color: '#f59e0b', fontSize: '.85rem', letterSpacing: '4px', marginBottom: '1.2rem', textShadow: '0 0 10px rgba(245,158,11,0.3)', display: 'flex' }}>
+                    {[1, 2, 3, 4, 5].map(star => <i key={star} className="fas fa-star" />)}
+                  </div>
+
+                  <p style={{ color: 'var(--text-secondary)', lineHeight: 1.8, fontSize: '1.05rem', position: 'relative', zIndex: 1 }}>"{T(t.textKey)}"</p>
+
+                  <i className="fas fa-quote-right" style={{ position: 'absolute', bottom: '20px', right: '30px', fontSize: '4rem', color: 'var(--glass-border)', opacity: 0.3, zIndex: 0 }} />
                 </div>
+              ))}
+            </div>
 
-                <div style={{ color: '#f59e0b', fontSize: '.85rem', letterSpacing: '4px', marginBottom: '1.2rem', textShadow: '0 0 10px rgba(245,158,11,0.3)', display: 'flex' }}>
-                  {[1, 2, 3, 4, 5].map(star => <i key={star} className="fas fa-star" />)}
-                </div>
-
-                <p style={{ color: 'var(--text-secondary)', lineHeight: 1.8, fontSize: '1.05rem', position: 'relative', zIndex: 1 }}>"{T(t.textKey)}"</p>
-
-                <i className="fas fa-quote-right" style={{ position: 'absolute', bottom: '20px', right: '30px', fontSize: '4rem', color: 'var(--glass-border)', opacity: 0.3, zIndex: 0 }} />
-              </div>
-            ))}
+            {/* Carousel Controls */}
+            <div style={{ display: 'flex', justifyContent: 'center', gap: '1rem', marginTop: '1rem' }}>
+              <button 
+                onClick={() => scrollCarousel(-1)} 
+                style={{ width: 50, height: 50, borderRadius: '50%', border: '1px solid var(--brand-green)', background: 'var(--card-glow)', color: 'var(--brand-green)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all 0.3s', fontSize: '1.2rem' }} 
+                onMouseEnter={e => { e.currentTarget.style.background = 'var(--brand-green)'; e.currentTarget.style.color = 'var(--bg-primary)'; }} 
+                onMouseLeave={e => { e.currentTarget.style.background = 'var(--card-glow)'; e.currentTarget.style.color = 'var(--brand-green)'; }}
+              >
+                <i className="fas fa-chevron-left" />
+              </button>
+              <button 
+                onClick={() => scrollCarousel(1)} 
+                style={{ width: 50, height: 50, borderRadius: '50%', border: '1px solid var(--brand-green)', background: 'var(--card-glow)', color: 'var(--brand-green)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all 0.3s', fontSize: '1.2rem' }} 
+                onMouseEnter={e => { e.currentTarget.style.background = 'var(--brand-green)'; e.currentTarget.style.color = 'var(--bg-primary)'; }} 
+                onMouseLeave={e => { e.currentTarget.style.background = 'var(--card-glow)'; e.currentTarget.style.color = 'var(--brand-green)'; }}
+              >
+                <i className="fas fa-chevron-right" />
+              </button>
+            </div>
           </div>
         </div>
       </section>
