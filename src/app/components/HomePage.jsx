@@ -24,7 +24,7 @@ function SectionLabel({ label }) {
   );
 }
 
-function useReveal() {
+function useReveal(deps = []) {
   useEffect(() => {
     const els = document.querySelectorAll('.ibrat-reveal');
     const io = new IntersectionObserver((entries) => {
@@ -32,7 +32,7 @@ function useReveal() {
     }, { threshold: 0.12 });
     els.forEach(el => io.observe(el));
     return () => io.disconnect();
-  }, []);
+  }, deps);
 }
 
 function useCounter(active, target, duration = 2000) {
@@ -76,9 +76,8 @@ function StatCard({ target, suffix, label }) {
 
 export default function HomePage() {
   const { T } = useLang();
-  useReveal();
-
   const [activeTab, setActiveTab] = useState('all');
+  useReveal([activeTab]);
   const [formName, setFormName] = useState('');
   const [formPhone, setFormPhone] = useState('');
   const [formCourse, setFormCourse] = useState('');
@@ -360,9 +359,10 @@ export default function HomePage() {
             pointerEvents: 'none'
           }} />
         </div>
+      </section>
 
-        {/* Immersive Scroll Overlays for Stats, Process Roadmap & Branches */}
-        <div style={{ position: 'relative', zIndex: 12, marginTop: '-100vh', pointerEvents: 'none' }}>
+      {/* ── STATS, PROCESS, BRANCHES ── */}
+      <div style={{ position: 'relative', zIndex: 12 }}>
 
           {/* ── STATS (MILLENNIAL EMOTIONAL) ─────────────────────────────────────── */}
           <section style={{ ...section(), padding: '80px 0', position: 'relative', overflow: 'hidden', pointerEvents: 'auto' }}>
@@ -503,9 +503,7 @@ export default function HomePage() {
               </div>
             </div>
           </section>
-
         </div>
-      </section>
 
       {/* ── COURSES ───────────────────────────────────── */}
       <section id="courses" style={{ ...section(), background: 'var(--course-bg)', backgroundSize: '400% 400%', animation: 'gradBG 18s ease infinite' }}>

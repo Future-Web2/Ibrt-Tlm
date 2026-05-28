@@ -19,7 +19,7 @@ export default function Root() {
   const location = useLocation();
 
   useEffect(() => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    window.scrollTo({ top: 0, behavior: 'auto' });
   }, [location.pathname]);
 
   return (
@@ -108,7 +108,7 @@ export default function Root() {
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        html, body { scroll-behavior: smooth; overflow-x: hidden; background: var(--bg-primary) !important; color: var(--text-primary); transition: background 0.5s, color 0.5s; }
+        html, body { overflow-x: hidden; background: var(--bg-primary) !important; color: var(--text-primary); transition: background 0.5s, color 0.5s; }
         body { overflow-x: hidden; }
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: var(--bg-primary); }
