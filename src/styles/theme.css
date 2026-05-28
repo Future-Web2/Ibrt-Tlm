@@ -347,7 +347,7 @@
              rotateY(calc(-12deg + (var(--scroll-progress) * 12deg)))
              rotateZ(calc(-8deg + (var(--scroll-progress) * 8deg)))
              translate3d(0, calc(-30px + (var(--scroll-progress) * 30px)), calc(10px - (var(--scroll-progress) * 10px)));
-  transition: transform 0.1s ease-out;
+  /* transition removed to bind directly to scroll without lag */
 }
 
 /* Book Covers */
