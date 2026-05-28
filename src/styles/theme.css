@@ -939,7 +939,49 @@ html[data-theme="light"] .liquid-glass-card::before {
   transform: scale(1.2) translateY(-1px);
 }
 
+/* --- Dynamic Background Animations --- */
+@keyframes floatUpAndDown {
+  0% { transform: translateY(0px) rotate(0deg) scale(1); }
+  33% { transform: translateY(-30px) rotate(10deg) scale(1.05); }
+  66% { transform: translateY(15px) rotate(-5deg) scale(0.95); }
+  100% { transform: translateY(0px) rotate(0deg) scale(1); }
+}
 
+@keyframes floatAround {
+  0% { transform: translate(0, 0) rotate(0deg); }
+  25% { transform: translate(40px, -30px) rotate(45deg); }
+  50% { transform: translate(10px, -60px) rotate(90deg); }
+  75% { transform: translate(-30px, -20px) rotate(135deg); }
+  100% { transform: translate(0, 0) rotate(180deg); }
+}
 
+@keyframes pulseGlow {
+  0% { opacity: 0.3; filter: blur(50px) brightness(1); }
+  50% { opacity: 0.6; filter: blur(60px) brightness(1.2); transform: scale(1.1); }
+  100% { opacity: 0.3; filter: blur(50px) brightness(1); }
+}
 
+.dynamic-shape {
+  position: absolute;
+  pointer-events: none;
+  z-index: 0;
+  border-radius: 50%;
+  mix-blend-mode: multiply;
+}
 
+:root.dark .dynamic-shape {
+  mix-blend-mode: screen;
+}
+
+.anim-float-1 { animation: floatUpAndDown 12s ease-in-out infinite; }
+.anim-float-2 { animation: floatAround 18s linear infinite alternate; }
+.anim-pulse { animation: pulseGlow 8s ease-in-out infinite; }
+
+/* Dynamic Hover Micro-Interactions */
+.liquid-glass-card {
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1), transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.liquid-glass-card:hover {
+  transform: translateY(-8px) scale(1.02);
+}

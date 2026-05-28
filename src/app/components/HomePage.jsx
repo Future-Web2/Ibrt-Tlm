@@ -151,7 +151,14 @@ export default function HomePage() {
   ];
 
   return (
-    <div style={{ fontFamily: F }}>
+    <div style={{ fontFamily: F, position: 'relative', overflow: 'hidden' }}>
+      
+      {/* --- Dynamic Background Shapes --- */}
+      <div className="dynamic-shape anim-float-1 anim-pulse" style={{ width: '400px', height: '400px', background: 'radial-gradient(circle, rgba(16,185,129,0.1) 0%, transparent 70%)', top: '10%', left: '-10%' }} />
+      <div className="dynamic-shape anim-float-2 anim-pulse" style={{ width: '600px', height: '600px', background: 'radial-gradient(circle, rgba(59,130,246,0.08) 0%, transparent 70%)', top: '40%', right: '-15%' }} />
+      <div className="dynamic-shape anim-float-1 anim-pulse" style={{ width: '500px', height: '500px', background: 'radial-gradient(circle, rgba(245,158,11,0.07) 0%, transparent 70%)', bottom: '10%', left: '20%', animationDelay: '2s' }} />
+      
+
       <HeroSection />
 
 
