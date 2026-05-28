@@ -4,614 +4,708 @@ import logoImage from '../../publish/image.png';
 
 export default function HeroSection() {
   const { lang } = useLang();
-  const [vis, setVis] = useState(false);
+  const [vis, setVis]     = useState(false);
   const [mouse, setMouse] = useState({ x: 0, y: 0 });
-  const rightRef = useRef(null);
+  const rightRef           = useRef(null);
 
   useEffect(() => {
-    const t = setTimeout(() => setVis(true), 80);
+    const t = setTimeout(() => setVis(true), 100);
     return () => clearTimeout(t);
   }, []);
 
-  const onMove = (e) => {
+  const handleMouseMove = (e) => {
     const r = rightRef.current?.getBoundingClientRect();
     if (!r) return;
     setMouse({
-      x: (e.clientX - r.left - r.width / 2) / r.width,
-      y: (e.clientY - r.top - r.height / 2) / r.height,
+      x: (e.clientX - r.left - r.width / 2)  / r.width,
+      y: (e.clientY - r.top  - r.height / 2) / r.height,
     });
   };
 
   const copy = {
     uz: {
-      badge: "Toshkentning №1 Ta'lim Markazi",
-      hl1: 'Kelajagingizni', hl2: "Biz Bilan", hl3: 'Shakllantiring.',
-      sub: "Ingliz tili, rus tili, mental arifmetika va Montessori — 9 yillik tajriba, tasdiqlangan natijalar.",
-      cta1: "Kurslarni Ko'rish", cta2: "Biz Haqimizda",
-      s1n: '1,500+', s1l: "Faol o'quvchi",
-      s2n: '98%',   s2l: 'Mamnunlik',
-      s3n: '9+',    s3l: 'Yil tajriba',
-      c1l: "O'QUVCHILAR", c1n: '1,500+', c1s: "Faol o'quvchi",
-      c2l: 'MAMNUNLIK',   c2n: '98%',    c2s: 'Ijobiy baho',
-      c3l: 'KURSLAR',     c3n: '8+',     c3s: "Ta'lim yo'nalishlari",
-      t1: '🇬🇧 Ingliz tili', t2: '🌱 Montessori', t3: '🧮 Mental',
+      badge : "Toshkentning №1 Ta'lim Markazi",
+      hl1   : "Kelajagingizni",
+      hl2   : "Biz Bilan",
+      hl3   : "Shakllantiring.",
+      sub   : "Ingliz tili, rus tili, mental arifmetika va Montessori metodikasi — 9 yillik tajriba, isbotlangan natijalar.",
+      cta1  : "Kurslarni Ko'rish",
+      cta2  : "Biz Haqimizda",
+      s1n: "1,500+", s1l: "Faol o'quvchi",
+      s2n: "98%",    s2l: "Mamnunlik darajasi",
+      s3n: "9+",     s3l: "Yil tajriba",
+      c1lbl: "O'QUVCHILAR", c1num: "1,500+", c1sub: "Faol o'quvchi",
+      c2lbl: "MAMNUNLIK",   c2num: "98%",    c2sub: "Ijobiy baho",
+      c3lbl: "KURSLAR",     c3num: "8+",     c3sub: "Ta'lim yo'nalishi",
+      t1: "🇬🇧 Ingliz tili",
+      t2: "🌱 Montessori",
+      t3: "🧮 Mental Arifmetika",
     },
     ru: {
-      badge: 'Образовательный центр №1 в Ташкенте',
-      hl1: 'Формируйте', hl2: 'Своё Будущее', hl3: 'Вместе с Нами.',
-      sub: 'Английский, русский, ментальная арифметика и Монтессори — 9 лет опыта, измеримые результаты.',
-      cta1: 'Смотреть Курсы', cta2: 'О Нас',
-      s1n: '1,500+', s1l: 'Студентов',
-      s2n: '98%',   s2l: 'Удовлетворённость',
-      s3n: '9+',    s3l: 'Лет опыта',
-      c1l: 'СТУДЕНТЫ',       c1n: '1,500+', c1s: 'Активных',
-      c2l: 'УДОВЛЕТВОРЁННОСТЬ', c2n: '98%', c2s: 'Положит. оценок',
-      c3l: 'КУРСЫ',          c3n: '8+',    c3s: 'Направлений',
-      t1: '🇬🇧 Английский', t2: '🌱 Монтессори', t3: '🧮 Арифметика',
+      badge : "Образовательный центр №1 в Ташкенте",
+      hl1   : "Формируйте",
+      hl2   : "Своё Будущее",
+      hl3   : "Вместе с Нами.",
+      sub   : "Английский, русский, ментальная арифметика и методика Монтессори — 9 лет опыта, измеримые результаты.",
+      cta1  : "Смотреть Курсы",
+      cta2  : "О Нас",
+      s1n: "1,500+", s1l: "Студентов",
+      s2n: "98%",    s2l: "Удовлетворённость",
+      s3n: "9+",     s3l: "Лет опыта",
+      c1lbl: "СТУДЕНТЫ",     c1num: "1,500+", c1sub: "Активных",
+      c2lbl: "ОЦЕНКА",       c2num: "98%",    c2sub: "Положит. отзывов",
+      c3lbl: "КУРСЫ",        c3num: "8+",     c3sub: "Направлений",
+      t1: "🇬🇧 Английский",
+      t2: "🌱 Монтессори",
+      t3: "🧮 Ментальная арифм.",
     },
     en: {
-      badge: "Tashkent's #1 Educational Centre",
-      hl1: 'Shape Your', hl2: 'Future', hl3: 'With Us.',
-      sub: 'English, Russian, mental arithmetic and Montessori — 9 years of expertise, proven results.',
-      cta1: 'Explore Courses', cta2: 'About Us',
-      s1n: '1,500+', s1l: 'Active Students',
-      s2n: '98%',   s2l: 'Satisfaction',
-      s3n: '9+',    s3l: 'Years',
-      c1l: 'STUDENTS',    c1n: '1,500+', c1s: 'Active learners',
-      c2l: 'SATISFACTION', c2n: '98%',  c2s: 'Positive ratings',
-      c3l: 'COURSES',     c3n: '8+',    c3s: 'Programmes',
-      t1: '🇬🇧 English', t2: '🌱 Montessori', t3: '🧮 Mental Math',
+      badge : "Tashkent's #1 Educational Centre",
+      hl1   : "Shape Your",
+      hl2   : "Future",
+      hl3   : "With Us.",
+      sub   : "English, Russian, mental arithmetic and Montessori — 9 years of expertise, proven results.",
+      cta1  : "Explore Courses",
+      cta2  : "About Us",
+      s1n: "1,500+", s1l: "Active Students",
+      s2n: "98%",    s2l: "Satisfaction Rate",
+      s3n: "9+",     s3l: "Years of Experience",
+      c1lbl: "STUDENTS",    c1num: "1,500+", c1sub: "Active learners",
+      c2lbl: "SATISFACTION", c2num: "98%",   c2sub: "Positive ratings",
+      c3lbl: "COURSES",     c3num: "8+",     c3sub: "Programmes",
+      t1: "🇬🇧 English",
+      t2: "🌱 Montessori",
+      t3: "🧮 Mental Math",
     },
   };
   const lc = copy[lang] || copy.uz;
 
-  const v = vis ? ' hv' : '';
+  /* parallax multipliers — separate per element */
+  const px = (ax) => `${mouse.x * ax}px`;
+  const py = (ay) => `${mouse.y * ay}px`;
 
   return (
     <section id="home">
+      {/* ── scoped styles ── */}
       <style>{`
-        /* ════════════════════════════════════════════
-           HERO SECTION — Ocean-World-inspired layout
-           Vibrant right panel · Clean left panel
-        ════════════════════════════════════════════ */
 
-        /* Page background (outside the rounded container) */
+        /* ══════════════════════════════════════════════════
+           IBRAT HERO  ·  Ocean-style layout  ·  v3
+           Left: clean panel   Right: vibrant green panel
+        ══════════════════════════════════════════════════ */
+
+        /* ------- outer page shell ------- */
         #home {
           min-height: 100vh;
-          padding: 92px 18px 18px;
+          padding: 106px 20px 20px;   /* 18px top-offset + 72px navbar + 16px gap */
           box-sizing: border-box;
           display: flex;
           flex-direction: column;
-          background: #e8e8e8;
-          font-family: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
+          font-family: 'Outfit', -apple-system, sans-serif;
+          /* Light-mode page bg */
+          background: #ddd8cf;
+          transition: background 0.35s;
         }
-        html.dark #home {
-          background: #0a0a0a;
-        }
-        html[data-theme="light"] #home {
-          background: #e5e0d8;
+        .dark #home {
+          background: #0d0d0d;
         }
 
-        /* ── Rounded main container ── */
-        .hw-outer {
+        /* ------- rounded hero card ------- */
+        .h3-wrap {
           flex: 1;
           display: grid;
-          grid-template-columns: 52fr 48fr;
-          border-radius: 20px;
+          grid-template-columns: 54fr 46fr;
+          border-radius: 22px;
           overflow: hidden;
-          min-height: calc(100vh - 112px);
-          box-shadow: 0 30px 80px rgba(0,0,0,0.2);
+          min-height: calc(100vh - 128px);
+          box-shadow:
+            0 4px 6px rgba(0,0,0,0.04),
+            0 20px 60px rgba(0,0,0,0.14),
+            0 40px 80px rgba(0,0,0,0.08);
         }
 
-        /* ════ LEFT COLUMN ════ */
-        .hw-left {
+        /* ═══════ LEFT PANEL ═══════ */
+        .h3-left {
           background: #ffffff;
           display: flex;
           flex-direction: column;
           justify-content: center;
-          padding: 64px 60px;
-          gap: 0;
-          transition: background 0.35s ease;
+          padding: 72px 64px;
+          transition: background 0.35s;
           position: relative;
-          z-index: 1;
+          overflow: hidden;
         }
-        html.dark .hw-left {
-          background: #111111;
-        }
-        html[data-theme="light"] .hw-left {
-          background: #ffffff;
+        .dark .h3-left {
+          background: #141414;
         }
 
-        /* Badge pill */
-        .hw-badge {
+        /* subtle top-left corner gradient decoration */
+        .h3-left::before {
+          content: '';
+          position: absolute;
+          top: -80px; left: -80px;
+          width: 280px; height: 280px;
+          border-radius: 50%;
+          background: radial-gradient(circle, rgba(26,122,60,0.07) 0%, transparent 70%);
+          pointer-events: none;
+        }
+
+        /* ---- badge ---- */
+        .h3-badge {
           display: inline-flex;
           align-items: center;
           gap: 8px;
-          padding: 7px 14px 7px 10px;
-          border-radius: 50px;
-          border: 1px solid rgba(26,122,60,0.22);
-          background: rgba(26,122,60,0.06);
-          font-size: 11.5px;
-          font-weight: 700;
-          color: #1a7a3c;
           width: fit-content;
-          letter-spacing: 0.2px;
-          margin-bottom: 28px;
+          padding: 7px 14px 7px 9px;
+          border-radius: 50px;
+          border: 1.5px solid rgba(26,122,60,0.2);
+          background: rgba(26,122,60,0.06);
+          font-size: 11px;
+          font-weight: 700;
+          letter-spacing: 0.3px;
+          color: #1a7a3c;
+          margin-bottom: 32px;
           opacity: 0;
-          transform: translateY(-12px);
-          transition: opacity 0.5s 0.05s ease, transform 0.5s 0.05s ease;
+          transform: translateY(-14px);
+          transition: opacity 0.55s 0.05s, transform 0.55s 0.05s;
         }
-        html.dark .hw-badge {
+        .dark .h3-badge {
           color: #2dc56a;
-          border-color: rgba(45,197,106,0.28);
+          border-color: rgba(45,197,106,0.25);
           background: rgba(45,197,106,0.08);
         }
-        .hw-badge.hv { opacity: 1; transform: translateY(0); }
+        .h3-badge.on { opacity: 1; transform: translateY(0); }
 
-        .hw-badge-dot {
+        .h3-dot {
           width: 7px; height: 7px;
           border-radius: 50%;
           background: #1a7a3c;
           flex-shrink: 0;
-          animation: hwPulse 2.2s ease-in-out infinite;
+          animation: h3pulse 2s ease-in-out infinite;
         }
-        html.dark .hw-badge-dot { background: #2dc56a; }
-        @keyframes hwPulse {
-          0%,100% { opacity: 1; transform: scale(1); }
-          50%      { opacity: 0.4; transform: scale(1.5); }
+        .dark .h3-dot { background: #2dc56a; }
+
+        @keyframes h3pulse {
+          0%,100% { opacity:1; transform:scale(1); }
+          50%      { opacity:.4; transform:scale(1.55); }
         }
 
-        /* Headline */
-        .hw-h1 {
-          font-size: clamp(38px, 4.8vw, 70px);
+        /* ---- headline ---- */
+        .h3-h1 {
+          font-size: clamp(38px, 4.6vw, 66px);
           font-weight: 900;
-          line-height: 1.04;
+          line-height: 1.05;
           letter-spacing: -2.5px;
-          color: #0a0a0a;
-          margin: 0 0 24px;
+          color: #090909;
+          margin: 0 0 28px;
           opacity: 0;
-          transform: translateY(24px);
-          transition: opacity 0.65s 0.18s ease, transform 0.65s 0.18s cubic-bezier(0.16,1,0.3,1);
+          transform: translateY(28px);
+          transition: opacity 0.7s 0.2s cubic-bezier(0.16,1,0.3,1),
+                      transform 0.7s 0.2s cubic-bezier(0.16,1,0.3,1);
         }
-        html.dark .hw-h1   { color: #f2f2f2; }
-        html[data-theme="light"] .hw-h1 { color: #0a0a0a; }
-        .hw-h1.hv { opacity: 1; transform: translateY(0); }
+        .dark .h3-h1 { color: #f0f0f0; }
+        .h3-h1.on { opacity: 1; transform: translateY(0); }
 
-        .hw-h1-accent {
+        .h3-accent {
           color: #1a7a3c;
           display: block;
         }
-        html.dark .hw-h1-accent { color: #2dc56a; }
+        .dark .h3-accent { color: #2dc56a; }
 
-        /* Subtitle */
-        .hw-sub {
-          font-size: 15px;
-          line-height: 1.75;
-          color: #666;
-          max-width: 400px;
-          margin: 0 0 36px;
+        /* ---- sub ---- */
+        .h3-sub {
+          font-size: 14.5px;
+          line-height: 1.78;
+          color: #717171;
+          max-width: 380px;
+          margin: 0 0 38px;
           font-weight: 400;
           opacity: 0;
-          transform: translateY(18px);
-          transition: opacity 0.65s 0.32s ease, transform 0.65s 0.32s ease;
+          transform: translateY(20px);
+          transition: opacity 0.65s 0.34s ease, transform 0.65s 0.34s ease;
         }
-        html.dark .hw-sub { color: rgba(242,242,242,0.5); }
-        .hw-sub.hv { opacity: 1; transform: translateY(0); }
+        .dark .h3-sub { color: rgba(240,240,240,0.48); }
+        .h3-sub.on { opacity: 1; transform: translateY(0); }
 
-        /* CTA buttons */
-        .hw-ctas {
+        /* ---- CTA buttons ---- */
+        .h3-ctas {
           display: flex;
           gap: 12px;
           flex-wrap: wrap;
-          margin-bottom: 40px;
+          margin-bottom: 44px;
           opacity: 0;
-          transform: translateY(16px);
-          transition: opacity 0.65s 0.46s ease, transform 0.65s 0.46s ease;
+          transform: translateY(18px);
+          transition: opacity 0.65s 0.48s ease, transform 0.65s 0.48s ease;
         }
-        .hw-ctas.hv { opacity: 1; transform: translateY(0); }
+        .h3-ctas.on { opacity: 1; transform: translateY(0); }
 
-        .hw-cta-solid {
+        .h3-btn-solid {
           display: inline-flex;
           align-items: center;
           gap: 8px;
-          padding: 14px 30px;
+          padding: 13px 28px;
           border-radius: 50px;
           background: #1a7a3c;
-          color: #fff !important;
+          color: #ffffff !important;
           font-weight: 700;
-          font-size: 14px;
+          font-size: 13.5px;
+          font-family: 'Outfit', sans-serif;
           text-decoration: none !important;
           border: none;
           cursor: pointer;
-          box-shadow: 0 8px 28px rgba(26,122,60,0.38);
-          font-family: 'Outfit', sans-serif;
-          transition: transform 0.2s ease, box-shadow 0.2s ease;
+          box-shadow: 0 6px 24px rgba(26,122,60,0.36);
+          transition: transform 0.22s ease, box-shadow 0.22s ease;
           white-space: nowrap;
+          user-select: none;
         }
-        html.dark .hw-cta-solid {
+        .dark .h3-btn-solid {
           background: #2dc56a;
-          color: #060f08 !important;
-          box-shadow: 0 8px 28px rgba(45,197,106,0.42);
+          color: #041008 !important;
+          box-shadow: 0 6px 24px rgba(45,197,106,0.4);
         }
-        .hw-cta-solid:hover {
+        .h3-btn-solid:hover {
           transform: translateY(-3px);
-          box-shadow: 0 14px 36px rgba(26,122,60,0.48);
+          box-shadow: 0 12px 32px rgba(26,122,60,0.46);
         }
-        html.dark .hw-cta-solid:hover {
-          box-shadow: 0 14px 36px rgba(45,197,106,0.55);
+        .dark .h3-btn-solid:hover {
+          box-shadow: 0 12px 32px rgba(45,197,106,0.52);
         }
+        .h3-btn-solid:active { transform: translateY(-1px); }
 
-        .hw-cta-ghost {
+        .h3-btn-ghost {
           display: inline-flex;
           align-items: center;
           gap: 8px;
-          padding: 14px 30px;
+          padding: 13px 28px;
           border-radius: 50px;
           background: transparent;
-          color: #0a0a0a !important;
+          color: #090909 !important;
           font-weight: 700;
-          font-size: 14px;
-          text-decoration: none !important;
-          border: 1.5px solid rgba(0,0,0,0.18);
-          cursor: pointer;
+          font-size: 13.5px;
           font-family: 'Outfit', sans-serif;
+          text-decoration: none !important;
+          border: 1.5px solid rgba(0,0,0,0.15);
+          cursor: pointer;
           transition: border-color 0.22s ease, color 0.22s ease;
           white-space: nowrap;
+          user-select: none;
         }
-        html.dark .hw-cta-ghost {
-          color: #f2f2f2 !important;
-          border-color: rgba(255,255,255,0.18);
+        .dark .h3-btn-ghost {
+          color: #f0f0f0 !important;
+          border-color: rgba(255,255,255,0.15);
         }
-        .hw-cta-ghost:hover {
+        .h3-btn-ghost:hover {
           border-color: #1a7a3c;
           color: #1a7a3c !important;
         }
-        html.dark .hw-cta-ghost:hover {
+        .dark .h3-btn-ghost:hover {
           border-color: #2dc56a;
           color: #2dc56a !important;
         }
 
-        /* Stat strip inside left col */
-        .hw-stats {
+        /* ---- stat row ---- */
+        .h3-stats {
           display: flex;
           gap: 0;
-          padding-top: 32px;
+          padding-top: 30px;
           border-top: 1px solid rgba(0,0,0,0.07);
           opacity: 0;
-          transition: opacity 0.65s 0.6s ease;
+          transition: opacity 0.65s 0.62s ease;
         }
-        html.dark .hw-stats { border-color: rgba(255,255,255,0.07); }
-        .hw-stats.hv { opacity: 1; }
+        .dark .h3-stats { border-color: rgba(255,255,255,0.07); }
+        .h3-stats.on { opacity: 1; }
 
-        .hw-stat {
+        .h3-stat {
           flex: 1;
           display: flex;
           flex-direction: column;
           gap: 3px;
-          padding-right: 20px;
+          padding-right: 16px;
         }
-        .hw-stat + .hw-stat {
-          padding-left: 20px;
+        .h3-stat + .h3-stat {
+          padding-left: 16px;
           padding-right: 0;
           border-left: 1px solid rgba(0,0,0,0.07);
         }
-        html.dark .hw-stat + .hw-stat { border-color: rgba(255,255,255,0.07); }
+        .dark .h3-stat + .h3-stat { border-color: rgba(255,255,255,0.07); }
 
-        .hw-stat-n {
-          font-size: 24px;
+        .h3-stat-n {
+          font-size: 22px;
           font-weight: 900;
           letter-spacing: -0.8px;
-          color: #0a0a0a;
+          color: #090909;
           line-height: 1;
         }
-        html.dark .hw-stat-n { color: #f2f2f2; }
+        .dark .h3-stat-n { color: #f0f0f0; }
 
-        .hw-stat-l {
-          font-size: 10.5px;
+        .h3-stat-l {
+          font-size: 10px;
           font-weight: 600;
-          color: #999;
+          color: #a0a0a0;
           text-transform: uppercase;
-          letter-spacing: 0.8px;
+          letter-spacing: 0.7px;
         }
 
-        /* ════ RIGHT COLUMN ════ */
-        .hw-right {
+        /* ═══════ RIGHT PANEL ═══════ */
+        .h3-right {
           position: relative;
           overflow: hidden;
-          background: linear-gradient(145deg, #1e8c46 0%, #0f5c2a 45%, #073d1a 100%);
           display: flex;
           align-items: center;
           justify-content: center;
-          min-height: 520px;
+          min-height: 560px;
+          /* Light: rich forest green gradient */
+          background: linear-gradient(148deg, #1e9148 0%, #0f5c2a 48%, #073d1a 100%);
+          transition: background 0.35s;
         }
-        html.dark .hw-right {
-          background: linear-gradient(145deg, #104d26 0%, #072e15 50%, #030f07 100%);
+        .dark .h3-right {
+          background: linear-gradient(148deg, #0f4d24 0%, #072e14 52%, #030f07 100%);
         }
 
-        /* Decorative blobs */
-        .hw-blob {
+        /* background blobs */
+        .h3-blob {
           position: absolute;
           border-radius: 50%;
-          filter: blur(80px);
           pointer-events: none;
           z-index: 0;
         }
-        .hw-blob-1 {
-          width: 420px; height: 420px;
-          background: rgba(45,197,106,0.3);
-          top: -120px; right: -100px;
+        .h3-blob-a {
+          width: 380px; height: 380px;
+          top: -110px; right: -110px;
+          background: rgba(45,197,106,0.28);
+          filter: blur(70px);
+          animation: h3breatheA 8s ease-in-out infinite;
         }
-        .hw-blob-2 {
-          width: 300px; height: 300px;
-          background: rgba(16,185,129,0.2);
-          bottom: -100px; left: -60px;
+        .h3-blob-b {
+          width: 260px; height: 260px;
+          bottom: -80px; left: -50px;
+          background: rgba(16,185,129,0.22);
+          filter: blur(60px);
+          animation: h3breatheB 10s ease-in-out -3s infinite;
         }
-        .hw-blob-3 {
-          width: 180px; height: 180px;
-          background: rgba(255,255,255,0.06);
-          top: 45%; left: 45%;
+        .h3-blob-c {
+          width: 160px; height: 160px;
+          top: 50%; left: 52%;
+          transform: translate(-50%,-50%);
+          background: rgba(255,255,255,0.05);
+          filter: blur(40px);
+          animation: h3breatheA 12s ease-in-out -6s infinite;
         }
 
-        /* Grid lines overlay (subtle) */
-        .hw-grid {
+        @keyframes h3breatheA {
+          0%,100% { opacity: 0.8; transform: scale(1); }
+          50%      { opacity: 1;   transform: scale(1.12); }
+        }
+        @keyframes h3breatheB {
+          0%,100% { opacity: 0.7; transform: scale(1); }
+          50%      { opacity: 1;   transform: scale(1.15); }
+        }
+
+        /* grid overlay */
+        .h3-grid {
           position: absolute;
           inset: 0;
           background-image:
-            linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px);
-          background-size: 48px 48px;
+            linear-gradient(rgba(255,255,255,0.035) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(255,255,255,0.035) 1px, transparent 1px);
+          background-size: 52px 52px;
           pointer-events: none;
           z-index: 0;
         }
 
-        /* Central logo */
-        .hw-logo-outer {
+        /* ---- logo ring ---- */
+        .h3-logo-wrap {
           position: relative;
           z-index: 2;
-          transition: transform 0.08s linear;
+          will-change: transform;
         }
-        .hw-logo-ring {
-          width: 190px; height: 190px;
+        .h3-logo-ring {
+          width: 196px; height: 196px;
           border-radius: 50%;
-          border: 2px solid rgba(255,255,255,0.22);
+          border: 2px solid rgba(255,255,255,0.2);
           display: flex;
           align-items: center;
           justify-content: center;
           position: relative;
-          background: rgba(255,255,255,0.06);
-          backdrop-filter: blur(8px);
-          animation: hwLogoGlow 4s ease-in-out infinite;
+          background: rgba(255,255,255,0.07);
+          backdrop-filter: blur(10px);
+          -webkit-backdrop-filter: blur(10px);
+          animation: h3logoGlow 4.5s ease-in-out infinite;
         }
-        @keyframes hwLogoGlow {
-          0%,100% { box-shadow: 0 0 0 8px rgba(45,197,106,0.08), 0 0 60px rgba(45,197,106,0.25); }
-          50%      { box-shadow: 0 0 0 14px rgba(45,197,106,0.12), 0 0 100px rgba(45,197,106,0.4); }
+        @keyframes h3logoGlow {
+          0%,100% { box-shadow: 0 0 0 0px rgba(45,197,106,0), 0 0 55px rgba(45,197,106,0.22); }
+          50%      { box-shadow: 0 0 0 12px rgba(45,197,106,0.1), 0 0 90px rgba(45,197,106,0.38); }
         }
-        /* Spinning dashed border */
-        .hw-logo-ring::before {
+        /* spinning dashed ring */
+        .h3-logo-ring::before {
           content: '';
           position: absolute;
-          inset: -6px;
+          inset: -8px;
           border-radius: 50%;
-          border: 1.5px dashed rgba(255,255,255,0.2);
-          animation: hwSpin 18s linear infinite;
+          border: 1.5px dashed rgba(255,255,255,0.18);
+          animation: h3spin 20s linear infinite;
         }
-        @keyframes hwSpin { to { transform: rotate(360deg); } }
+        @keyframes h3spin { to { transform: rotate(360deg); } }
 
-        .hw-logo-img {
-          width: 162px; height: 162px;
+        .h3-logo-img {
+          width: 168px; height: 168px;
           border-radius: 50%;
           object-fit: contain;
-          background: #fff;
-          padding: 6px;
+          background: #ffffff;
+          padding: 8px;
           box-sizing: border-box;
+          display: block;
         }
 
-        /* Floating glass cards */
-        .hw-fc {
+        /* ---- floating glass cards ---- */
+        .h3-card {
           position: absolute;
-          background: rgba(255,255,255,0.13);
-          backdrop-filter: blur(14px);
-          -webkit-backdrop-filter: blur(14px);
-          border: 1px solid rgba(255,255,255,0.22);
-          border-radius: 16px;
-          padding: 14px 18px;
+          background: rgba(255,255,255,0.11);
+          backdrop-filter: blur(16px);
+          -webkit-backdrop-filter: blur(16px);
+          border: 1px solid rgba(255,255,255,0.2);
+          border-radius: 18px;
+          padding: 16px 20px;
+          color: #ffffff;
           z-index: 3;
-          color: #fff;
-          min-width: 130px;
-          box-shadow: 0 8px 32px rgba(0,0,0,0.2);
-          transition: transform 0.08s linear;
+          min-width: 128px;
+          box-shadow: 0 8px 32px rgba(0,0,0,0.22), inset 0 1px 0 rgba(255,255,255,0.12);
+          will-change: transform;
         }
-        .hw-fc-top-left  { top: 14%; left: 6%; animation: hwFloatA 6s ease-in-out infinite; }
-        .hw-fc-bot-right { bottom: 20%; right: 6%; animation: hwFloatB 7s ease-in-out -2.5s infinite; }
-        .hw-fc-top-right { top: 16%; right: 8%; animation: hwFloatC 5.5s ease-in-out -1.5s infinite; }
 
-        @keyframes hwFloatA { 0%,100%{transform:translateY(0px)} 50%{transform:translateY(-11px)} }
-        @keyframes hwFloatB { 0%,100%{transform:translateY(0px)} 50%{transform:translateY(-8px)} }
-        @keyframes hwFloatC { 0%,100%{transform:translateY(0px)} 50%{transform:translateY(-14px)} }
+        /* positions */
+        .h3-card-tl { top: 12%; left: 7%;  animation: h3floatUp   6s ease-in-out infinite; }
+        .h3-card-br { bottom: 16%; right: 7%; animation: h3floatDown 7s ease-in-out -2s infinite; }
+        .h3-card-tr { top: 14%; right: 9%; animation: h3floatUp   5.5s ease-in-out -1.2s infinite; }
 
-        .hw-fc-lbl {
-          font-size: 8.5px;
-          font-weight: 700;
+        @keyframes h3floatUp   { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-12px)} }
+        @keyframes h3floatDown { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-9px)} }
+
+        .h3-card-lbl {
+          font-size: 8px;
+          font-weight: 800;
           text-transform: uppercase;
-          letter-spacing: 1.5px;
-          opacity: 0.6;
-          margin-bottom: 5px;
-          font-family: 'Outfit', sans-serif;
+          letter-spacing: 1.6px;
+          opacity: 0.55;
+          margin-bottom: 6px;
+          display: block;
         }
-        .hw-fc-num {
-          font-size: 26px;
+        .h3-card-num {
+          font-size: 28px;
           font-weight: 900;
           letter-spacing: -0.5px;
           line-height: 1;
-          font-family: 'Outfit', sans-serif;
+          display: block;
         }
-        .hw-fc-sub {
+        .h3-card-sub {
           font-size: 10px;
-          opacity: 0.6;
-          margin-top: 3px;
-          font-family: 'Outfit', sans-serif;
+          opacity: 0.55;
+          margin-top: 4px;
+          display: block;
+          line-height: 1.4;
         }
 
-        /* Floating tag pills */
-        .hw-tag {
+        /* progress bar under card */
+        .h3-bar {
+          width: 100%;
+          height: 2px;
+          background: rgba(255,255,255,0.12);
+          border-radius: 2px;
+          margin-top: 10px;
+          overflow: hidden;
+        }
+        .h3-bar-fill {
+          height: 100%;
+          border-radius: 2px;
+          background: #2dc56a;
+        }
+
+        /* ---- floating tag pills ---- */
+        .h3-pill {
           position: absolute;
-          background: rgba(255,255,255,0.16);
-          backdrop-filter: blur(10px);
-          -webkit-backdrop-filter: blur(10px);
-          border: 1px solid rgba(255,255,255,0.28);
+          background: rgba(255,255,255,0.14);
+          backdrop-filter: blur(12px);
+          -webkit-backdrop-filter: blur(12px);
+          border: 1px solid rgba(255,255,255,0.26);
           border-radius: 50px;
-          padding: 7px 16px;
+          padding: 8px 18px;
           font-size: 12px;
           font-weight: 700;
-          color: #fff;
-          z-index: 3;
+          color: #ffffff;
           white-space: nowrap;
-          box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+          z-index: 3;
+          box-shadow: 0 4px 14px rgba(0,0,0,0.18);
         }
-        .hw-tag-1 { bottom: 28%; left: 8%;  animation: hwFloatC 8s ease-in-out -1s infinite; }
-        .hw-tag-2 { bottom: 18%; left: 28%; animation: hwFloatA 7s ease-in-out -3s infinite; }
-        .hw-tag-3 { bottom: 12%; right: 12%; animation: hwFloatB 9s ease-in-out -5s infinite; }
+        .h3-pill-1 { bottom: 30%; left: 8%;  animation: h3floatUp   8s ease-in-out -1s infinite; }
+        .h3-pill-2 { bottom: 19%; left: 30%; animation: h3floatDown 7.5s ease-in-out -3.5s infinite; }
+        .h3-pill-3 { bottom: 11%; right: 10%; animation: h3floatUp  9s ease-in-out -6s infinite; }
 
-        /* ════ RESPONSIVE ════ */
-        @media (max-width: 920px) {
-          #home { padding: 90px 12px 12px; }
-          .hw-outer { grid-template-columns: 1fr; }
-          .hw-right { min-height: 460px; order: -1; }
-          .hw-left  { padding: 52px 40px; }
-          .hw-fc-top-right { display: none; }
+        /* ═══════ RESPONSIVE ═══════ */
+
+        @media (max-width: 960px) {
+          #home { padding: 100px 14px 14px; }
+          .h3-wrap {
+            grid-template-columns: 1fr;
+          }
+          /* put visual panel on top */
+          .h3-right { order: -1; min-height: 420px; }
+          .h3-left  { padding: 52px 44px; }
+          .h3-card-tr { display: none; }
         }
 
-        @media (max-width: 620px) {
-          #home { padding: 80px 8px 8px; }
-          .hw-outer { border-radius: 14px; min-height: auto; }
-          .hw-left  { padding: 40px 28px; }
-          .hw-h1    { font-size: 36px; letter-spacing: -1.5px; }
-          .hw-right { min-height: 380px; }
-          .hw-logo-ring { width: 145px; height: 145px; }
-          .hw-logo-img  { width: 125px; height: 125px; }
-          .hw-fc-bot-right { bottom: 14%; right: 4%; }
-          .hw-stats { gap: 0; }
-          .hw-stat-n { font-size: 20px; }
-          .hw-tag-3 { display: none; }
+        @media (max-width: 640px) {
+          #home { padding: 90px 10px 10px; }
+          .h3-wrap { border-radius: 16px; min-height: auto; }
+          .h3-left  { padding: 40px 28px; }
+          .h3-h1    { font-size: 36px; letter-spacing: -1.5px; }
+          .h3-sub   { font-size: 13.5px; }
+          .h3-right { min-height: 360px; }
+          .h3-logo-ring { width: 150px; height: 150px; }
+          .h3-logo-img  { width: 128px; height: 128px; }
+          .h3-card-tl { top: 10%; left: 4%; padding: 12px 14px; min-width: 110px; }
+          .h3-card-br { bottom: 12%; right: 4%; padding: 12px 14px; min-width: 110px; }
+          .h3-card-num { font-size: 22px; }
+          .h3-pill-3 { display: none; }
+          .h3-stat-n { font-size: 19px; }
+          .h3-badge  { font-size: 10px; }
         }
+
+        @media (max-width: 400px) {
+          .h3-left { padding: 32px 20px; }
+          .h3-h1   { font-size: 30px; letter-spacing: -1px; }
+          .h3-ctas { flex-direction: column; }
+          .h3-btn-solid,
+          .h3-btn-ghost { width: 100%; justify-content: center; }
+        }
+
       `}</style>
 
-      <div className="hw-outer">
+      {/* ─── main card ─── */}
+      <div className="h3-wrap">
 
-        {/* ═══ LEFT ═══ */}
-        <div className="hw-left">
+        {/* ════ LEFT PANEL ════ */}
+        <div className="h3-left">
 
-          {/* Badge */}
-          <div className={`hw-badge${v}`}>
-            <span className="hw-badge-dot" />
+          {/* badge */}
+          <div className={`h3-badge${vis ? ' on' : ''}`}>
+            <span className="h3-dot" />
             {lc.badge}
           </div>
 
-          {/* 3-line headline */}
-          <h1 className={`hw-h1${v}`}>
+          {/* headline */}
+          <h1 className={`h3-h1${vis ? ' on' : ''}`}>
             {lc.hl1}
-            <span className="hw-h1-accent">{lc.hl2}</span>
+            <span className="h3-accent">{lc.hl2}</span>
             {lc.hl3}
           </h1>
 
-          {/* Subtitle */}
-          <p className={`hw-sub${v}`}>{lc.sub}</p>
+          {/* subtitle */}
+          <p className={`h3-sub${vis ? ' on' : ''}`}>{lc.sub}</p>
 
-          {/* CTA buttons */}
-          <div className={`hw-ctas${v}`}>
+          {/* CTAs */}
+          <div className={`h3-ctas${vis ? ' on' : ''}`}>
             <a
-              className="hw-cta-solid"
+              className="h3-btn-solid"
               href="#courses"
-              onClick={e => { e.preventDefault(); document.getElementById('courses')?.scrollIntoView({ behavior: 'smooth' }); }}
+              onClick={e => {
+                e.preventDefault();
+                document.getElementById('courses')?.scrollIntoView({ behavior: 'smooth' });
+              }}
             >
               {lc.cta1} →
             </a>
             <a
-              className="hw-cta-ghost"
+              className="h3-btn-ghost"
               href="#about"
-              onClick={e => { e.preventDefault(); document.getElementById('about')?.scrollIntoView({ behavior: 'smooth' }); }}
+              onClick={e => {
+                e.preventDefault();
+                document.getElementById('about')?.scrollIntoView({ behavior: 'smooth' });
+              }}
             >
               {lc.cta2}
             </a>
           </div>
 
-          {/* Inline stat strip */}
-          <div className={`hw-stats${v}`}>
-            <div className="hw-stat">
-              <span className="hw-stat-n">{lc.s1n}</span>
-              <span className="hw-stat-l">{lc.s1l}</span>
+          {/* stats */}
+          <div className={`h3-stats${vis ? ' on' : ''}`}>
+            <div className="h3-stat">
+              <span className="h3-stat-n">{lc.s1n}</span>
+              <span className="h3-stat-l">{lc.s1l}</span>
             </div>
-            <div className="hw-stat">
-              <span className="hw-stat-n">{lc.s2n}</span>
-              <span className="hw-stat-l">{lc.s2l}</span>
+            <div className="h3-stat">
+              <span className="h3-stat-n">{lc.s2n}</span>
+              <span className="h3-stat-l">{lc.s2l}</span>
             </div>
-            <div className="hw-stat">
-              <span className="hw-stat-n">{lc.s3n}</span>
-              <span className="hw-stat-l">{lc.s3l}</span>
+            <div className="h3-stat">
+              <span className="h3-stat-n">{lc.s3n}</span>
+              <span className="h3-stat-l">{lc.s3l}</span>
             </div>
           </div>
 
         </div>
 
-        {/* ═══ RIGHT — Vibrant visual panel ═══ */}
+        {/* ════ RIGHT PANEL ════ */}
         <div
-          className="hw-right"
+          className="h3-right"
           ref={rightRef}
-          onMouseMove={onMove}
+          onMouseMove={handleMouseMove}
           onMouseLeave={() => setMouse({ x: 0, y: 0 })}
         >
-          {/* Blobs */}
-          <div className="hw-blob hw-blob-1" />
-          <div className="hw-blob hw-blob-2" />
-          <div className="hw-blob hw-blob-3" />
+          {/* blobs */}
+          <div className="h3-blob h3-blob-a" />
+          <div className="h3-blob h3-blob-b" />
+          <div className="h3-blob h3-blob-c" />
 
-          {/* Grid texture */}
-          <div className="hw-grid" />
+          {/* grid texture */}
+          <div className="h3-grid" />
 
-          {/* Central logo — mild parallax on mouse */}
+          {/* logo — lightest parallax */}
           <div
-            className="hw-logo-outer"
-            style={{ transform: `translate(${mouse.x * 10}px, ${mouse.y * 7}px)` }}
+            className="h3-logo-wrap"
+            style={{ transform: `translate(${px(8)}, ${py(6)})` }}
           >
-            <div className="hw-logo-ring">
-              <img src={logoImage} alt="IBRAT TA'LIM" className="hw-logo-img" />
+            <div className="h3-logo-ring">
+              <img src={logoImage} alt="IBRAT TA'LIM" className="h3-logo-img" />
             </div>
           </div>
 
-          {/* Floating card — top left — Students */}
+          {/* card — top left */}
           <div
-            className="hw-fc hw-fc-top-left"
-            style={{ transform: `translate(${mouse.x * 20}px, ${mouse.y * 14}px)` }}
+            className="h3-card h3-card-tl"
+            style={{ transform: `translate(${px(22)}, ${py(15)})` }}
           >
-            <div className="hw-fc-lbl">{lc.c1l}</div>
-            <div className="hw-fc-num">{lc.c1n}</div>
-            <div className="hw-fc-sub">{lc.c1s}</div>
+            <span className="h3-card-lbl">{lc.c1lbl}</span>
+            <span className="h3-card-num">{lc.c1num}</span>
+            <span className="h3-card-sub">{lc.c1sub}</span>
+            <div className="h3-bar"><div className="h3-bar-fill" style={{ width: '88%' }} /></div>
           </div>
 
-          {/* Floating card — bottom right — Satisfaction */}
+          {/* card — bottom right */}
           <div
-            className="hw-fc hw-fc-bot-right"
-            style={{ transform: `translate(${mouse.x * -16}px, ${mouse.y * -11}px)` }}
+            className="h3-card h3-card-br"
+            style={{ transform: `translate(${px(-18)}, ${py(-12)})` }}
           >
-            <div className="hw-fc-lbl">{lc.c2l}</div>
-            <div className="hw-fc-num">{lc.c2n}</div>
-            <div className="hw-fc-sub">{lc.c2s}</div>
+            <span className="h3-card-lbl">{lc.c2lbl}</span>
+            <span className="h3-card-num">{lc.c2num}</span>
+            <span className="h3-card-sub">{lc.c2sub}</span>
+            <div className="h3-bar"><div className="h3-bar-fill" style={{ width: '98%' }} /></div>
           </div>
 
-          {/* Floating card — top right — Courses */}
+          {/* card — top right (hidden ≤960) */}
           <div
-            className="hw-fc hw-fc-top-right"
-            style={{ transform: `translate(${mouse.x * -12}px, ${mouse.y * 18}px)` }}
+            className="h3-card h3-card-tr"
+            style={{ transform: `translate(${px(-14)}, ${py(20)})` }}
           >
-            <div className="hw-fc-lbl">{lc.c3l}</div>
-            <div className="hw-fc-num">{lc.c3n}</div>
-            <div className="hw-fc-sub">{lc.c3s}</div>
+            <span className="h3-card-lbl">{lc.c3lbl}</span>
+            <span className="h3-card-num">{lc.c3num}</span>
+            <span className="h3-card-sub">{lc.c3sub}</span>
+            <div className="h3-bar"><div className="h3-bar-fill" style={{ width: '70%' }} /></div>
           </div>
 
-          {/* Course tag pills — bottom area */}
-          <div className="hw-tag hw-tag-1">{lc.t1}</div>
-          <div className="hw-tag hw-tag-2">{lc.t2}</div>
-          <div className="hw-tag hw-tag-3">{lc.t3}</div>
+          {/* floating pills */}
+          <div className="h3-pill h3-pill-1">{lc.t1}</div>
+          <div className="h3-pill h3-pill-2">{lc.t2}</div>
+          <div className="h3-pill h3-pill-3">{lc.t3}</div>
 
         </div>
       </div>
