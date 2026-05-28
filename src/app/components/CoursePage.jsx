@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { useParams, Link } from 'react-router';
 import { useLang } from '../context/LanguageContext.jsx';
 import { courses } from '../data/courses.js';
@@ -15,6 +16,10 @@ const glass = {
 export default function CoursePage() {
   const { id } = useParams();
   const { T } = useLang();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [id]);
 
   const course = courses.find(c => c.id === id) ?? courses[0];
   const others = courses.filter(c => c.id !== course.id).slice(0, 3);
