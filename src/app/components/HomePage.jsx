@@ -363,8 +363,6 @@ export default function HomePage() {
 
         {/* Immersive Scroll Overlays for Stats, Process Roadmap & Branches */}
         <div style={{ position: 'relative', zIndex: 12, marginTop: '-100vh', pointerEvents: 'none' }}>
-          {/* Spacer to allow the book to open fully first */}
-          <div style={{ height: '140vh' }} />
 
           {/* ── STATS (MILLENNIAL EMOTIONAL) ─────────────────────────────────────── */}
           <section style={{ ...section(), padding: '80px 0', position: 'relative', overflow: 'hidden', pointerEvents: 'auto' }}>
@@ -506,8 +504,6 @@ export default function HomePage() {
             </div>
           </section>
 
-          {/* Extra bottom padding to transition smoothly out of sticky track */}
-          <div style={{ height: '30vh' }} />
         </div>
       </section>
 

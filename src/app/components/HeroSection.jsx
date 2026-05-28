@@ -88,7 +88,7 @@ export default function HeroSection() {
       <style>{`
 
         /* ══════════════════════════════════════════════
-           IBRAT HERO  ·  Book edition  ·  v4
+           IBRAT HERO  ·  v5  ·  Logo ring edition
         ══════════════════════════════════════════════ */
 
         #home {
@@ -103,7 +103,7 @@ export default function HeroSection() {
         }
         .dark #home { background: #0d0d0d; }
 
-        /* ── rounded hero card ── */
+        /* ── hero card ── */
         .h3-wrap {
           flex: 1;
           display: grid;
@@ -130,7 +130,6 @@ export default function HeroSection() {
         }
         .dark .h3-left { background: #141414; }
 
-        /* corner glow */
         .h3-left::before {
           content: '';
           position: absolute;
@@ -196,10 +195,7 @@ export default function HeroSection() {
         .dark .h3-h1 { color: #f0f0f0; }
         .h3-h1.on { opacity: 1; transform: translateY(0); }
 
-        .h3-accent {
-          color: #1a7a3c;
-          display: block;
-        }
+        .h3-accent { color: #1a7a3c; display: block; }
         .dark .h3-accent { color: #2dc56a; }
 
         /* subtitle */
@@ -341,7 +337,7 @@ export default function HeroSection() {
           background: linear-gradient(148deg, #0f4d24 0%, #072e14 52%, #030f07 100%);
         }
 
-        /* background blobs */
+        /* blobs */
         .h3-blob {
           position: absolute;
           border-radius: 50%;
@@ -364,7 +360,8 @@ export default function HeroSection() {
         }
         .h3-blob-c {
           width: 160px; height: 160px;
-          top: 50%; left: 50%; transform: translate(-50%,-50%);
+          top: 50%; left: 50%;
+          transform: translate(-50%,-50%);
           background: rgba(255,255,255,0.04);
           filter: blur(40px);
           animation: h3breathe 12s ease-in-out -6s infinite;
@@ -373,9 +370,8 @@ export default function HeroSection() {
           0%,100% { opacity:.8; transform:scale(1); }
           50%      { opacity:1;  transform:scale(1.14); }
         }
-        .h3-blob-c { transform: translate(-50%,-50%); }
 
-        /* grid lines */
+        /* grid texture */
         .h3-grid {
           position: absolute; inset: 0;
           background-image:
@@ -385,219 +381,47 @@ export default function HeroSection() {
           pointer-events: none; z-index: 0;
         }
 
-        /* ═══════ 3-D BOOK ═══════ */
-        /*
-          Perspective scene:  .h3-scene
-            └── .h3-book  (transform-style: preserve-3d, tilted 3D)
-                 ├── .h3-cover-front  (front face)
-                 ├── .h3-cover-back   (back face)
-                 ├── .h3-spine        (left side)
-                 ├── .h3-page-*       (page leaves, each flipping)
-                 └── .h3-shadow       (floor shadow)
-        */
-
-        .h3-scene {
+        /* ── logo ring ── */
+        .h3-logo-wrap {
           position: relative;
           z-index: 2;
-          perspective: 900px;
-          perspective-origin: 55% 45%;
           will-change: transform;
         }
-
-        .h3-book {
-          width: 200px;
-          height: 260px;
-          position: relative;
-          transform-style: preserve-3d;
-          /* tilt so it looks 3D on screen */
-          transform: rotateX(22deg) rotateY(-28deg);
-          transition: transform 0.1s linear;
-        }
-
-        /* Cover faces */
-        .h3-cover-front,
-        .h3-cover-back {
-          position: absolute;
-          width: 200px; height: 260px;
-          border-radius: 2px 6px 6px 2px;
-          backface-visibility: hidden;
-        }
-
-        .h3-cover-front {
-          background: linear-gradient(160deg, #e8f4ed 0%, #c6dece 50%, #9ec9b0 100%);
-          transform: translateZ(6px);
+        .h3-logo-ring {
+          width: 200px; height: 200px;
+          border-radius: 50%;
+          border: 2px solid rgba(255,255,255,0.2);
           display: flex;
-          flex-direction: column;
           align-items: center;
           justify-content: center;
-          gap: 12px;
-          box-shadow: inset -3px 0 8px rgba(0,0,0,0.15);
-          overflow: hidden;
+          position: relative;
+          background: rgba(255,255,255,0.07);
+          backdrop-filter: blur(10px);
+          -webkit-backdrop-filter: blur(10px);
+          animation: h3logoGlow 4.5s ease-in-out infinite;
         }
-        /* sheen on cover */
-        .h3-cover-front::after {
+        @keyframes h3logoGlow {
+          0%,100% { box-shadow: 0 0 0 0px rgba(45,197,106,0), 0 0 55px rgba(45,197,106,0.22); }
+          50%      { box-shadow: 0 0 0 14px rgba(45,197,106,0.1), 0 0 90px rgba(45,197,106,0.38); }
+        }
+        .h3-logo-ring::before {
           content: '';
           position: absolute;
-          inset: 0;
-          background: linear-gradient(135deg, rgba(255,255,255,0.35) 0%, transparent 55%);
-          pointer-events: none;
+          inset: -8px;
+          border-radius: 50%;
+          border: 1.5px dashed rgba(255,255,255,0.18);
+          animation: h3spin 20s linear infinite;
         }
+        @keyframes h3spin { to { transform: rotate(360deg); } }
 
-        .h3-cover-back {
-          background: linear-gradient(160deg, #b8d4c2 0%, #8db89e 100%);
-          transform: rotateY(180deg) translateZ(6px);
-        }
-
-        /* Spine */
-        .h3-spine {
-          position: absolute;
-          width: 12px; height: 260px;
-          background: linear-gradient(to right, #2d6b45 0%, #4a9463 100%);
-          transform: rotateY(-90deg) translateZ(0px) translateX(-6px);
-          transform-origin: left center;
-          left: 0;
-          box-shadow: inset -2px 0 4px rgba(0,0,0,0.3);
-        }
-
-        /* Top & Bottom edges */
-        .h3-top, .h3-bottom {
-          position: absolute;
-          width: 200px; height: 12px;
-          background: linear-gradient(to bottom, #d4e8dc 0%, #aecfbb 100%);
-          left: 0;
-        }
-        .h3-top    { transform: rotateX(90deg) translateZ(0px) translateY(-6px);  transform-origin: top center; top: 0; }
-        .h3-bottom { transform: rotateX(-90deg) translateZ(0px) translateY(6px);  transform-origin: bottom center; bottom: 0; }
-
-        /* Logo on cover */
-        .h3-book-logo {
-          width: 80px; height: 80px;
+        .h3-logo-img {
+          width: 172px; height: 172px;
           border-radius: 50%;
           object-fit: contain;
-          background: rgba(255,255,255,0.9);
-          padding: 6px;
+          background: #ffffff;
+          padding: 8px;
           box-sizing: border-box;
-          position: relative;
-          z-index: 1;
-          box-shadow: 0 4px 16px rgba(0,0,0,0.15);
-        }
-        .h3-book-title {
-          font-size: 13px;
-          font-weight: 800;
-          color: #1a5c34;
-          text-align: center;
-          letter-spacing: 0.5px;
-          line-height: 1.3;
-          position: relative;
-          z-index: 1;
-          padding: 0 12px;
-        }
-        .h3-book-subtitle {
-          font-size: 8px;
-          font-weight: 700;
-          color: #3d8c5a;
-          text-align: center;
-          letter-spacing: 2px;
-          text-transform: uppercase;
-          position: relative;
-          z-index: 1;
-        }
-
-        /* ── PAGE LEAVES ── */
-        /*
-          Each leaf is a thin card, hinged at left edge (transform-origin: left center).
-          Stacked at z=5px (behind front cover), each with slightly different translateZ
-          so they read as a page stack.
-          Animation: flip from closed (rotateY 0) → open (rotateY -180deg) and back.
-          We cascade 4 pages with staggered delays so they flip one at a time.
-        */
-
-        .h3-pages {
-          position: absolute;
-          width: 194px; height: 252px;
-          top: 4px; left: 6px;
-          transform-style: preserve-3d;
-          transform: translateZ(5px);
-        }
-
-        .h3-page {
-          position: absolute;
-          width: 194px; height: 252px;
-          top: 0; left: 0;
-          transform-origin: left center;
-          transform-style: preserve-3d;
-          backface-visibility: hidden;
-        }
-
-        .h3-page-front,
-        .h3-page-back {
-          position: absolute;
-          width: 100%; height: 100%;
-          border-radius: 1px 4px 4px 1px;
-          backface-visibility: hidden;
-          overflow: hidden;
-        }
-
-        .h3-page-front {
-          background: #f8faf8;
-          box-shadow: inset -2px 0 6px rgba(0,0,0,0.08);
-          display: flex;
-          flex-direction: column;
-          padding: 20px 16px;
-          gap: 8px;
-          box-sizing: border-box;
-        }
-        .h3-page-back {
-          background: #f4f7f5;
-          transform: rotateY(180deg);
-          display: flex;
-          flex-direction: column;
-          padding: 20px 16px;
-          gap: 8px;
-          box-sizing: border-box;
-        }
-
-        /* fake text lines inside pages */
-        .h3-line {
-          height: 7px;
-          border-radius: 4px;
-          background: rgba(0,0,0,0.08);
-        }
-        .h3-line.short { width: 55%; }
-        .h3-line.med   { width: 78%; }
-        .h3-line.long  { width: 92%; }
-        .h3-line.head  { width: 60%; height: 11px; background: rgba(26,122,60,0.2); margin-bottom: 4px; }
-        .h3-line.img   {
-          width: 100%; height: 60px; border-radius: 6px;
-          background: linear-gradient(135deg, rgba(26,122,60,0.15), rgba(26,122,60,0.05));
-          margin-bottom: 2px;
-        }
-
-        /* Page flip animation */
-        .h3-page { animation-duration: 1.8s; animation-timing-function: cubic-bezier(0.45,0,0.55,1); animation-iteration-count: infinite; animation-fill-mode: both; }
-
-        .h3-page-1 { animation-name: h3flip; animation-delay: 0s; }
-        .h3-page-2 { animation-name: h3flip; animation-delay: 1.4s; }
-        .h3-page-3 { animation-name: h3flip; animation-delay: 2.8s; }
-        .h3-page-4 { animation-name: h3flip; animation-delay: 4.2s; }
-
-        @keyframes h3flip {
-          0%   { transform: rotateY(0deg); }
-          8%   { transform: rotateY(-2deg); }    /* subtle lift */
-          42%  { transform: rotateY(-90deg); }   /* mid-flip */
-          58%  { transform: rotateY(-90deg); }   /* pause at spine */
-          92%  { transform: rotateY(-178deg); }
-          100% { transform: rotateY(-180deg); }
-        }
-
-        /* shadow under book */
-        .h3-book-shadow {
-          position: absolute;
-          width: 200px; height: 40px;
-          bottom: -50px; left: 50%;
-          transform: translateX(-50%) rotateX(90deg) scaleX(1.2);
-          background: radial-gradient(ellipse, rgba(0,0,0,0.35) 0%, transparent 70%);
-          filter: blur(8px);
+          display: block;
         }
 
         /* ── floating stat cards ── */
@@ -610,39 +434,25 @@ export default function HeroSection() {
           border-radius: 18px;
           padding: 16px 20px;
           color: #ffffff;
-          z-index: 4;
+          z-index: 3;
           min-width: 128px;
           box-shadow: 0 8px 32px rgba(0,0,0,0.22), inset 0 1px 0 rgba(255,255,255,0.12);
           will-change: transform;
         }
-        .h3-card-tl { top: 10%; left: 6%;  animation: h3floatUp   6s ease-in-out infinite; }
+        .h3-card-tl { top: 10%; left: 6%;  animation: h3floatUp 6s ease-in-out infinite; }
         .h3-card-br { bottom: 14%; right: 6%; animation: h3floatDn 7s ease-in-out -2s infinite; }
-        .h3-card-tr { top: 12%; right: 8%; animation: h3floatUp   5.5s ease-in-out -1.2s infinite; }
+        .h3-card-tr { top: 12%; right: 8%; animation: h3floatUp 5.5s ease-in-out -1.2s infinite; }
 
         @keyframes h3floatUp { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-12px)} }
         @keyframes h3floatDn { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-9px)} }
 
-        .h3-card-lbl {
-          font-size: 8px; font-weight: 800;
-          text-transform: uppercase; letter-spacing: 1.6px;
-          opacity: 0.55; margin-bottom: 6px; display: block;
-        }
-        .h3-card-num {
-          font-size: 28px; font-weight: 900;
-          letter-spacing: -0.5px; line-height: 1; display: block;
-        }
-        .h3-card-sub {
-          font-size: 10px; opacity: 0.55;
-          margin-top: 4px; display: block; line-height: 1.4;
-        }
-        .h3-bar {
-          width: 100%; height: 2px;
-          background: rgba(255,255,255,0.12);
-          border-radius: 2px; margin-top: 10px; overflow: hidden;
-        }
+        .h3-card-lbl { font-size: 8px; font-weight: 800; text-transform: uppercase; letter-spacing: 1.6px; opacity: 0.55; margin-bottom: 6px; display: block; }
+        .h3-card-num { font-size: 28px; font-weight: 900; letter-spacing: -0.5px; line-height: 1; display: block; }
+        .h3-card-sub { font-size: 10px; opacity: 0.55; margin-top: 4px; display: block; line-height: 1.4; }
+        .h3-bar { width: 100%; height: 2px; background: rgba(255,255,255,0.12); border-radius: 2px; margin-top: 10px; overflow: hidden; }
         .h3-bar-fill { height: 100%; border-radius: 2px; background: #2dc56a; }
 
-        /* ── floating pills ── */
+        /* ── pills ── */
         .h3-pill {
           position: absolute;
           background: rgba(255,255,255,0.14);
@@ -653,7 +463,7 @@ export default function HeroSection() {
           padding: 8px 18px;
           font-size: 12px; font-weight: 700;
           color: #ffffff; white-space: nowrap;
-          z-index: 4;
+          z-index: 3;
           box-shadow: 0 4px 14px rgba(0,0,0,0.18);
         }
         .h3-pill-1 { bottom: 28%; left: 6%;  animation: h3floatUp 8s ease-in-out -1s infinite; }
@@ -661,11 +471,10 @@ export default function HeroSection() {
         .h3-pill-3 { bottom: 10%; right: 8%; animation: h3floatUp 9s ease-in-out -6s infinite; }
 
         /* ═══════ RESPONSIVE ═══════ */
-
         @media (max-width: 960px) {
           #home { padding: 100px 14px 14px; }
           .h3-wrap { grid-template-columns: 1fr; }
-          .h3-right { order: -1; min-height: 440px; }
+          .h3-right { order: -1; min-height: 420px; }
           .h3-left  { padding: 52px 44px; }
           .h3-card-tr { display: none; }
         }
@@ -676,14 +485,14 @@ export default function HeroSection() {
           .h3-left  { padding: 40px 28px; }
           .h3-h1    { font-size: 36px; letter-spacing: -1.5px; }
           .h3-sub   { font-size: 13.5px; }
-          .h3-right { min-height: 380px; }
-          .h3-book  { transform: rotateX(20deg) rotateY(-22deg) scale(0.8); }
-          .h3-card-tl { top: 8%; left: 3%; padding: 12px 14px; min-width: 108px; }
-          .h3-card-br { bottom: 10%; right: 3%; padding: 12px 14px; min-width: 108px; }
+          .h3-right { min-height: 360px; }
+          .h3-logo-ring { width: 150px; height: 150px; }
+          .h3-logo-img  { width: 128px; height: 128px; }
+          .h3-card-tl { padding: 12px 14px; min-width: 108px; }
+          .h3-card-br { padding: 12px 14px; min-width: 108px; }
           .h3-card-num { font-size: 22px; }
           .h3-pill-3 { display: none; }
           .h3-stat-n { font-size: 19px; }
-          .h3-badge  { font-size: 10px; }
         }
 
         @media (max-width: 400px) {
@@ -759,159 +568,37 @@ export default function HeroSection() {
           onMouseMove={handleMouseMove}
           onMouseLeave={() => setMouse({ x: 0, y: 0 })}
         >
-          {/* background blobs */}
           <div className="h3-blob h3-blob-a" />
           <div className="h3-blob h3-blob-b" />
           <div className="h3-blob h3-blob-c" />
           <div className="h3-grid" />
 
-          {/* ── 3D BOOK ── */}
+          {/* logo ring — parallax */}
           <div
-            className="h3-scene"
+            className="h3-logo-wrap"
             style={{ transform: `translate(${px(8)}, ${py(6)})` }}
           >
-            <div
-              className="h3-book"
-              style={{
-                transform: `rotateX(22deg) rotateY(${-28 + mouse.x * 10}deg)`,
-              }}
-            >
-              {/* Spine */}
-              <div className="h3-spine" />
+            <div className="h3-logo-ring">
+              <img src={logoImage} alt="IBRAT TA'LIM" className="h3-logo-img" />
+            </div>
+          </div>
 
-              {/* Top & Bottom edges */}
-              <div className="h3-top" />
-              <div className="h3-bottom" />
-
-              {/* Back cover */}
-              <div className="h3-cover-back" />
-
-              {/* Page stack — 4 flipping leaves */}
-              <div className="h3-pages">
-
-                <div className="h3-page h3-page-4">
-                  <div className="h3-page-front">
-                    <div className="h3-line img" />
-                    <div className="h3-line head" />
-                    <div className="h3-line long" />
-                    <div className="h3-line med" />
-                    <div className="h3-line long" />
-                    <div className="h3-line short" />
-                    <div className="h3-line med" />
-                  </div>
-                  <div className="h3-page-back">
-                    <div className="h3-line head" />
-                    <div className="h3-line long" />
-                    <div className="h3-line med" />
-                    <div className="h3-line short" />
-                    <div className="h3-line long" />
-                    <div className="h3-line med" />
-                    <div className="h3-line img" />
-                  </div>
-                </div>
-
-                <div className="h3-page h3-page-3">
-                  <div className="h3-page-front">
-                    <div className="h3-line head" />
-                    <div className="h3-line long" />
-                    <div className="h3-line short" />
-                    <div className="h3-line long" />
-                    <div className="h3-line med" />
-                    <div className="h3-line img" />
-                    <div className="h3-line short" />
-                  </div>
-                  <div className="h3-page-back">
-                    <div className="h3-line img" />
-                    <div className="h3-line head" />
-                    <div className="h3-line long" />
-                    <div className="h3-line med" />
-                    <div className="h3-line short" />
-                    <div className="h3-line long" />
-                  </div>
-                </div>
-
-                <div className="h3-page h3-page-2">
-                  <div className="h3-page-front">
-                    <div className="h3-line img" />
-                    <div className="h3-line head" />
-                    <div className="h3-line long" />
-                    <div className="h3-line med" />
-                    <div className="h3-line short" />
-                    <div className="h3-line long" />
-                    <div className="h3-line med" />
-                  </div>
-                  <div className="h3-page-back">
-                    <div className="h3-line head" />
-                    <div className="h3-line long" />
-                    <div className="h3-line med" />
-                    <div className="h3-line img" />
-                    <div className="h3-line short" />
-                    <div className="h3-line long" />
-                  </div>
-                </div>
-
-                <div className="h3-page h3-page-1">
-                  <div className="h3-page-front">
-                    <div className="h3-line head" />
-                    <div className="h3-line long" />
-                    <div className="h3-line med" />
-                    <div className="h3-line short" />
-                    <div className="h3-line img" />
-                    <div className="h3-line long" />
-                    <div className="h3-line med" />
-                  </div>
-                  <div className="h3-page-back">
-                    <div className="h3-line img" />
-                    <div className="h3-line head" />
-                    <div className="h3-line med" />
-                    <div className="h3-line long" />
-                    <div className="h3-line short" />
-                    <div className="h3-line med" />
-                    <div className="h3-line long" />
-                  </div>
-                </div>
-
-              </div>
-
-              {/* Front cover — on top of pages */}
-              <div className="h3-cover-front">
-                <img src={logoImage} alt="IBRAT TA'LIM" className="h3-book-logo" />
-                <div className="h3-book-title">IBRAT TA'LIM</div>
-                <div className="h3-book-subtitle">Education Centre</div>
-              </div>
-
-            </div>{/* /h3-book */}
-
-            {/* shadow */}
-            <div className="h3-book-shadow" />
-
-          </div>{/* /h3-scene */}
-
-          {/* floating stat cards */}
-          <div
-            className="h3-card h3-card-tl"
-            style={{ transform: `translate(${px(22)}, ${py(15)})` }}
-          >
+          {/* stat cards */}
+          <div className="h3-card h3-card-tl" style={{ transform: `translate(${px(22)}, ${py(15)})` }}>
             <span className="h3-card-lbl">{lc.c1lbl}</span>
             <span className="h3-card-num">{lc.c1num}</span>
             <span className="h3-card-sub">{lc.c1sub}</span>
             <div className="h3-bar"><div className="h3-bar-fill" style={{ width: '88%' }} /></div>
           </div>
 
-          <div
-            className="h3-card h3-card-br"
-            style={{ transform: `translate(${px(-18)}, ${py(-12)})` }}
-          >
+          <div className="h3-card h3-card-br" style={{ transform: `translate(${px(-18)}, ${py(-12)})` }}>
             <span className="h3-card-lbl">{lc.c2lbl}</span>
             <span className="h3-card-num">{lc.c2num}</span>
             <span className="h3-card-sub">{lc.c2sub}</span>
             <div className="h3-bar"><div className="h3-bar-fill" style={{ width: '98%' }} /></div>
           </div>
 
-          <div
-            className="h3-card h3-card-tr"
-            style={{ transform: `translate(${px(-14)}, ${py(20)})` }}
-          >
+          <div className="h3-card h3-card-tr" style={{ transform: `translate(${px(-14)}, ${py(20)})` }}>
             <span className="h3-card-lbl">{lc.c3lbl}</span>
             <span className="h3-card-num">{lc.c3num}</span>
             <span className="h3-card-sub">{lc.c3sub}</span>
