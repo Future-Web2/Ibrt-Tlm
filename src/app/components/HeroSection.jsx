@@ -88,7 +88,7 @@ export default function HeroSection() {
       <style>{`
 
         /* ══════════════════════════════════════════════
-           IBRAT HERO  ·  v5  ·  Logo ring edition
+           IBRAT HERO  ·  v6  ·  3D Book edition
         ══════════════════════════════════════════════ */
 
         #home {
@@ -381,47 +381,202 @@ export default function HeroSection() {
           pointer-events: none; z-index: 0;
         }
 
-        /* ── logo ring ── */
-        .h3-logo-wrap {
+        /* ════════════════════════════
+           3-D BOOK  (pure CSS + HTML)
+        ════════════════════════════ */
+
+        .h3-scene {
           position: relative;
           z-index: 2;
+          perspective: 900px;
+          perspective-origin: 55% 45%;
           will-change: transform;
         }
-        .h3-logo-ring {
-          width: 200px; height: 200px;
-          border-radius: 50%;
-          border: 2px solid rgba(255,255,255,0.2);
+
+        .h3-book {
+          width: 200px;
+          height: 260px;
+          position: relative;
+          transform-style: preserve-3d;
+          /* base tilt — rotateY responds to mouse via inline style */
+          transition: transform 0.1s linear;
+        }
+
+        /* ── covers ── */
+        .h3-cover-front,
+        .h3-cover-back {
+          position: absolute;
+          width: 200px; height: 260px;
+          border-radius: 2px 6px 6px 2px;
+          backface-visibility: hidden;
+        }
+
+        .h3-cover-front {
+          background: linear-gradient(160deg, #e8f4ed 0%, #c6dece 50%, #9ec9b0 100%);
+          transform: translateZ(6px);
           display: flex;
+          flex-direction: column;
           align-items: center;
           justify-content: center;
-          position: relative;
-          background: rgba(255,255,255,0.07);
-          backdrop-filter: blur(10px);
-          -webkit-backdrop-filter: blur(10px);
-          animation: h3logoGlow 4.5s ease-in-out infinite;
+          gap: 12px;
+          box-shadow: inset -3px 0 8px rgba(0,0,0,0.15);
+          overflow: hidden;
         }
-        @keyframes h3logoGlow {
-          0%,100% { box-shadow: 0 0 0 0px rgba(45,197,106,0), 0 0 55px rgba(45,197,106,0.22); }
-          50%      { box-shadow: 0 0 0 14px rgba(45,197,106,0.1), 0 0 90px rgba(45,197,106,0.38); }
-        }
-        .h3-logo-ring::before {
+        /* sheen */
+        .h3-cover-front::after {
           content: '';
           position: absolute;
-          inset: -8px;
-          border-radius: 50%;
-          border: 1.5px dashed rgba(255,255,255,0.18);
-          animation: h3spin 20s linear infinite;
+          inset: 0;
+          background: linear-gradient(135deg, rgba(255,255,255,0.35) 0%, transparent 55%);
+          pointer-events: none;
         }
-        @keyframes h3spin { to { transform: rotate(360deg); } }
 
-        .h3-logo-img {
-          width: 172px; height: 172px;
+        .h3-cover-back {
+          background: linear-gradient(160deg, #b8d4c2 0%, #8db89e 100%);
+          transform: rotateY(180deg) translateZ(6px);
+        }
+
+        /* ── spine ── */
+        .h3-spine {
+          position: absolute;
+          width: 12px; height: 260px;
+          background: linear-gradient(to right, #2d6b45 0%, #4a9463 100%);
+          transform: rotateY(-90deg) translateZ(0px) translateX(-6px);
+          transform-origin: left center;
+          left: 0;
+          box-shadow: inset -2px 0 4px rgba(0,0,0,0.3);
+        }
+
+        /* ── top & bottom edges ── */
+        .h3-top, .h3-bottom {
+          position: absolute;
+          width: 200px; height: 12px;
+          background: linear-gradient(to bottom, #d4e8dc 0%, #aecfbb 100%);
+          left: 0;
+        }
+        .h3-top    { transform: rotateX(90deg) translateZ(0px) translateY(-6px);  transform-origin: top center; top: 0; }
+        .h3-bottom { transform: rotateX(-90deg) translateZ(0px) translateY(6px);  transform-origin: bottom center; bottom: 0; }
+
+        /* ── cover content ── */
+        .h3-book-logo {
+          width: 80px; height: 80px;
           border-radius: 50%;
           object-fit: contain;
-          background: #ffffff;
-          padding: 8px;
+          background: rgba(255,255,255,0.9);
+          padding: 6px;
           box-sizing: border-box;
-          display: block;
+          position: relative;
+          z-index: 1;
+          box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+        }
+        .h3-book-title {
+          font-size: 13px;
+          font-weight: 800;
+          color: #1a5c34;
+          text-align: center;
+          letter-spacing: 0.5px;
+          line-height: 1.3;
+          position: relative;
+          z-index: 1;
+          padding: 0 12px;
+        }
+        .h3-book-sub {
+          font-size: 8px;
+          font-weight: 700;
+          color: #3d8c5a;
+          text-align: center;
+          letter-spacing: 2px;
+          text-transform: uppercase;
+          position: relative;
+          z-index: 1;
+        }
+
+        /* ── page leaves ── */
+        .h3-pages {
+          position: absolute;
+          width: 194px; height: 252px;
+          top: 4px; left: 6px;
+          transform-style: preserve-3d;
+          transform: translateZ(5px);
+        }
+
+        .h3-page {
+          position: absolute;
+          width: 194px; height: 252px;
+          top: 0; left: 0;
+          transform-origin: left center;
+          transform-style: preserve-3d;
+          backface-visibility: hidden;
+        }
+
+        .h3-pf, .h3-pb {
+          position: absolute;
+          width: 100%; height: 100%;
+          border-radius: 1px 4px 4px 1px;
+          backface-visibility: hidden;
+          overflow: hidden;
+          display: flex;
+          flex-direction: column;
+          padding: 18px 14px;
+          gap: 7px;
+          box-sizing: border-box;
+        }
+        .h3-pf {
+          background: #f8faf8;
+          box-shadow: inset -2px 0 6px rgba(0,0,0,0.08);
+        }
+        .h3-pb {
+          background: #f4f7f5;
+          transform: rotateY(180deg);
+        }
+
+        /* fake text lines */
+        .h3-ln {
+          border-radius: 3px;
+          background: rgba(0,0,0,0.07);
+          flex-shrink: 0;
+        }
+        .h3-ln-h  { height: 10px; width: 55%; background: rgba(26,122,60,0.18); }
+        .h3-ln-l  { height: 6px; width: 92%; }
+        .h3-ln-m  { height: 6px; width: 76%; }
+        .h3-ln-s  { height: 6px; width: 52%; }
+        .h3-ln-img {
+          height: 56px; width: 100%;
+          border-radius: 5px;
+          background: linear-gradient(135deg, rgba(26,122,60,0.13), rgba(26,122,60,0.04));
+          flex-shrink: 0;
+        }
+
+        /* flip animation — 4 pages, staggered */
+        .h3-page {
+          animation-duration: 2s;
+          animation-timing-function: cubic-bezier(0.45, 0, 0.55, 1);
+          animation-iteration-count: infinite;
+          animation-fill-mode: both;
+          animation-name: h3flip;
+        }
+        .h3-p1 { animation-delay: 0s; }
+        .h3-p2 { animation-delay: 1.6s; }
+        .h3-p3 { animation-delay: 3.2s; }
+        .h3-p4 { animation-delay: 4.8s; }
+
+        @keyframes h3flip {
+          0%   { transform: rotateY(0deg); }
+          8%   { transform: rotateY(-3deg); }
+          45%  { transform: rotateY(-90deg); }
+          55%  { transform: rotateY(-90deg); }
+          92%  { transform: rotateY(-177deg); }
+          100% { transform: rotateY(-180deg); }
+        }
+
+        /* shadow under book */
+        .h3-book-shadow {
+          position: absolute;
+          width: 210px; height: 36px;
+          bottom: -48px; left: 50%;
+          transform: translateX(-50%);
+          background: radial-gradient(ellipse, rgba(0,0,0,0.32) 0%, transparent 72%);
+          filter: blur(8px);
         }
 
         /* ── floating stat cards ── */
@@ -434,7 +589,7 @@ export default function HeroSection() {
           border-radius: 18px;
           padding: 16px 20px;
           color: #ffffff;
-          z-index: 3;
+          z-index: 4;
           min-width: 128px;
           box-shadow: 0 8px 32px rgba(0,0,0,0.22), inset 0 1px 0 rgba(255,255,255,0.12);
           will-change: transform;
@@ -463,7 +618,7 @@ export default function HeroSection() {
           padding: 8px 18px;
           font-size: 12px; font-weight: 700;
           color: #ffffff; white-space: nowrap;
-          z-index: 3;
+          z-index: 4;
           box-shadow: 0 4px 14px rgba(0,0,0,0.18);
         }
         .h3-pill-1 { bottom: 28%; left: 6%;  animation: h3floatUp 8s ease-in-out -1s infinite; }
@@ -474,7 +629,7 @@ export default function HeroSection() {
         @media (max-width: 960px) {
           #home { padding: 100px 14px 14px; }
           .h3-wrap { grid-template-columns: 1fr; }
-          .h3-right { order: -1; min-height: 420px; }
+          .h3-right { order: -1; min-height: 440px; }
           .h3-left  { padding: 52px 44px; }
           .h3-card-tr { display: none; }
         }
@@ -485,9 +640,8 @@ export default function HeroSection() {
           .h3-left  { padding: 40px 28px; }
           .h3-h1    { font-size: 36px; letter-spacing: -1.5px; }
           .h3-sub   { font-size: 13.5px; }
-          .h3-right { min-height: 360px; }
-          .h3-logo-ring { width: 150px; height: 150px; }
-          .h3-logo-img  { width: 128px; height: 128px; }
+          .h3-right { min-height: 380px; }
+          .h3-book  { transform: rotateX(20deg) rotateY(-22deg) scale(0.8) !important; }
           .h3-card-tl { padding: 12px 14px; min-width: 108px; }
           .h3-card-br { padding: 12px 14px; min-width: 108px; }
           .h3-card-num { font-size: 22px; }
@@ -561,7 +715,7 @@ export default function HeroSection() {
 
         </div>
 
-        {/* ════ RIGHT ════ */}
+        {/* ════ RIGHT — 3D Book ════ */}
         <div
           className="h3-right"
           ref={rightRef}
@@ -573,14 +727,105 @@ export default function HeroSection() {
           <div className="h3-blob h3-blob-c" />
           <div className="h3-grid" />
 
-          {/* logo ring — parallax */}
+          {/* ── 3D Book scene ── */}
           <div
-            className="h3-logo-wrap"
+            className="h3-scene"
             style={{ transform: `translate(${px(8)}, ${py(6)})` }}
           >
-            <div className="h3-logo-ring">
-              <img src={logoImage} alt="IBRAT TA'LIM" className="h3-logo-img" />
+            <div
+              className="h3-book"
+              style={{ transform: `rotateX(22deg) rotateY(${-28 + mouse.x * 10}deg)` }}
+            >
+              <div className="h3-spine" />
+              <div className="h3-top" />
+              <div className="h3-bottom" />
+              <div className="h3-cover-back" />
+
+              {/* page leaves */}
+              <div className="h3-pages">
+
+                <div className="h3-page h3-p4">
+                  <div className="h3-pf">
+                    <div className="h3-ln h3-ln-img" />
+                    <div className="h3-ln h3-ln-h" />
+                    <div className="h3-ln h3-ln-l" />
+                    <div className="h3-ln h3-ln-m" />
+                    <div className="h3-ln h3-ln-l" />
+                    <div className="h3-ln h3-ln-s" />
+                  </div>
+                  <div className="h3-pb">
+                    <div className="h3-ln h3-ln-h" />
+                    <div className="h3-ln h3-ln-l" />
+                    <div className="h3-ln h3-ln-m" />
+                    <div className="h3-ln h3-ln-s" />
+                    <div className="h3-ln h3-ln-img" />
+                  </div>
+                </div>
+
+                <div className="h3-page h3-p3">
+                  <div className="h3-pf">
+                    <div className="h3-ln h3-ln-h" />
+                    <div className="h3-ln h3-ln-l" />
+                    <div className="h3-ln h3-ln-s" />
+                    <div className="h3-ln h3-ln-img" />
+                    <div className="h3-ln h3-ln-m" />
+                  </div>
+                  <div className="h3-pb">
+                    <div className="h3-ln h3-ln-img" />
+                    <div className="h3-ln h3-ln-h" />
+                    <div className="h3-ln h3-ln-l" />
+                    <div className="h3-ln h3-ln-m" />
+                    <div className="h3-ln h3-ln-s" />
+                  </div>
+                </div>
+
+                <div className="h3-page h3-p2">
+                  <div className="h3-pf">
+                    <div className="h3-ln h3-ln-img" />
+                    <div className="h3-ln h3-ln-h" />
+                    <div className="h3-ln h3-ln-l" />
+                    <div className="h3-ln h3-ln-m" />
+                    <div className="h3-ln h3-ln-s" />
+                    <div className="h3-ln h3-ln-l" />
+                  </div>
+                  <div className="h3-pb">
+                    <div className="h3-ln h3-ln-h" />
+                    <div className="h3-ln h3-ln-m" />
+                    <div className="h3-ln h3-ln-img" />
+                    <div className="h3-ln h3-ln-s" />
+                    <div className="h3-ln h3-ln-l" />
+                  </div>
+                </div>
+
+                <div className="h3-page h3-p1">
+                  <div className="h3-pf">
+                    <div className="h3-ln h3-ln-h" />
+                    <div className="h3-ln h3-ln-l" />
+                    <div className="h3-ln h3-ln-m" />
+                    <div className="h3-ln h3-ln-s" />
+                    <div className="h3-ln h3-ln-img" />
+                    <div className="h3-ln h3-ln-l" />
+                  </div>
+                  <div className="h3-pb">
+                    <div className="h3-ln h3-ln-img" />
+                    <div className="h3-ln h3-ln-h" />
+                    <div className="h3-ln h3-ln-m" />
+                    <div className="h3-ln h3-ln-l" />
+                    <div className="h3-ln h3-ln-s" />
+                  </div>
+                </div>
+
+              </div>
+
+              {/* front cover — on top */}
+              <div className="h3-cover-front">
+                <img src={logoImage} alt="IBRAT TA'LIM" className="h3-book-logo" />
+                <div className="h3-book-title">IBRAT TA'LIM</div>
+                <div className="h3-book-sub">Education Centre</div>
+              </div>
+
             </div>
+            <div className="h3-book-shadow" />
           </div>
 
           {/* stat cards */}
