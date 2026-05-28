@@ -186,7 +186,7 @@ export default function HomePage() {
       <HeroSection />
 
       {/* ── ABOUT (3D IMMERSIVE BOOK) ─────────────────────────────────────── */}
-      <section id="about" ref={aboutRef} className="book-scroll-track" style={{ height: '620vh', position: 'relative' }}>
+      <section id="about" ref={aboutRef} className="book-scroll-track" style={{ height: '280vh', position: 'relative' }}>
         <div className="sticky-viewport" style={{ pointerEvents: 'none' }}>
           <div className="writing-table">
             <div className="spotlight" />
