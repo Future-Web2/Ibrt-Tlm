@@ -36,7 +36,7 @@ export default function Navbar() {
       return;
     }
 
-    const sections = ['home', 'about', 'courses', 'branches', 'testimonials', 'contact'];
+    const sections = ['home', 'courses', 'branches', 'testimonials', 'contact'];
     const observedElements = sections.map(id => document.getElementById(id)).filter(Boolean);
 
     if (observedElements.length === 0) return;
@@ -159,7 +159,7 @@ export default function Navbar() {
 
   const links = [
     { href: '/#home', key: 'nav_home' },
-    { href: '/#about', key: 'nav_about' },
+
     { href: '/#courses', key: 'nav_courses' },
     { href: '/#branches', key: 'nav_branches' },
     { href: '/#testimonials', key: 'nav_reviews' },
