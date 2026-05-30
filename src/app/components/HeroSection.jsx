@@ -633,52 +633,54 @@ export default function HeroSection() {
         @media (max-width: 960px) {
           #home { padding: 100px 14px 14px; }
           .h3-wrap { grid-template-columns: 1fr; }
-          .h3-right { order: -1; min-height: 440px; }
+          .h3-right { order: -1; min-height: 400px; }
           .h3-left  { padding: 52px 44px; }
           .h3-card-tr { display: none; }
         }
 
         @media (max-width: 640px) {
-          #home { padding: 86px 10px 10px; }
-          .h3-wrap { border-radius: 16px; min-height: auto; }
-          .h3-left  { padding: 36px 24px; }
-          .h3-h1    { font-size: 34px; letter-spacing: -1.5px; margin-bottom: 18px; }
-          .h3-sub   { font-size: 13px; margin-bottom: 26px; }
-          .h3-ctas  { margin-bottom: 30px; }
+          #home { padding: 76px 8px 8px; }
+          .h3-wrap { border-radius: 14px; min-height: auto; gap: 0; }
+          .h3-left  { padding: 28px 20px 32px; }
+          .h3-h1    { font-size: 32px; letter-spacing: -1.5px; margin-bottom: 14px; }
+          .h3-sub   { font-size: 13px; margin-bottom: 22px; line-height: 1.65; }
+          .h3-ctas  { margin-bottom: 24px; gap: 10px; }
+          .h3-badge { margin-bottom: 18px; }
 
-          /* right panel: fixed height so book fits without clipping */
-          .h3-right { min-height: 340px; padding: 24px 12px 70px; box-sizing: border-box; }
+          /* Right panel: shorter so book doesn't dominate the screen */
+          .h3-right { min-height: 280px; padding: 20px 12px 60px; box-sizing: border-box; }
 
-          /* scale book down and fix it statically — no inline mouse transform */
+          /* Scale book down and fix it statically — no inline mouse transform */
           .h3-scene { transform: none !important; }
-          .h3-book  { transform: rotateX(18deg) rotateY(-20deg) scale(0.75) !important; }
+          .h3-book  { transform: rotateX(18deg) rotateY(-20deg) scale(0.68) !important; }
 
-          /* stat cards — reposition so they don't clip the edges */
-          .h3-card { padding: 10px 13px; min-width: 100px; border-radius: 14px; }
+          /* Stat cards — reposition so they don't clip the edges */
+          .h3-card { padding: 9px 12px; min-width: 96px; border-radius: 13px; }
           .h3-card-tl { top: 8px; left: 8px; }
-          .h3-card-br { bottom: 66px; right: 8px; }
-          .h3-card-num { font-size: 20px; }
+          .h3-card-br { bottom: 60px; right: 8px; }
+          .h3-card-num { font-size: 19px; }
           .h3-card-sub { font-size: 9px; }
 
-          /* pills — anchor to bottom strip, prevent overflow */
-          .h3-pill { font-size: 11px; padding: 6px 13px; }
-          .h3-pill-1 { bottom: 12px; left: 8px; }
-          .h3-pill-2 { bottom: 12px; left: 50%; transform: translateX(-50%); }
+          /* Pills — anchor to bottom strip, prevent overflow */
+          .h3-pill { font-size: 11px; padding: 6px 12px; }
+          .h3-pill-1 { bottom: 10px; left: 8px; }
+          .h3-pill-2 { bottom: 10px; left: 50%; transform: translateX(-50%); }
           .h3-pill-3 { display: none; }
 
-          .h3-stat-n { font-size: 18px; }
-          .h3-stats  { padding-top: 20px; }
+          .h3-stat-n { font-size: 17px; }
+          .h3-stats  { padding-top: 18px; }
         }
 
         @media (max-width: 400px) {
-          .h3-left { padding: 28px 18px; }
-          .h3-h1   { font-size: 28px; letter-spacing: -1px; }
+          #home { padding: 72px 6px 6px; }
+          .h3-left { padding: 22px 16px 28px; }
+          .h3-h1   { font-size: 26px; letter-spacing: -1px; }
           .h3-ctas { flex-direction: column; }
           .h3-btn-solid, .h3-btn-ghost { width: 100%; justify-content: center; }
-          .h3-right { min-height: 300px; padding-bottom: 60px; }
-          .h3-book  { transform: rotateX(18deg) rotateY(-20deg) scale(0.65) !important; }
+          .h3-right { min-height: 250px; padding-bottom: 55px; }
+          .h3-book  { transform: rotateX(18deg) rotateY(-20deg) scale(0.58) !important; }
           .h3-card-tl { top: 6px; left: 6px; }
-          .h3-card-br { bottom: 58px; right: 6px; }
+          .h3-card-br { bottom: 52px; right: 6px; }
         }
       `}</style>
 

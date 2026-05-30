@@ -612,6 +612,22 @@ export default function Navbar() {
           color: var(--brand-green);
         }
 
+        /* Engineering-style nav link icons (visible only in mobile menu) */
+        .nav-link-icon {
+          display: none;
+          width: 32px;
+          height: 32px;
+          border-radius: 8px;
+          background: var(--glass-bg);
+          border: 1px solid var(--glass-border);
+          align-items: center;
+          justify-content: center;
+          font-size: 0.85rem;
+          flex-shrink: 0;
+          color: var(--text-secondary);
+          transition: all 0.3s ease;
+        }
+
         /* ── Backdrop overlay ── */
         .nav-backdrop {
           display: none;
@@ -685,21 +701,28 @@ export default function Navbar() {
           .nav-links li:last-child { border-bottom: none; }
 
           .nav-links a:not(.nav-btn-login) {
-            font-size: 1rem;
-            font-weight: 600;
+            font-size: 0.9rem;
+            font-weight: 700;
             display: flex;
             align-items: center;
+            gap: 12px;
             width: 100%;
-            padding: 1.1rem 1.8rem;
+            padding: 0.9rem 1.4rem;
             border-radius: 0;
             color: var(--text-primary);
-            letter-spacing: 0.5px;
+            letter-spacing: 0.8px;
+            text-transform: uppercase;
           }
           .nav-links a:not(.nav-btn-login):hover,
           .nav-links a:not(.nav-btn-login).active {
             background: var(--card-glow);
             color: var(--brand-green);
-            padding-left: 2.2rem;
+          }
+          .nav-links a:not(.nav-btn-login):hover .nav-link-icon,
+          .nav-links a:not(.nav-btn-login).active .nav-link-icon {
+            color: var(--brand-green);
+            border-color: var(--brand-green);
+            background: rgba(16, 185, 129, 0.1);
           }
           .nav-links a:not(.nav-btn-login).active::before {
             content: '';
@@ -713,19 +736,22 @@ export default function Navbar() {
           }
           .nav-links li { position: relative; }
 
+          /* Show icons only in mobile side-menu */
+          .nav-link-icon { display: inline-flex !important; }
+
           /* Login button in mobile menu */
           .nav-btn-login {
-            margin: 1.5rem;
-            width: calc(100% - 3rem);
+            margin: 1.2rem 1.4rem;
+            width: calc(100% - 2.8rem);
             justify-content: center;
-            padding: 1rem 1.5rem;
-            border-radius: 14px;
-            font-size: 1rem;
+            padding: 0.9rem 1.5rem;
+            border-radius: 12px;
+            font-size: 0.9rem;
           }
 
           /* Enroll link in mobile menu */
           .nav-link-enroll {
-            padding: 1.1rem 1.8rem;
+            padding: 0.9rem 1.4rem;
             justify-content: space-between;
           }
 
@@ -747,11 +773,16 @@ export default function Navbar() {
         @media (max-width: 480px) {
           .navbar {
             width: 94%;
-            padding: 0 1.2rem;
-            height: 60px;
+            padding: 0 1rem;
+            height: 52px;
+            top: 12px;
+            border-radius: 80px;
           }
-          .logo { font-size: 1.2rem; letter-spacing: 1px; }
-          .theme-toggle, .settings-toggle { width: 32px; height: 32px; font-size: 0.85rem; }
+          .navbar.scrolled { top: 8px; height: 48px; }
+          .logo { font-size: 1.05rem; letter-spacing: 1px; gap: 6px; }
+          .theme-toggle, .settings-toggle { width: 30px; height: 30px; font-size: 0.8rem; }
+          .mobile-toggle { width: 34px; height: 34px; font-size: 1.15rem; }
+          .nav-right { gap: 0.35rem !important; }
         }
       `}</style>
 
@@ -767,14 +798,23 @@ export default function Navbar() {
             {/* Smooth Sliding Glass Indicator */}
             <span className="nav-indicator" style={indicatorStyle}></span>
 
-            {links.map((link) => (
-              <li key={link.key}>
-                <a href={link.href} onClick={(e) => scrollTo(e, link.href.slice(2))}
-                   className={activeSection === link.href.slice(2) ? 'active' : ''}>
-                  {T(link.key)}
-                </a>
-              </li>
-            ))}
+            {links.map((link) => {
+              const iconMap = {
+                'nav_home': 'fa-house',
+                'nav_courses': 'fa-layer-group',
+                'nav_branches': 'fa-location-dot',
+                'nav_reviews': 'fa-star',
+              };
+              return (
+                <li key={link.key}>
+                  <a href={link.href} onClick={(e) => scrollTo(e, link.href.slice(2))}
+                     className={activeSection === link.href.slice(2) ? 'active' : ''}>
+                    <i className={`fas ${iconMap[link.key] || 'fa-circle'} nav-link-icon`}></i>
+                    {T(link.key)}
+                  </a>
+                </li>
+              );
+            })}
             
             {/* Special Enroll link with pulsing dot */}
             <li>
@@ -799,16 +839,18 @@ export default function Navbar() {
             {/* Quick Theme Toggle */}
             <button onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
               className="theme-toggle liquid-glass-droplet"
+              title={theme === 'dark' ? 'Light mode' : 'Dark mode'}
               aria-label="Mavzuni almashtirish">
-              <i className={`fas fa-${theme === 'dark' ? 'sun' : 'moon'}`}></i>
+              <i className={`fas fa-${theme === 'dark' ? 'sun' : 'circle-half-stroke'}`}></i>
             </button>
  
             {/* Settings cog with animated panel */}
             <div className="settings-control" ref={settingsRef}>
               <button onClick={() => setSettingsOpen(!settingsOpen)}
                 className={`settings-toggle liquid-glass-droplet ${settingsOpen ? 'active' : ''}`}
+                title="Settings"
                 aria-label="Sozlamalar">
-                <i className="fas fa-cog"></i>
+                <i className="fas fa-sliders"></i>
               </button>
  
               {/* Dropdown panel - Float cleanly below */}
