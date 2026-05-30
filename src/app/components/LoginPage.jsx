@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate, Link } from 'react-router';
 import loginVideo from '../../publish/172833-847860686.mp4';
-import logoImage from '../../publish/image.png';
+import logoImage from '../../publish/logo.jpg';
 
 export default function LoginPage() {
   const navigate = useNavigate();
