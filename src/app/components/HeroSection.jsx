@@ -6,14 +6,18 @@ export default function HeroSection() {
   const { lang } = useLang();
   const [vis, setVis]     = useState(false);
   const [mouse, setMouse] = useState({ x: 0, y: 0 });
+  const [isMobile, setIsMobile] = useState(() => window.innerWidth <= 640);
   const rightRef           = useRef(null);
 
   useEffect(() => {
     const t = setTimeout(() => setVis(true), 100);
-    return () => clearTimeout(t);
+    const onResize = () => setIsMobile(window.innerWidth <= 640);
+    window.addEventListener('resize', onResize);
+    return () => { clearTimeout(t); window.removeEventListener('resize', onResize); };
   }, []);
 
   const handleMouseMove = (e) => {
+    if (isMobile) return;
     const r = rightRef.current?.getBoundingClientRect();
     if (!r) return;
     setMouse({
@@ -635,25 +639,46 @@ export default function HeroSection() {
         }
 
         @media (max-width: 640px) {
-          #home { padding: 90px 10px 10px; }
+          #home { padding: 86px 10px 10px; }
           .h3-wrap { border-radius: 16px; min-height: auto; }
-          .h3-left  { padding: 40px 28px; }
-          .h3-h1    { font-size: 36px; letter-spacing: -1.5px; }
-          .h3-sub   { font-size: 13.5px; }
-          .h3-right { min-height: 380px; }
-          .h3-book  { transform: rotateX(20deg) rotateY(-22deg) scale(0.8) !important; }
-          .h3-card-tl { padding: 12px 14px; min-width: 108px; }
-          .h3-card-br { padding: 12px 14px; min-width: 108px; }
-          .h3-card-num { font-size: 22px; }
+          .h3-left  { padding: 36px 24px; }
+          .h3-h1    { font-size: 34px; letter-spacing: -1.5px; margin-bottom: 18px; }
+          .h3-sub   { font-size: 13px; margin-bottom: 26px; }
+          .h3-ctas  { margin-bottom: 30px; }
+
+          /* right panel: fixed height so book fits without clipping */
+          .h3-right { min-height: 340px; padding: 24px 12px 70px; box-sizing: border-box; }
+
+          /* scale book down and fix it statically — no inline mouse transform */
+          .h3-scene { transform: none !important; }
+          .h3-book  { transform: rotateX(18deg) rotateY(-20deg) scale(0.75) !important; }
+
+          /* stat cards — reposition so they don't clip the edges */
+          .h3-card { padding: 10px 13px; min-width: 100px; border-radius: 14px; }
+          .h3-card-tl { top: 8px; left: 8px; }
+          .h3-card-br { bottom: 66px; right: 8px; }
+          .h3-card-num { font-size: 20px; }
+          .h3-card-sub { font-size: 9px; }
+
+          /* pills — anchor to bottom strip, prevent overflow */
+          .h3-pill { font-size: 11px; padding: 6px 13px; }
+          .h3-pill-1 { bottom: 12px; left: 8px; }
+          .h3-pill-2 { bottom: 12px; left: 50%; transform: translateX(-50%); }
           .h3-pill-3 { display: none; }
-          .h3-stat-n { font-size: 19px; }
+
+          .h3-stat-n { font-size: 18px; }
+          .h3-stats  { padding-top: 20px; }
         }
 
         @media (max-width: 400px) {
-          .h3-left { padding: 32px 20px; }
-          .h3-h1   { font-size: 30px; letter-spacing: -1px; }
+          .h3-left { padding: 28px 18px; }
+          .h3-h1   { font-size: 28px; letter-spacing: -1px; }
           .h3-ctas { flex-direction: column; }
           .h3-btn-solid, .h3-btn-ghost { width: 100%; justify-content: center; }
+          .h3-right { min-height: 300px; padding-bottom: 60px; }
+          .h3-book  { transform: rotateX(18deg) rotateY(-20deg) scale(0.65) !important; }
+          .h3-card-tl { top: 6px; left: 6px; }
+          .h3-card-br { bottom: 58px; right: 6px; }
         }
       `}</style>
 
@@ -730,11 +755,11 @@ export default function HeroSection() {
           {/* ── 3D Book scene ── */}
           <div
             className="h3-scene"
-            style={{ transform: `translate(${px(8)}, ${py(6)})` }}
+            style={isMobile ? {} : { transform: `translate(${px(8)}, ${py(6)})` }}
           >
             <div
               className="h3-book"
-              style={{ transform: `rotateX(22deg) rotateY(${-28 + mouse.x * 10}deg)` }}
+              style={isMobile ? {} : { transform: `rotateX(22deg) rotateY(${-28 + mouse.x * 10}deg)` }}
             >
               <div className="h3-spine" />
               <div className="h3-top" />
@@ -829,21 +854,21 @@ export default function HeroSection() {
           </div>
 
           {/* stat cards */}
-          <div className="h3-card h3-card-tl" style={{ transform: `translate(${px(22)}, ${py(15)})` }}>
+          <div className="h3-card h3-card-tl" style={isMobile ? {} : { transform: `translate(${px(22)}, ${py(15)})` }}>
             <span className="h3-card-lbl">{lc.c1lbl}</span>
             <span className="h3-card-num">{lc.c1num}</span>
             <span className="h3-card-sub">{lc.c1sub}</span>
             <div className="h3-bar"><div className="h3-bar-fill" style={{ width: '88%' }} /></div>
           </div>
 
-          <div className="h3-card h3-card-br" style={{ transform: `translate(${px(-18)}, ${py(-12)})` }}>
+          <div className="h3-card h3-card-br" style={isMobile ? {} : { transform: `translate(${px(-18)}, ${py(-12)})` }}>
             <span className="h3-card-lbl">{lc.c2lbl}</span>
             <span className="h3-card-num">{lc.c2num}</span>
             <span className="h3-card-sub">{lc.c2sub}</span>
             <div className="h3-bar"><div className="h3-bar-fill" style={{ width: '98%' }} /></div>
           </div>
 
-          <div className="h3-card h3-card-tr" style={{ transform: `translate(${px(-14)}, ${py(20)})` }}>
+          <div className="h3-card h3-card-tr" style={isMobile ? {} : { transform: `translate(${px(-14)}, ${py(20)})` }}>
             <span className="h3-card-lbl">{lc.c3lbl}</span>
             <span className="h3-card-num">{lc.c3num}</span>
             <span className="h3-card-sub">{lc.c3sub}</span>

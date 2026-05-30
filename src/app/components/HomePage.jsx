@@ -270,7 +270,7 @@ export default function HomePage() {
                 <p style={{ color: 'var(--text-secondary)', fontSize: '1rem' }}>{T('branches_sub')}</p>
               </div>
 
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(330px,1fr))', gap: '2rem' }}>
+              <div className="ibrat-branches-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(300px,1fr))', gap: '2rem' }}>
                 {branches.map((b, i) => (
                   <div key={b.nameKey} className="ibrat-reveal liquid-glass-card" style={{ ...glass, borderRadius: 24, overflow: 'hidden', opacity: 0, transform: 'translateY(30px)' }}>
                     <div style={{ width: '100%', height: 220, overflow: 'hidden' }}>
@@ -473,14 +473,15 @@ export default function HomePage() {
                 display: 'flex', 
                 overflowX: 'auto', 
                 scrollSnapType: 'x mandatory', 
-                gap: '2rem', 
+                gap: '1.5rem', 
                 paddingBottom: '2rem',
+                paddingInline: '1rem',
                 WebkitOverflowScrolling: 'touch',
                 scrollBehavior: 'smooth'
               }}
             >
               {testimonials.map((t, i) => (
-                <div key={t.initial} className="ibrat-reveal liquid-glass-card" style={{ minWidth: '320px', maxWidth: '380px', flex: '0 0 auto', scrollSnapAlign: 'start', background: 'var(--glass-bg)', backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)', border: '1px solid var(--glass-border)', padding: '2.5rem', borderRadius: '24px', boxShadow: 'var(--glass-shadow)', opacity: 0, transform: 'translateY(30px)', cursor: 'pointer', position: 'relative', overflow: 'hidden' }}>
+                <div key={t.initial} className="ibrat-reveal liquid-glass-card ibrat-tcard" style={{ minWidth: '320px', maxWidth: '380px', flex: '0 0 auto', scrollSnapAlign: 'start', background: 'var(--glass-bg)', backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)', border: '1px solid var(--glass-border)', padding: '2.5rem', borderRadius: '24px', boxShadow: 'var(--glass-shadow)', opacity: 0, transform: 'translateY(30px)', cursor: 'pointer', position: 'relative', overflow: 'hidden' }}>
 
                   {/* Micro Glow on hover */}
                   <div className="ibrat-testimonial-glow" style={{ position: 'absolute', top: '-50px', right: '-50px', width: '150px', height: '150px', background: 'var(--brand-green)', filter: 'blur(80px)', opacity: 0, transition: 'opacity 0.4s', borderRadius: '50%', pointerEvents: 'none' }} />
@@ -841,6 +842,28 @@ export default function HomePage() {
         @media(max-width:600px) {
           .ibrat-footer-grid { grid-template-columns: 1fr !important; gap: 2rem !important; }
           .ibrat-roadmap-line { display: none !important; }
+          /* Testimonials: one card per screen on mobile */
+          .ibrat-tcard {
+            min-width: calc(85vw) !important;
+            max-width: calc(85vw) !important;
+            padding: 1.6rem !important;
+          }
+          /* Branches grid: single column */
+          .ibrat-branches-grid {
+            grid-template-columns: 1fr !important;
+          }
+          /* Section padding reduction */
+          #testimonials, #gallery, #contact, #branches, #process {
+            padding-top: 60px !important;
+            padding-bottom: 60px !important;
+          }
+        }
+        @media(max-width:400px) {
+          .ibrat-tcard {
+            min-width: calc(90vw) !important;
+            max-width: calc(90vw) !important;
+            padding: 1.2rem !important;
+          }
         }
       `}</style>
     </div>

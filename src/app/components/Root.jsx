@@ -1,4 +1,4 @@
-import { Outlet, useLocation } from 'react-router';
+import { Outlet, useLocation, ScrollRestoration } from 'react-router';
 import { useEffect } from 'react';
 import Navbar from './Navbar.jsx';
 import { useLang } from '../context/LanguageContext.jsx';
@@ -19,7 +19,9 @@ export default function Root() {
   const location = useLocation();
 
   useEffect(() => {
-    window.scrollTo({ top: 0, behavior: 'auto' });
+    window.scrollTo(0, 0);
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
   }, [location.pathname]);
 
   return (
@@ -31,6 +33,7 @@ export default function Root() {
       }} />
 
       <Navbar />
+      <ScrollRestoration getKey={({ pathname }) => pathname} />
       <main style={{ position: 'relative', zIndex: 1 }}>
         <Outlet />
       </main>

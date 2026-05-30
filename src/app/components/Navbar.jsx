@@ -588,92 +588,170 @@ export default function Navbar() {
           letter-spacing: 1px;
         }
 
-        /* Mobile Menu support matching original */
+        /* ── Mobile Toggle Button ── */
         .mobile-toggle {
           display: none;
           cursor: pointer;
           color: var(--text-primary);
-          font-size: 1.3rem;
+          font-size: 1.4rem;
+          width: 40px;
+          height: 40px;
+          border-radius: 50%;
+          border: 1px solid var(--glass-border);
+          background: var(--glass-bg);
+          backdrop-filter: blur(12px);
+          -webkit-backdrop-filter: blur(12px);
+          align-items: center;
+          justify-content: center;
+          flex-shrink: 0;
+          transition: all 0.3s ease;
+          box-shadow: var(--glass-shadow);
+        }
+        .mobile-toggle:hover {
+          border-color: var(--brand-green);
+          color: var(--brand-green);
         }
 
-        /* Optimize small desktop viewports to prevent layout squeeze */
+        /* ── Backdrop overlay ── */
+        .nav-backdrop {
+          display: none;
+          position: fixed;
+          inset: 0;
+          background: rgba(0,0,0,0.45);
+          backdrop-filter: blur(4px);
+          -webkit-backdrop-filter: blur(4px);
+          z-index: 998;
+          opacity: 0;
+          transition: opacity 0.3s ease;
+        }
+        .nav-backdrop.active {
+          opacity: 1;
+        }
+
+        /* Optimize small desktop viewports */
         @media (min-width: 992px) and (max-width: 1200px) {
-          .navbar {
-            padding: 0.45rem 1.2rem !important;
-            width: 95% !important;
-          }
-          .nav-links {
-            gap: 0.3rem !important;
-          }
-          .nav-links a:not(.nav-btn-login) {
-            font-size: 0.8rem !important;
-            letter-spacing: 0.5px !important;
-            padding: 6px 12px !important; /* Elegant slightly smaller padding to prevent crowding */
-          }
-          .nav-btn-login {
-            padding: 7px 16px !important;
-            font-size: 0.85rem !important;
-          }
-          .logo {
-            font-size: 1.2rem !important;
-            letter-spacing: 1px !important;
-          }
-          .nav-right {
-            gap: 0.5rem !important;
-          }
-          .theme-toggle, .settings-toggle {
-            width: 32px !important;
-            height: 32px !important;
-            font-size: 0.85rem !important;
-          }
+          .navbar { padding: 0.45rem 1.2rem !important; width: 95% !important; }
+          .nav-links { gap: 0.3rem !important; }
+          .nav-links a:not(.nav-btn-login) { font-size: 0.8rem !important; letter-spacing: 0.5px !important; padding: 6px 12px !important; }
+          .nav-btn-login { padding: 7px 16px !important; font-size: 0.85rem !important; }
+          .logo { font-size: 1.2rem !important; letter-spacing: 1px !important; }
+          .nav-right { gap: 0.5rem !important; }
+          .theme-toggle, .settings-toggle { width: 32px !important; height: 32px !important; font-size: 0.85rem !important; }
         }
 
         @media (max-width: 992px) {
-          .mobile-toggle {
-            display: block;
-          }
+          .mobile-toggle { display: flex; }
+          .nav-backdrop { display: block; }
 
+          /* Mobile menu panel */
           .nav-links {
             position: fixed;
-            top: 90px;
-            left: 4%;
-            width: 92%;
-            height: auto;
-            max-height: calc(100vh - 120px);
+            top: 0;
+            right: 0;
+            left: auto;
+            width: min(340px, 88vw);
+            height: 100dvh;
             background: var(--nav-scroll-bg);
-            backdrop-filter: blur(28px) saturate(1.85);
-            -webkit-backdrop-filter: blur(28px) saturate(1.85);
-            border: 1px solid var(--glass-border);
-            border-radius: 28px;
-            box-shadow: var(--glass-shadow);
+            backdrop-filter: blur(32px) saturate(2);
+            -webkit-backdrop-filter: blur(32px) saturate(2);
+            border-left: 1px solid var(--glass-border);
+            border-radius: 0;
+            box-shadow: -8px 0 40px rgba(0,0,0,0.3);
             flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            gap: 1.8rem;
-            padding: 3rem 1.5rem;
-            transform: translateY(-20px) scale(0.95);
-            opacity: 0;
+            justify-content: flex-start;
+            align-items: stretch;
+            gap: 0;
+            padding: 0;
+            padding-top: 80px;
+            transform: translateX(110%);
+            opacity: 1;
             visibility: hidden;
-            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.3s, visibility 0.3s;
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.4s;
             z-index: 999;
+            overflow-y: auto;
           }
 
           .nav-links.active {
-            transform: translateY(0) scale(1);
-            opacity: 1;
+            transform: translateX(0);
             visibility: visible;
           }
 
+          /* Nav items list */
           .nav-links li {
             width: 100%;
-            text-align: center;
+            text-align: left;
+            border-bottom: 1px solid var(--section-border);
           }
+          .nav-links li:last-child { border-bottom: none; }
 
           .nav-links a:not(.nav-btn-login) {
-            font-size: 1.1rem;
-            display: inline-block;
+            font-size: 1rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
             width: 100%;
+            padding: 1.1rem 1.8rem;
+            border-radius: 0;
+            color: var(--text-primary);
+            letter-spacing: 0.5px;
           }
+          .nav-links a:not(.nav-btn-login):hover,
+          .nav-links a:not(.nav-btn-login).active {
+            background: var(--card-glow);
+            color: var(--brand-green);
+            padding-left: 2.2rem;
+          }
+          .nav-links a:not(.nav-btn-login).active::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: var(--brand-green);
+            border-radius: 0 3px 3px 0;
+          }
+          .nav-links li { position: relative; }
+
+          /* Login button in mobile menu */
+          .nav-btn-login {
+            margin: 1.5rem;
+            width: calc(100% - 3rem);
+            justify-content: center;
+            padding: 1rem 1.5rem;
+            border-radius: 14px;
+            font-size: 1rem;
+          }
+
+          /* Enroll link in mobile menu */
+          .nav-link-enroll {
+            padding: 1.1rem 1.8rem;
+            justify-content: space-between;
+          }
+
+          /* Nav indicator hidden on mobile */
+          .nav-indicator { display: none !important; }
+
+          /* Settings panel on mobile — open upward from bottom of screen */
+          .settings-panel {
+            position: fixed;
+            bottom: 1rem;
+            right: 1rem;
+            left: 1rem;
+            top: auto;
+            width: auto;
+            border-radius: 24px;
+          }
+        }
+
+        @media (max-width: 480px) {
+          .navbar {
+            width: 94%;
+            padding: 0 1.2rem;
+            height: 60px;
+          }
+          .logo { font-size: 1.2rem; letter-spacing: 1px; }
+          .theme-toggle, .settings-toggle { width: 32px; height: 32px; font-size: 0.85rem; }
         }
       `}</style>
 
