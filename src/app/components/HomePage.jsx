@@ -309,6 +309,57 @@ export default function HomePage() {
 
       {/* ── COURSES ───────────────────────────────────── */}
       <section id="courses" style={{ ...section(), background: 'var(--course-bg)', backgroundSize: '400% 400%', animation: 'gradBG 18s ease infinite' }}>
+        <style>{`
+          .ibrat-course-card-lux {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-top: 1px solid rgba(255,255,255,0.1);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1), inset 0 1px 0 rgba(255,255,255,0.1);
+            transition: transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.5s cubic-bezier(0.2, 0.8, 0.2, 1), border-color 0.5s;
+          }
+          .ibrat-course-card-lux:hover {
+            transform: translateY(-12px) scale(1.02);
+            box-shadow: 0 35px 60px rgba(0,0,0,0.2), 0 0 40px rgba(5, 150, 105, 0.15), inset 0 1px 0 rgba(255,255,255,0.2);
+            border-color: rgba(255,255,255,0.2);
+            z-index: 10;
+          }
+          .ibrat-course-card-lux .ibrat-course-img {
+            transition: transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+          }
+          .ibrat-course-card-lux:hover .ibrat-course-img {
+            transform: scale(1.1);
+          }
+          .ibrat-course-card-lux .lux-badge {
+            box-shadow: 0 0 15px currentColor;
+            transition: box-shadow 0.4s, transform 0.4s;
+          }
+          .ibrat-course-card-lux:hover .lux-badge {
+            box-shadow: 0 0 25px currentColor, inset 0 0 10px rgba(255,255,255,0.5);
+            transform: scale(1.05);
+          }
+          .ibrat-course-card-lux .lux-arrow {
+            transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+          }
+          .ibrat-course-card-lux:hover .lux-arrow {
+            transform: translateX(6px);
+          }
+          .lux-tab-btn {
+            position: relative;
+            overflow: hidden;
+          }
+          .lux-tab-btn::before {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%; width: 50%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+          }
+          .lux-tab-btn:hover::before {
+            left: 150%;
+          }
+        `}</style>
         <div style={container}>
           <div className="ibrat-reveal" style={{ textAlign: 'center', marginBottom: '2rem', opacity: 0, transform: 'translateY(30px)', transition: 'opacity .8s, transform .8s' }}>
             <SectionLabel label={T('courses_label')} />
@@ -318,68 +369,82 @@ export default function HomePage() {
           </div>
 
           {/* Tabs */}
-          <div className="ibrat-reveal" style={{ display: 'flex', gap: '.5rem', flexWrap: 'wrap', marginBottom: '2.5rem', opacity: 0, transform: 'translateY(20px)', transition: 'opacity .8s .1s, transform .8s .1s' }}>
+          <div className="ibrat-reveal" style={{ display: 'flex', gap: '.8rem', flexWrap: 'wrap', marginBottom: '3rem', opacity: 0, transform: 'translateY(20px)', transition: 'opacity .8s .1s, transform .8s .1s', justifyContent: 'center' }}>
             {[
               { id: 'all', key: 'tab_all' }, { id: 'lang', key: 'tab_lang' },
               { id: 'kids', key: 'tab_kids' }, { id: 'exam', key: 'tab_exam' },
             ].map(tab => (
               <button key={tab.id} onClick={() => setActiveTab(tab.id)}
-                className="liquid-glass-droplet"
+                className="lux-tab-btn"
                 style={{
-                  padding: '.55rem 1.2rem', borderRadius: 50, fontSize: '.82rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1px', cursor: 'pointer', fontFamily: F,
-                  background: activeTab === tab.id ? G : 'transparent',
+                  padding: '.8rem 1.8rem', borderRadius: 50, fontSize: '.85rem', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '1.5px', cursor: 'pointer', fontFamily: F,
+                  background: activeTab === tab.id ? G : 'var(--glass-bg)',
                   color: activeTab === tab.id ? '#fff' : 'var(--text-secondary)',
-                  border: '1px solid transparent'
+                  border: `1px solid ${activeTab === tab.id ? G : 'var(--glass-border)'}`,
+                  boxShadow: activeTab === tab.id ? `0 10px 25px ${G}60, inset 0 2px 4px rgba(255,255,255,0.3)` : '0 4px 15px rgba(0,0,0,0.05)',
+                  transition: 'all 0.4s cubic-bezier(0.2, 0.8, 0.2, 1)'
                 }}>
                 {T(tab.key)}
               </button>
             ))}
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill,minmax(300px,1fr))', gap: '2rem' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill,minmax(320px,1fr))', gap: '2.5rem' }}>
             {filteredCourses.map((c, i) => (
-              <Link to={`/course/${c.id}`} key={c.id} className="ibrat-reveal liquid-glass-card"
-                style={{ borderRadius: 24, overflow: 'hidden', display: 'flex', flexDirection: 'column', textDecoration: 'none', color: 'inherit', transition: `opacity .8s ${i * 0.1}s, transform .8s ${i * 0.1}s`, cursor: 'pointer', position: 'relative', opacity: 0, transform: 'translateY(30px)' }}>
-                <div style={{ width: '100%', height: 220, overflow: 'hidden', position: 'relative' }}>
-                  <img className="ibrat-course-img" src={c.image} alt={T(c.nameKey)} style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.8s cubic-bezier(0.16,1,0.3,1)', display: 'block' }} />
-                  <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(0,0,0,0.6) 0%, transparent 60%)', pointerEvents: 'none' }} />
+              <div className="ibrat-reveal" key={c.id} style={{ transition: `opacity .8s ${i * 0.1}s, transform .8s ${i * 0.1}s`, opacity: 0, transform: 'translateY(30px)' }}>
+                <Link to={`/course/${c.id}`} className="ibrat-course-card-lux"
+                  style={{ borderRadius: 28, overflow: 'hidden', display: 'flex', flexDirection: 'column', textDecoration: 'none', color: 'inherit', cursor: 'pointer', position: 'relative', height: '100%' }}>
+                  
+                  {/* Image container */}
+                  <div style={{ width: '100%', height: 240, overflow: 'hidden', position: 'relative' }}>
+                    <img className="ibrat-course-img" src={c.image} alt={T(c.nameKey)} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
+                    <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.2) 50%, transparent 100%)', pointerEvents: 'none' }} />
+                    
+                    <div style={{ position: 'absolute', inset: 0, background: `linear-gradient(to bottom, ${c.badgeColor}33 0%, transparent 40%)`, pointerEvents: 'none', mixBlendMode: 'overlay' }} />
 
-                  {/* Badge & Level */}
-                  <div style={{ position: 'absolute', top: 15, right: 15, display: 'flex', gap: '8px' }}>
-                    {c.level && <div style={{ background: 'rgba(0,0,0,0.5)', backdropFilter: 'blur(10px)', color: '#fff', padding: '5px 12px', borderRadius: 50, fontWeight: 700, fontSize: '.7rem', border: '1px solid rgba(255,255,255,0.2)' }}>{c.level}</div>}
-                    <div style={{ background: c.badgeColor, color: c.badgeColor === '#f59e0b' || c.badgeColor === '#06b6d4' ? '#000' : '#fff', padding: '5px 12px', borderRadius: 50, fontWeight: 900, fontSize: '.7rem', boxShadow: `0 0 20px ${c.badgeColor}80` }}>
-                      {c.badge}
+                    {/* Badge & Level */}
+                    <div style={{ position: 'absolute', top: 18, right: 18, display: 'flex', gap: '10px' }}>
+                      {c.level && <div style={{ background: 'rgba(20,20,20,0.6)', backdropFilter: 'blur(12px)', color: '#fff', padding: '6px 14px', borderRadius: 50, fontWeight: 800, fontSize: '.75rem', border: '1px solid rgba(255,255,255,0.15)', boxShadow: '0 4px 12px rgba(0,0,0,0.2)' }}>{c.level}</div>}
+                      <div className="lux-badge" style={{ background: c.badgeColor, color: c.badgeColor === '#f59e0b' || c.badgeColor === '#06b6d4' ? '#000' : '#fff', padding: '6px 14px', borderRadius: 50, fontWeight: 900, fontSize: '.75rem' }}>
+                        {c.badge}
+                      </div>
                     </div>
                   </div>
-                </div>
 
-                <div style={{ padding: '1.8rem', flexGrow: 1, display: 'flex', flexDirection: 'column', background: 'var(--glass-bg)' }}>
-                  <h4 style={{ fontSize: '1.25rem', marginBottom: '.6rem', color: 'var(--text-primary)', fontWeight: 800 }}>{T(c.nameKey)}</h4>
-                  <p style={{ color: 'var(--text-secondary)', fontSize: '.9rem', lineHeight: 1.6, marginBottom: '1.5rem', flexGrow: 1 }}>{T(c.descKey)}</p>
+                  <div style={{ padding: '2rem', flexGrow: 1, display: 'flex', flexDirection: 'column', position: 'relative' }}>
+                    {/* Glowing top line matches badge color */}
+                    <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '4px', background: c.badgeColor, boxShadow: `0 0 20px ${c.badgeColor}` }} />
 
-                  {/* Skill Tags */}
-                  {c.features && (
-                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px', marginBottom: '1.5rem' }}>
-                      {c.features.slice(0, 3).map(f => (
-                        <span key={f} style={{ background: 'var(--bg-primary)', border: '1px solid var(--glass-border)', color: 'var(--text-secondary)', fontSize: '.7rem', padding: '4px 10px', borderRadius: '8px', fontWeight: 700, transition: 'color 0.3s' }}
-                          onMouseEnter={e => e.currentTarget.style.color = c.badgeColor}
-                          onMouseLeave={e => e.currentTarget.style.color = 'var(--text-secondary)'}>
-                          {f}
-                        </span>
-                      ))}
+                    <h4 style={{ fontSize: '1.4rem', marginBottom: '.8rem', color: 'var(--text-primary)', fontWeight: 900, letterSpacing: '-0.5px' }}>{T(c.nameKey)}</h4>
+                    <p style={{ color: 'var(--text-secondary)', fontSize: '.95rem', lineHeight: 1.6, marginBottom: '1.8rem', flexGrow: 1 }}>{T(c.descKey)}</p>
+
+                    {/* Skill Tags */}
+                    {c.features && (
+                      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginBottom: '1.8rem' }}>
+                        {c.features.slice(0, 3).map(f => (
+                          <span key={f} style={{ background: 'var(--bg-primary)', border: '1px solid var(--glass-border)', color: 'var(--text-secondary)', fontSize: '.75rem', padding: '6px 12px', borderRadius: '10px', fontWeight: 800, transition: 'all 0.3s', boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.05)' }}
+                            onMouseEnter={e => { e.currentTarget.style.color = c.badgeColor; e.currentTarget.style.borderColor = c.badgeColor; e.currentTarget.style.boxShadow = `0 0 15px ${c.badgeColor}40`; }}
+                            onMouseLeave={e => { e.currentTarget.style.color = 'var(--text-secondary)'; e.currentTarget.style.borderColor = 'var(--glass-border)'; e.currentTarget.style.boxShadow = 'inset 0 1px 0 rgba(255,255,255,0.05)'; }}>
+                            {f}
+                          </span>
+                        ))}
+                      </div>
+                    )}
+
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingTop: '1.5rem', borderTop: '1px solid var(--section-border)' }}>
+                      <span style={{ color: 'var(--text-primary)', fontSize: '.9rem', fontWeight: 900, display: 'flex', alignItems: 'center', gap: '10px' }}>
+                        <div style={{ width: 30, height: 30, borderRadius: '50%', background: `${c.badgeColor}20`, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                          <i className="far fa-clock" style={{ color: c.badgeColor, fontSize: '1rem' }} /> 
+                        </div>
+                        {c.duration}
+                      </span>
+                      <span style={{ color: c.badgeColor, fontSize: '.9rem', fontWeight: 900, textTransform: 'uppercase', letterSpacing: 1.5, display: 'flex', alignItems: 'center', gap: 8 }}>
+                        {T('learn_more')} <i className="fas fa-arrow-right lux-arrow" style={{ fontSize: '.8rem' }} />
+                      </span>
                     </div>
-                  )}
-
-                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingTop: '1.2rem', borderTop: '1px solid var(--section-border)' }}>
-                    <span style={{ color: 'var(--text-primary)', fontSize: '.85rem', fontWeight: 800, display: 'flex', alignItems: 'center', gap: '8px' }}>
-                      <i className="far fa-clock" style={{ color: c.badgeColor }} /> {c.duration}
-                    </span>
-                    <span style={{ color: c.badgeColor, fontSize: '.85rem', fontWeight: 800, textTransform: 'uppercase', letterSpacing: 1, display: 'flex', alignItems: 'center', gap: 6 }}>
-                      {T('learn_more')} <i className="fas fa-arrow-right" style={{ fontSize: '.75rem', transition: 'transform .2s' }} />
-                    </span>
                   </div>
-                </div>
-              </Link>
+                </Link>
+              </div>
             ))}
           </div>
         </div>
