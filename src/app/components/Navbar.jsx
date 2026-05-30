@@ -658,6 +658,12 @@ export default function Navbar() {
         @media (max-width: 992px) {
           .mobile-toggle { display: flex; }
           .nav-backdrop { display: block; }
+          /* Show compact login btn in navbar on mobile */
+          .nav-login-mobile { display: inline-flex !important; }
+
+          /* HIDE settings panel entirely on mobile — it breaks the layout */
+          .settings-control { display: none !important; }
+          .theme-toggle { display: none !important; }
 
           /* Mobile menu panel */
           .nav-links {
@@ -665,7 +671,7 @@ export default function Navbar() {
             top: 0;
             right: 0;
             left: auto;
-            width: min(340px, 88vw);
+            width: min(320px, 85vw);
             height: 100dvh;
             background: var(--nav-scroll-bg);
             backdrop-filter: blur(32px) saturate(2);
@@ -739,7 +745,7 @@ export default function Navbar() {
           /* Show icons only in mobile side-menu */
           .nav-link-icon { display: inline-flex !important; }
 
-          /* Login button in mobile menu */
+          /* Login button in mobile slide menu */
           .nav-btn-login {
             margin: 1.2rem 1.4rem;
             width: calc(100% - 2.8rem);
@@ -757,32 +763,21 @@ export default function Navbar() {
 
           /* Nav indicator hidden on mobile */
           .nav-indicator { display: none !important; }
-
-          /* Settings panel on mobile — open upward from bottom of screen */
-          .settings-panel {
-            position: fixed;
-            bottom: 1rem;
-            right: 1rem;
-            left: 1rem;
-            top: auto;
-            width: auto;
-            border-radius: 24px;
-          }
         }
 
         @media (max-width: 480px) {
           .navbar {
             width: 94%;
-            padding: 0 1rem;
+            padding: 0 0.9rem;
             height: 52px;
             top: 12px;
             border-radius: 80px;
           }
           .navbar.scrolled { top: 8px; height: 48px; }
           .logo { font-size: 1.05rem; letter-spacing: 1px; gap: 6px; }
-          .theme-toggle, .settings-toggle { width: 30px; height: 30px; font-size: 0.8rem; }
-          .mobile-toggle { width: 34px; height: 34px; font-size: 1.15rem; }
-          .nav-right { gap: 0.35rem !important; }
+          .mobile-toggle { width: 34px; height: 34px; font-size: 1.1rem; }
+          .nav-right { gap: 0.4rem !important; }
+          .nav-login-mobile { padding: 6px 14px !important; font-size: 0.78rem !important; }
         }
       `}</style>
 
@@ -834,17 +829,17 @@ export default function Navbar() {
             </li>
           </ul>
 
-          {/* Right section containing ONLY toggles */}
+          {/* Right section: theme, settings (desktop), login (mobile), hamburger */}
           <div className="nav-right">
-            {/* Quick Theme Toggle */}
+            {/* Quick Theme Toggle — desktop only */}
             <button onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
               className="theme-toggle liquid-glass-droplet"
               title={theme === 'dark' ? 'Light mode' : 'Dark mode'}
               aria-label="Mavzuni almashtirish">
               <i className={`fas fa-${theme === 'dark' ? 'sun' : 'circle-half-stroke'}`}></i>
             </button>
- 
-            {/* Settings cog with animated panel */}
+
+            {/* Settings cog with animated panel — desktop only */}
             <div className="settings-control" ref={settingsRef}>
               <button onClick={() => setSettingsOpen(!settingsOpen)}
                 className={`settings-toggle liquid-glass-droplet ${settingsOpen ? 'active' : ''}`}
@@ -852,14 +847,13 @@ export default function Navbar() {
                 aria-label="Sozlamalar">
                 <i className="fas fa-sliders"></i>
               </button>
- 
-              {/* Dropdown panel - Float cleanly below */}
+
+              {/* Dropdown panel */}
               <div className={`settings-panel liquid-glass-card ${settingsOpen ? 'active' : ''}`}>
                 <h4 className="settings-title">
                   {lang === 'uz' ? 'Boshqaruv Paneli' : lang === 'ru' ? 'Панель Управления' : 'Control Panel'}
                 </h4>
- 
-                {/* Lang Switches */}
+
                 <div className="settings-group">
                   <span className="settings-label">{lang === 'uz' ? 'Sayt Tili' : lang === 'ru' ? 'Язык сайта' : 'Site Language'}</span>
                   <div className="lang-pills">
@@ -871,8 +865,7 @@ export default function Navbar() {
                     ))}
                   </div>
                 </div>
- 
-                {/* Font Scaling */}
+
                 <div className="settings-group">
                   <span className="settings-label">{lang === 'uz' ? 'Shrift Kattaligi' : lang === 'ru' ? 'Размер Шрифта' : 'Font Size'}</span>
                   <div className="scale-pills">
@@ -884,12 +877,17 @@ export default function Navbar() {
                     ))}
                   </div>
                 </div>
- 
-                <div className="settings-footer">
-                  IBRAT TALIM v1.2
-                </div>
+
+                <div className="settings-footer">IBRAT TALIM v1.2</div>
               </div>
             </div>
+
+            {/* Login button — visible directly in navbar on mobile */}
+            <Link to="/login" className="nav-login-mobile liquid-glass-droplet"
+              style={{ display: 'none', alignItems: 'center', gap: 6, padding: '7px 16px', borderRadius: 50, background: 'var(--brand-green)', color: '#fff', fontWeight: 800, fontSize: '0.82rem', textDecoration: 'none', whiteSpace: 'nowrap', letterSpacing: '0.5px', boxShadow: '0 4px 14px var(--card-glow)' }}>
+              <i className="fas fa-right-to-bracket" style={{ fontSize: '0.85rem' }}></i>
+              <span>{lang === 'uz' ? 'Kirish' : lang === 'ru' ? 'Войти' : 'Login'}</span>
+            </Link>
 
             {/* Mobile menu toggle */}
             <button onClick={() => setMobileOpen(!mobileOpen)} className="mobile-toggle" aria-label="Menyu">
